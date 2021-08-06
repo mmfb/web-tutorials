@@ -1,5 +1,6 @@
 body {
-  padding: 50px;
+  padding: 0px;
+  margin: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -8,14 +9,76 @@ a {
 }
 
 header {
-  text-align: center;
-  padding: 20px;
-  text-align: center;
-  background-color: darkblue;
-  color: lightskyblue;
+  font-size: 1.2em;
+  padding: 10px;
+  border-bottom: green 2px solid;
+  color: darkgreen;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
-body {
-  color: darkblue;
-  padding: 15px;
+header > section > section * {
+  margin: 0px;
+}
+
+
+header > section {
+  display: flex;
+  width: 40%;
+  align-items: center;
+}
+
+header > section  img {
+  width: 80px;
+  padding-right: 15px;
+}
+
+header > nav {
+  width: 80%;
+  text-align: right;
+  padding-right: 20px;
+}
+
+header > nav > a{
+  color:darkgreen;
+  padding:5px;
+  margin: 10px;
+  border-left: green solid 3px;
+}
+
+header > nav > a.here{
+  color: darkred;
+  border-bottom: darkred solid 3px;
+  border-left: darkred solid 3px;
+}
+
+main {
+  padding: 0px 15px;
+}
+
+main .centerImg {
+   text-align: center;
+}
+
+img.big {
+  width: 80%;
+}
+
+img.large {
+  width: 60%;
+}
+
+
+img.med {
+  width: 40%;
+}
+
+main > section {
+    border-top: black solid 1px
+
+}
+
+img.small {
+  width: 20%;
 }

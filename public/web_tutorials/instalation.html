@@ -1,0 +1,142 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <link rel="stylesheet" href="../stylesheets/style.css">
+  <script src="../javascripts/includeHtml.js"></script>
+</head>
+
+<body>
+  <header id="header"></header>
+  <script>
+    (async () => {
+      await includeHtml("../header.html", "header")
+      document.getElementById("web").classList.add("here")
+    })();
+  </script>
+  <main>
+    <section>
+      <h1> Objectives </h1>
+      <p><input type="checkbox"> Understand the architecture of a restfull web application</p>
+      <p><input type="checkbox"> Installing node.js, express.js and other support applications</p>
+      <p><input type="checkbox"> Setting up localhost Node.js/Express.js application </p>
+      <p><input type="checkbox"> Debugging a Node.js/Express.js application </p>
+      <h2> Other objectives </h2>
+      <p><input type="checkbox"> Using version control with git, github and fork </p>
+      <p><input type="checkbox"> Setting up a online Node.js/Express.js application using HerokuApp </p>
+      <p><input type="checkbox"> Setting up a postgres database on a Node.js/Express.js application </p>
+      <p><input type="checkbox"> Creating a postgres database Heroku and configurint the Node.js/Express.js application
+        to use it </p>
+    </section>
+    <section>
+      <h1> Index </h1>
+      <ol>
+        <li>
+          <a href="#restapp">The architecture of a restfull web application</a>
+        </li>
+      </ol>
+    </section>
+
+    <section id="restapp">
+      <h2>1- The architecture of a restfull web application</h2>
+      <p>The following image will try to summarize all the components of a web application, their relations, and
+        the corresponding resources/concepts.</p>
+      <p class="centerImg"><img class="large" src="images/restfullapp.png"></p>
+      <ul>
+        <li>
+          <p>At the top right you see two IDE (Integrated Development Environment) used to create code and manage
+            databases:
+          </p>
+          <ul>
+            <li>
+              <p><strong><a href="o	https://code.visualstudio.com/">Visual Studio Code</a></strong>
+                Editor for code, including all things web (
+                  <a href="#html">HTML</a>, <a href="#css">CSS</a>, 
+                  <a href="#javascript">Javascript</a>, etc)</p>
+              <p>You can also get Notepad++ - Also and editor for any type of text file – lighter and good for quick
+                modifications:
+                <a href="https://notepad-plus-plus.org/downloads/">https://notepad-plus-plus.org/downloads/</a>
+              </p>
+            </li>
+            <li>
+              <p><strong>Database Client Application</strong>
+
+                Applications to manage and develop databases, they will depend on the database used. Examples:
+              </p>
+              <ul>
+                <li>
+                  <p><strong><a href="https://dev.mysql.com/downloads/workbench/">Workbench</a></strong>
+                    Allows the design and management of MySql databases and similar </p>
+                </li>
+                <li>
+                  <p><strong><a href="https://www.pgadmin.org/">pgAdmin</a></strong>
+                    Open Source administration and development platform for PostgreSQL </p>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Bellow the IDEs, connect to the DB Client you see the databases.
+            This constitutes the base of the three tiers that usually constitute a web application:
+            <strong>Database | Server | Client </strong>.
+          </p>
+          <p> For local server you can use a local or a remote database,
+            but for an online server you will need a remote database,
+            because it would be really hard to connect to the local server.</p>
+        </li>
+        <li>
+          <p> In the top middle you see a depiction of the Node.js/Express.js. The server is divided in two parts:
+          <ul>
+            <li><strong>Web Pages Server</strong>
+              Will serve HTML, CSS, Javascript and other files (ex: images) to the browser clients
+            </li>
+            <li><strong><a href="#rest">REST</a> API Server</strong>
+              Will serve data requested by web pages on the browser (using <a href="#ajax">AJAX</a>
+               and <a href="#json">JSON</a>) and could also serve data to
+              other applications (using JSON).
+            </li>
+          </ul>
+          </p>
+
+        </li>
+      </ul>
+      <h3>Other concepts</h3>
+      <ul>
+        <li>
+          <p id="html"><strong>HTML</strong>
+            HypertText Modeling Language – Used to define the content of web pages</p>
+          <p>Reference: <a href="https://www.w3schools.com/html/">
+              https://www.w3schools.com/html/ </a>
+            (w3schools is your “go to” resource for websites)</p>
+        </li>
+        <li>
+          <p id="css"><strong>CSS</strong>
+            Cascating Style Sheets – Used to describe the style (presentation) of the web pages</p>
+          <p>Reference: <a href="https://www.w3schools.com/css">
+              https://www.w3schools.com/css</a></p>
+        </li>
+        <li>
+          <p id="javascript"><strong>Javascript</strong>
+            Programming language for web development – Used to make calculations and modifications to and for your web
+            pages
+          <p>Reference: <a href="https://www.w3schools.com/js">
+              https://www.w3schools.com/js</a></p>
+        </li>
+        <li>
+          <p id="rest"><strong>REST</strong>
+            REpresentational State Transfer (just a concept, nothing to install) - Defines a way to provide communication between computer systems.
+            Applications that follow REST rules are called RESTfull Application</p> 
+            <p>Reference: <a href="https://www.restapitutorial.com/lessons/whatisrest.html">
+              https://www.restapitutorial.com/lessons/whatisrest.html</a></p>
+            <p>How to document a rest application: <a href="https://bocoup.com/blog/documenting-your-api">
+              https://bocoup.com/blog/documenting-your-api</a></p>
+        </li>
+        
+      </ul>
+    </section>
+
+  </main>
+</body>
+
+</html>
