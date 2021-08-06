@@ -18,15 +18,19 @@ header {
   margin-bottom: 30px;
 }
 
-header > section > section * {
+header > section  section  * {
   margin: 0px;
 }
 
 
-header > section {
-  display: flex;
+header> section {
   width: 40%;
+}
+header > section > a{
+  display: flex;
   align-items: center;
+  color: green;
+  text-decoration: none;
 }
 
 header > section  img {

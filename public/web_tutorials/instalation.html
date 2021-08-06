@@ -34,6 +34,26 @@
         <li>
           <a href="#restapp">The architecture of a restfull web application</a>
         </li>
+        <li>
+          <a href="#install_node">
+            Installing node.js and express.js
+          </a>
+        </li>
+        <li>
+          <a href="#install_vscode">
+            Installing an editor: Visual Studio Code	
+          </a>
+        </li>
+        <li>
+          <a href="#set_postgresql">
+            Configuring a database: PostGreSQL	
+          </a>
+        </li>
+        <li>
+          <a href="#deploy_heroku">
+            Setting up a website: Github and Heroku
+          </a>
+        </li>
       </ol>
     </section>
 
@@ -86,23 +106,107 @@
             because it would be really hard to connect to the local server.</p>
         </li>
         <li>
-          <p> In the top middle you see a depiction of the Node.js/Express.js. The server is divided in two parts:
+          <p> In the top middle you see a depiction of the <a href="#node_express">Node.js/Express.js</a> server. The server is divided in two parts:
           <ul>
             <li><strong>Web Pages Server</strong>
               Will serve HTML, CSS, Javascript and other files (ex: images) to the browser clients
             </li>
-            <li><strong><a href="#rest">REST</a> API Server</strong>
+            <li><p><strong><a href="#rest">REST</a> API Server</strong>
               Will serve data requested by web pages on the browser (using <a href="#ajax">AJAX</a>
                and <a href="#json">JSON</a>) and could also serve data to
-              other applications (using JSON).
+              other applications (using JSON).</p>
+              <p>
+                 Since the REST API is responsible to manage data, only this part of the server will communicate with the database.
+              </p>
             </li>
           </ul>
           </p>
+        </li>
+        <li>
+          <p> In the top left side you see the client side:
+            <ul>
+            <li><p><strong>Browser</strong>
+              Browsers like chrome, safari or edge will need web pages composed by HTML, CSS, images, etc. 
+              All these files will be sent by the Web Pages Server.</p>
+              <p> Some of these pages will also need data. 
+                These pages will have javascripts that will request the data from the REST API Server 
+                (the one that can obtain data from the Database) and insert that data on the web pages </p>
+                <p>Some pages will also send data to the REST API also using javascript.</p>
+            </li>
+            <li><p><strong>Apps</strong>
+              Applications like mobile applications or desktop programs can also comunicate with the server.
+            </p>
+            <p> Since applications will have their own interface they only need the data so they only connecto to the REST API Server.</p>
+          </li>
+
+          </ul>
+          </p>
+        </li>
+        <li>
+          <p> In the bottom, inside the cloud, you have a depiction of the online web server.
+            It replicates the same elements as the local web server: clients, 
+            Node.js/Express.js server and database (the online database).
+            The Node.js/Express.js server is divided in the same way in Web Page Server and REST API Server.
+          </p>
+          <p>
+            To create an online server you need a provider.
+            We give as example the <a href="#heroku">Heroku</a> platform that suports Node.js servers.
+            Heroku supports several ways to deploy applications but the simplest one is probably
+            using a <a href="#git">git</a> repository. 
+          </p>
+          <p>
+            The idea is simple:
+            <ol>
+              <li>Create a local git repository that will allow us to manage versions and connect to a remote repository.
+              The creation and managing of the repository can be made with a git client like <a href="#fork">Fork</a>.  </li>
+              <li>Push the latest version (using the git client) to a remote git repository like <a href="github"> GitHub</a>.</li>
+              <li>Connect the GitHub repositorywith Heroku.
+                After configuring this connection Heroku will automatically deploy the latest version 
+              of the code each time the GitHub repository is updated.</li>
+            </ol>           </p>
+            <p>
+            You can see more details on how to deploy a Node Web Application on Heroku on <a href="#deploy_heroku">another section of this tutorial</a>.
+          </p>
+          
 
         </li>
+
       </ul>
-      <h3>Other concepts</h3>
+      <h3>Other concepts and applications</h3>
       <ul>
+        <li>
+          <p id="node_express"><strong>Node.js and Express</strong>
+            Allows for the creation of a server that will manage the requests and responses 
+            of web pages and other data. We will see this in more detail in this tutorial and following</p>
+          <p><strong>Node.js </strong>
+            Open source server environment – It is programmed in javascript</p>
+          <p>Reference: <a href="https://nodejs.org/en/docs/guides/">
+            https://nodejs.org/en/docs/guides/  </a><p>
+          <p><strong> Express.js  </strong>
+            Node.js web application framework (it is a Node.js module) – Used to create web applications more easily</p>
+          <p> References:
+           <ul>
+             <li>
+            Express generator – Tool to quickly create an application skeleton:
+            <a href="https://expressjs.com/en/starter/generator.html">
+              https://expressjs.com/en/starter/generator.html </a>
+            </li>
+            <li>
+              Routing: 
+              <a href="https://expressjs.com/en/starter/basic-routing.html">
+                https://expressjs.com/en/starter/basic-routing.html </a>
+            </li>
+            <li>
+              API Reference: 
+              <a href="https://expressjs.com/en/4x/api.html">
+                https://expressjs.com/en/4x/api.html </a>
+            </li>
+            </ul>
+          </p>
+
+        </li>
+
+
         <li>
           <p id="html"><strong>HTML</strong>
             HypertText Modeling Language – Used to define the content of web pages</p>
@@ -132,10 +236,70 @@
             <p>How to document a rest application: <a href="https://bocoup.com/blog/documenting-your-api">
               https://bocoup.com/blog/documenting-your-api</a></p>
         </li>
-        
+        <li>
+          <p id="ajax"><strong>AJAX</strong>
+            Asynchronous JavaScript And XML (just a concept, nothing to install) - Allows the communication of web pages with the server and dynamically updating the page without reloading the whole page (much more convenient than the other option).
+            We will not use XML we will use JSON </p>
+        </li>
+        <li>
+          <p id="json"><strong>JSON</strong>
+            JavaScript Object Notation (just a concept, nothing to install) – 
+            A syntax for storing and exchanging data – 
+            We will use it to send and receive data between web pages and server  </p>
+          <p>Reference: <a href="https://www.w3schools.com/js/js_json_intro.asp">
+            https://www.w3schools.com/js/js_json_intro.asp</a></p>
+        </li>
+        <li>
+          <p id="git"><strong>Git</strong>
+            Distributed version control system. Ables developer teams to manage several versions of code 
+            and colaboratively create applications. 
+            You can use it directly on a command line or using a client with a graphic interface.
+          </p>
+        </li>
+        <li>
+          <p id="fork"><strong>Fork</strong>
+            Fork is a git client. It allows you to create and manage a local git repository and to connect it to a remote repository.
+            When installing Fork you will also install Git, if you have not already installed.
+          </p>
+          <p>Reference: <a href="https://git-fork.com/">
+            https://git-fork.com/</a>. Note: the free-evaluation has all the functionalities. 
+            For now you only need to close the pop-up windows that sometimes show asking for registation</p>
+        </li>
+        <li>
+          <p id="github"><strong>GitHub</strong>
+            It is a development platform – It is used to allow a community of developers to host and manage their code, including previous versions
+          </p>
+          <p>Reference: <a href="https://github.com/">
+            https://github.com/</a></p>
+        </li>
+        <li>
+          <p id="heroku"><strong>Heroku</strong>
+            It is a PaaS (platform as a service) – We can use it to host our website (needs GitHub to get the code to deploy)
+          </p>
+          <p>Reference: <a href="https://www.heroku.com/">
+            https://www.heroku.com/</a></p>
+        </li>
       </ul>
     </section>
 
+    <section id="install_node">
+      <h2>2- Installing Node.js and Express.js</h2>
+    
+      </section>
+      
+    <section id="install_vscode">
+      <h2>3- Installing and editor: Visual Studio Code</h2>
+    
+    </section>
+
+    <section id="set_postgresql">
+      <h2>4- Configuring a database: PostGreSQL</h2>
+    </section>
+
+
+    <section id="deploy_heroku">
+      <h2>5- Setting up a website: Github and Heroku</h2>
+    </section>
   </main>
 </body>
 
