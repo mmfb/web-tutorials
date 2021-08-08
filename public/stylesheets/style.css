@@ -71,6 +71,7 @@ img.big {
 
 img.large {
   width: 60%;
+
 }
 
 
@@ -78,6 +79,18 @@ img.med {
   width: 40%;
 }
 
+img.term {
+  width:500px;
+}
+
+img.halfterm {
+  width:300px;
+}
+
+
+img.termxl {
+  width:800px;
+}
 main > section {
     border-top: black solid 1px
 
@@ -87,6 +100,15 @@ img.small {
   width: 20%;
 }
 
+p.note {
+  padding-left:20px;
+}
+
+section.columns {
+  display:flex;
+  align-items: flex-start;
+  gap: 10px;
+}
 
 section.card {
   border: 2px solid green;
