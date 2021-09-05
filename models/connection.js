@@ -1,12 +1,5 @@
 var pg = require('pg');
 
-/*
-  user: process.env.USER,
-    host: process.env.HOST,
-    database: process.env.DB,
-    password: process.env.PASSWORD,
-    port: process.env.DBPORT,
-    */
 
 const connectionString = process.env.DATABASE_URL
 const Pool = pg.Pool
@@ -20,3 +13,12 @@ const pool = new Pool({
 })
 
 module.exports = pool;
+
+
+/*
+  user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DB,
+    password: process.env.PASSWORD,
+    port: process.env.DBPORT,
+    */

@@ -3,7 +3,7 @@
 <head>
   <title>Node.js Web App</title>
   <link rel="stylesheet" href="../stylesheets/style.css">
-  <script src="../javascripts/includeHtml.js"></script>
+  <script src="../javascripts/utils.js"></script>
 </head>
 
 <body>
@@ -21,12 +21,11 @@
       <p><input type="checkbox"> Installing node.js, express.js and other support applications</p>
       <p><input type="checkbox"> Setting up localhost Node.js/Express.js application </p>
       <h2> Other objectives </h2>
+      <p><input type="checkbox"> Setting up a database on a Node.js/Express.js application </p>
       <p><input type="checkbox"> Using version control with git, github and fork </p>
       <p><input type="checkbox"> Setting up a online Node.js/Express.js application using HerokuApp </p>
-      <p><input type="checkbox"> Setting up a postgres database on a Node.js/Express.js application </p>
       <p><input type="checkbox"> Creating a postgres database on Heroku and configuring the Node.js/Express.js
-        application for
-        to use it </p>
+        application to use it </p>
     </section>
     <section>
       <h1> Index </h1>
@@ -45,8 +44,8 @@
           </a>
         </li>
         <li>
-          <a href="#set_postgresql">
-            Configuring a database: PostGreSQL
+          <a href="#set_database">
+            Configuring a database
           </a>
         </li>
         <li>
@@ -327,7 +326,7 @@
       <p>We will now create a project called "unimanager" by running the express generator with options --git,
         to prepare for a git repository, and --no-view. </p>
       <strong>
-        <pre> express --git --no-view alunos</pre>
+        <pre> express --git --no-view unimanager</pre>
       </strong>
       <p>A new directory called <strong>unimanager</strong> will be created: </p>
       <p class="centerImg"><img class="termxl" src="images/projcreation.png"
@@ -346,7 +345,7 @@
       <p class="centerImg"><img src="images/vscodeopendir.png" alt="Open project directory with VSCode"></p>
       <p> If you choose that option, when you right click the directory, you should now have an option to open the
         directory with VSCode. </p>
-      <p> You can also open VSCode and choose the menu "File" and the option "Open Folder" (or "Open" in iOS)</p>
+      <p> You can also open VSCode and choose the menu "File" and the option "Open Folder" (or "Open" in MacOS)</p>
       <p> Make sure you choose the directory you just created (inside you must have a file named "app.js")</p>
       <p class="centerImg"><img src="images/vscodeopen.png" alt="Open project directory from File menu"></p>
       <p>You can now see all the files and directories created for the project.
@@ -384,7 +383,7 @@
       <p>We can now manage our project files. We can also run commands using the VSCode terminal
         (we do not need the windows command line): </p>
       <p class="centerImg"><img class="term" src="images/vscodeopenterm.png" alt="Open terminal on VSCode"></p>
-      <p>Make sure the terminal is on the correct directory. Run "dir" ("ls" on iOS) on the terminal and
+      <p>Make sure the terminal is on the correct directory. Run "dir" ("ls" on MacOS) on the terminal and
         see if the <strong>app.js</strong> file is listed. If it is not you have opened the wrong directory
         (open the right one before continuing).
       </p>
@@ -431,6 +430,7 @@
           <p class="note"> The correct way would be setting the PORT enviroment variable in the terminal using:</p>
           <p class="note">For cmd: <strong><code>set PORT=80</code></strong> </p>
           <p class="note">For powershell: <strong><code>$env:PORT=80</code></strong></p>
+          <p class="note">For MacOS: <strong><code>export PORT=80</code></strong></p>
           <p class="note">Both cmd and powershell are terminals for windows, you can see which one you have in the top
             right corner of the terminal if you only have one terminal open.
             You can open new terminals (cmd or powershell) using the plus sign.
@@ -438,10 +438,9 @@
             You can kill a terminal using the garbage can symbol or by left clicking the terminal name and chosing kill.
           </p>
           <section class="columns">
-            <p class="centerImg"><img class="big" src="images/termone.png" alt="One terminal on VSCode"></p>
-            <p class="centerImg"><img class="big" src="images/termtwo.png" alt="Two terminals on VSCode"></p>
+            <p class="centerImg"><img class="all" src="images/termone.png" alt="One terminal on VSCode"></p>
+            <p class="centerImg"><img class="all" src="images/termtwo.png" alt="Two terminals on VSCode"></p>
           </section>
-          <p class="note">For iOS: <strong><code>export PORT=80</code></strong></p>
         </li>
       </ul>
       </p>
@@ -568,10 +567,86 @@ Using "/api/" for all REST API paths is a good pratice since now we know that an
 <p> You will learn more about JavaScript and JSON in the next tutorials. You </p>
 <p>You can now use this file to experiment, we will use this project in the next tutorials too.</p>
      
-    <section id="set_postgresql">
-      <h2>4- Configuring a database: PostGreSQL</h2>
+    <section id="set_database">
+      <h2>4- Configuring a database</h2>
+      <p> We still have many concepts to learn before que can use a database, 
+        but since this is a instalation tutorial we will cover
+         also the database configuration of the server. </p>
+         <p>First we will need to install the module that will comunicate with the database. 
+           You will need to stop the server to do this and then run one of the following commands 
+           (depending on which database you are using):</p>
+         <p>For a MySql database or equivalent: <strong><code>npm install mysql --save --save-exact</code></strong> </p>
+         <p>For a PostGreSQL database: <strong><code>npm install pg --save --save-exact</code></strong> </p>~
+         <p class="note"><strong>install</strong> will add the module to our instaled modules in the directory "node_modules". 
+        <strong>--save</strong> will also add the dependency to the module in the "package.json" file. 
+        This is important since after that, if we delete our "node_modules" directory, we only need to run "npm install" to
+        install all modules, since the database connection module is already in the dependencies.
+      <strong>--save-exact</strong> will register in the dependencies we always want the same version installed. 
+      We could ommit this option if we want to always have the latest version when "npm install" is run, but a new version
+      may have differences that would make our code stop working, so we should test the new version first and only 
+      then change the dependency</p>
+      <p> If you open the "package.json" file you will see a new dependency was installed</p>
+      <h2> Configuring the database</h2>
+      <p> The database configuration is similar for most databases, but it still has differences</p>
+      <section class="columns">
+        <section>
+          <p> Lets create a "models" directory and inside a "connection.js" file. 
+            You can see the result on the right.</p>
+          <p> We only have one file in the models directory but in the future we will have more files.
+            It is on these files we will make function with our queries to request and send data to the database.
+            Our routes will then call these functions each time a user makes a request.
+          </p>
+          <p>
+            By having theses files in this "models" directory we make an important separation between:
+            <ul>
+              <li> The layer that manages client data requests: The files on the "routes" directory</li>
+              <li> The layer that actually makes the requests and calculations, 
+                also called the business layer since it has all the rules of "our business". 
+                This layer will correspond to the files on the "models"  directory</li>
+            </ul>
+          </p>
+          <p>First we will need to place the code on our "connection.js" file that will make the connection 
+            to our database and allow us to make queries.</p>
+            <p> After that we can make a simple example, but for now we will do it directly in the route file, 
+              we will see how to create our models files later.</p>
+          </section>
+        <p class="centerImg"><img class="halfterm" src="images/connection.png" alt="Models directory and connection file">
+      
+        
+      </section>
+    </section>
+    <h3 onclick="showHide('postgresql','mysql','block')">
+      Click here to see the code for PostGreSQL</h3>
+    <section id="postgresql" style="display:none" >
+        <p>PostgreSQL</p>
     </section>
 
+    <h3 onclick="showHide('mysql','postgresql','block')">
+      Click here to see the code for MySql</h3>
+      <section id="mysql" style="display:none">
+      <section class="columns">
+        <strong><pre class="code">
+var mysql = require('mysql')
+var util = require('util')
+
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host     : 'localhost',
+    user     : 'root',
+    password : 'password',
+    database : 'photos'
+});
+
+pool.query = util.promisify(pool.query)
+
+module.exports = pool</pre></strong>
+      </section>
+
+<p>MySql</p>
+      </section>
+
+    <h3>Clean disconnect</h3>
+    <p> It is important that we make sure that our </p>
 
     <section id="deploy_heroku">
       <h2>5- Setting up a website: Github and Heroku</h2>
