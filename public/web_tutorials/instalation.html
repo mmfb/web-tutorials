@@ -545,7 +545,7 @@ Using "/api/" for all REST API paths is a good pratice since now we know that an
 <!--  -->});<!--
  --></pre></code></strong>
     This code creates in Javascript a variable with a list with the information of one user and sends it. 
-    Normally we would create these variables oustide the "router.get()" so that it could be used by other functionalities~
+    Normally we would create these variables oustide the "router.get()" so that it could be used by other functionalities
     (for example a functionality to add users) but all that will be done later in files inside the "models" directory
     and later on using the database. 
 </li>
@@ -576,7 +576,7 @@ Using "/api/" for all REST API paths is a good pratice since now we know that an
            You will need to stop the server to do this and then run one of the following commands 
            (depending on which database you are using):</p>
          <p>For a MySql database or equivalent: <strong><code>npm install mysql --save --save-exact</code></strong> </p>
-         <p>For a PostGreSQL database: <strong><code>npm install pg --save --save-exact</code></strong> </p>~
+         <p>For a PostGreSQL database: <strong><code>npm install pg --save --save-exact</code></strong> </p>
          <p class="note"><strong>install</strong> will add the module to our instaled modules in the directory "node_modules". 
         <strong>--save</strong> will also add the dependency to the module in the "package.json" file. 
         This is important since after that, if we delete our "node_modules" directory, we only need to run "npm install" to
@@ -593,22 +593,23 @@ Using "/api/" for all REST API paths is a good pratice since now we know that an
           <p> Lets create a "models" directory and inside a "connection.js" file. 
             You can see the result on the right.</p>
           <p> We only have one file in the models directory but in the future we will have more files.
-            It is on these files we will make function with our queries to request and send data to the database.
+            It is on these files we will make functions with our queries to request and send data to the database.
             Our routes will then call these functions each time a user makes a request.
           </p>
           <p>
             By having theses files in this "models" directory we make an important separation between:
             <ul>
               <li> The layer that manages client data requests: The files on the "routes" directory</li>
-              <li> The layer that actually makes the requests and calculations, 
+              <li> The layer that actually processes the requests and does the calculations, 
                 also called the business layer since it has all the rules of "our business". 
                 This layer will correspond to the files on the "models"  directory</li>
             </ul>
           </p>
-          <p>First we will need to place the code on our "connection.js" file that will make the connection 
-            to our database and allow us to make queries.</p>
-            <p> After that we can make a simple example, but for now we will do it directly in the route file, 
-              we will see how to create our models files later.</p>
+          <p>First we will need to create the code that will make the connection 
+            to our database and allow us to make queries. 
+            We have created the "connection.js" file on the "models" directory  for that code</p>
+            <p> After that we can make a simple example and we 
+              will see how to create our models and connect them to the routes.</p>
           </section>
         <p class="centerImg"><img class="halfterm" src="images/connection.png" alt="Models directory and connection file">
       
@@ -618,7 +619,23 @@ Using "/api/" for all REST API paths is a good pratice since now we know that an
     <h3 onclick="showHide('postgresql','mysql','block')">
       Click here to see the code for PostGreSQL</h3>
     <section id="postgresql" style="display:none" >
-        <p>PostgreSQL</p>
+      <section class="columns">
+        <strong><pre class="code">
+var pg = require('pg');
+
+const connectionString = "postgres://root:password@localhost:5432/students"
+const Pool = pg.Pool
+const pool = new Pool({
+    connectionString,
+    max: 10,
+    ssl: {
+        require: true, 
+        rejectUnauthorized: false
+    }
+})
+
+module.exports = pool;</pre></strong>
+      </section>
     </section>
 
     <h3 onclick="showHide('mysql','postgresql','block')">
@@ -634,7 +651,7 @@ var pool  = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'password',
-    database : 'photos'
+    database : 'students'
 });
 
 pool.query = util.promisify(pool.query)
@@ -642,11 +659,40 @@ pool.query = util.promisify(pool.query)
 module.exports = pool</pre></strong>
       </section>
 
-<p>MySql</p>
       </section>
 
     <h3>Clean disconnect</h3>
-    <p> It is important that we make sure that our </p>
+    <p> It is important that we make sure that our server disconnects when we terminate or crash.
+      In this case we need to close all connections to the database to make them available to other usages.
+    </p>
+    <p> The following code is to be placed at the end of the "www" script that is inside of the "bin" folder.
+        This script starts the server and the code must be "attached" to the event that terminates the server.
+        It may be possible to place this code in another file, but this is the file where the data structure 
+        that represents the server is most accessible.
+    </p>
+    <section class="columns">
+      <strong><pre class="code">
+var pool = require("../models/connection");
+process.once('SIGTERM', end);
+process.once('SIGINT', end);
+function end() {
+  server.close(function (err) {
+    if (err) throw err;
+    console.log('Server endded!'); 
+    pool.end(function (err) {
+      if (err) throw err; 
+      process.exit();
+    });
+  });
+}</pre></strong>
+    </section>
+    <p> Notice we needed to "load" the connection module we made. 
+      We will to "require" the connection module each time we need to access the database.
+    In this case it was to end the connection pool that also closes all connections inside, 
+    thus increasing the number of available connections to any application that accesses the database.</p>
+    <h3>The model file</h3>
+      
+    <h3>The route file</h3>
 
     <section id="deploy_heroku">
       <h2>5- Setting up a website: Github and Heroku</h2>
