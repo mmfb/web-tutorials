@@ -753,7 +753,7 @@ function end() {
           href="https://github.com/">https://github.com/</a></p>
       <p> Create a new repository. On the top right you have a plus sign menu. Click on it and choose "New
         Repository". If your repository will have multiple collaborators only one needs to create, the others
-        will be set as colaborators and can clone or make changes to that same repository.</p>
+        will be set as collaborators and can clone or make changes to that same repository.</p>
       <p> Give it a name and <em>set it as public</em>.
         Check the <strong>README.md</strong> file option, it will allow you to write a description of the project that
         is shown in your
@@ -769,7 +769,7 @@ function end() {
       <p class="centerimg"> <img class="big" src="./images/add_collaborators_github.PNG"
           alt="Add collaborators to github repository"></p>
       <p> By pressing "Add people" you can write the username of the collaborators to send the invite for collaboration.
-        They will need to check the email to accept colaboration, but after that they will have access to the
+        They will need to check the email to accept collaboration, but after that they will have access to the
         repository.
       </p>
       <p> To clone your remote repository to your local computer (local repository) you will <strong>need to have a git
@@ -777,7 +777,7 @@ function end() {
       <p> If you install git you will already have a client with a command line interface, but you will probably
         want
         a client with graphical interface.
-        There are several options for git clients with GUI, bellow are 2 sugestions with some information:</p>
+        There are several options for git clients with GUI, bellow are 2 suggestions with some information:</p>
       <ul>
         <li> Git Fork application ( <a href="https://git-fork.com/">https://git-fork.com/</a>).
           It will install git and Fork applications. It has a clear GUI with many functionalities.</li>
@@ -795,12 +795,12 @@ function end() {
         (it is not as easy to work as other editors, I changed it to Notepad++).
       </p>
       <p> After this you can run git commands in VSCode by pressing F1 and writing "Git:".
-        When your repository is set you will also have most of these commands in the Source Control tab in the rigth,
+        When your repository is set you will also have most of these commands in the Source Control tab in the right,
         but first we need to clone the repository.</p>
       <h3> Clone the repository using VSCode</h3>
       <p> Open VSCode (any folder or even no folder will do). If you already have VSCode open but you only installed the
         git application
-        after you will need to close VSCode and open it again so it detects git executables.
+        after, you will need to close VSCode and open it again so it detects git executables.
       </p>
       <p> Press F1 and write "Git: Clode" on the command entry box. See the image bellow:</p>
       <p class="centerimg"><img class="med" src="./images/git_clone_vscode.PNG" alt="Git Clone in VSCode"></p>
@@ -821,7 +821,7 @@ function end() {
       <p> Open the folder of the repository in VSCode.
         You can open Source Control with the button on the bar on the left.
         If you already copy paste your code to the project you will see a number in blue, this says how many
-        files there are in the repository that were not yet commited to the local repository. ~
+        files there are in the repository that were not yet commited to the local repository. 
         The image bellow shows an example: </p>
       <p class="centerimg"><img style="width:50px" src="./images/vscode_source_control.PNG"
           alt="VSCode Source Control Option"></p>
@@ -829,7 +829,7 @@ function end() {
         To submit changes you will always need at least 3 steps:</p>
       <section class="fleximg">
         <ul>
-          <li> Stage all changes to commit: You can do this by pressing the plus sign on the rigth of 
+          <li> Stage all changes to commit: You can do this by pressing the plus sign on the right of 
             the "Changes" header. All files will now pass to the "Staged Changes" header. 
           </li>
           <li>
@@ -841,7 +841,7 @@ function end() {
           <li>
             Push all changes to the remote repository: When all changes are commited to the local repository
             VSCode will show a button with an option to Sync Changes, which means Pushing your changes to 
-            GitHub. You do not need to Push all Commits, if you keep editing files you can, and should, Commit
+            GitHub. You do not need to Push all Commits, if you keep editing files you can, and should, commit
             those changes to the local repository. When you are sure that you have something that can be shared
             with other collaborators you can Sync it to the remote repository.
             If you hover above the Sync Changes button it will say how many commits you made since last Sync
@@ -850,13 +850,13 @@ function end() {
         </ul>
         <img src="./images/vscode_stage.PNG" alt="Stage changes on VSCode">
       </section>
-      <p>Where there are no changes and the local repository was Synced with the remote repository the Source Control ~
+      <p>When there are no changes and the local repository was Synced with the remote repository the Source Control
         will have no blue number, and it will say "Changes 0"</p>
       <p> If any other collaborator has made changes to the remote repository you will first need to pull any
         changes before Pushing (Sync) your changes. 
         Even if you have no collaborators yet you can test this by editing the README file on GitHub.
         After that make some changes to the code and try to make the same 3 steps (Stage, Commit, Push)</p>  
-      <p> If you did all the steps you will notice it did not asked anything more. This is because the
+      <p> If you did all the steps you will notice it did not asked anything. This is because the
         "Sync" option on VSCode already includes a Pull if one is needed, so you actually only need 3 steps: Stage, Commit, Sync.
       </p>
       <p> If the other collaborator made a change in the same file as you, you can have a merge conflict. 
@@ -869,7 +869,7 @@ function end() {
    Your collaborator code here
 >>>>>>>>> Test (Incoming Change)
       </pre>
-      <p> Correct all the conflicts and delete the extra lines. Repeate the Stage, Commit, Sync steps 
+      <p> Correct all the conflicts and delete the extra lines. Repeat the Stage, Commit, Sync steps 
         to send the new version with your conflict resolution. </p>
       <p> You can see more information on how to use Source Control in here:
         <a href="https://code.visualstudio.com/docs/editor/versioncontrol">https://code.visualstudio.com/docs/editor/versioncontrol</a>
@@ -877,8 +877,8 @@ function end() {
     
       <h3> Create a Heroku Application and set your repository as source of the code</h3>
       <p> It is easier if the application is created by the same person that created the repository, since it is easier to connect to the repository that way.</p>
-      <p> Create a Heroku accout: <a href="https://signup.heroku.com/login">https://signup.heroku.com/login</a></p>
-      <p> Press the "New" button on the top rigth and choose "Create a new app". Fill your app name and press "Create App".
+      <p> Create a Heroku account: <a href="https://signup.heroku.com/login">https://signup.heroku.com/login</a></p>
+      <p> Press the "New" button on the top right and choose "Create a new app". Fill your app name and press "Create App".
       <p> The new app will open in the Deploy menu so you can set your code source.
           Make sure you are logged into your GitHub acount.
           Choose GitHub in the Deployment Method it will find your github username and allow you to search for 
@@ -894,7 +894,7 @@ function end() {
         You can already see all static content but we still need to set our database to see the dynamic content. 
         Your app URL will be {application_name}.herokuapp.com </p>
       <h3> Setting up the database on Heroku</h3>
-      <p> If you want a MySql database just create a remote database using one of the sugested websites and
+      <p> If you want a MySql database just create a remote database using one of the suggested websites and
          change the connnection.js settings for the new database (you will need to Stage/Commit/Sync after).</p>
       <p> You will need to create the tables and fill them with the data you used on the local database to make a complete 
         replica of your local run instance.</p>
@@ -912,27 +912,27 @@ function end() {
         <li>
           Scroll to Config Vars and choose Reveal Config Vars
         </li>
-        <li> Write the name and value of every enviroment var you used and press Add for each</li>
+        <li> Write the name and value of every environment var you used and press Add for each</li>
       </ul>
       <p> If you want to use the PostGreSQL database you can do the same using a free remote database hosting like
         <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a> or you can use the  PostGreSQL module
               in Heroku</p>
       <p> To use the PostGreSQL module go to the Resources menu and write PostGres on the Add-ons search bar</p>
       <p> Choose the option named "Heroku Postgres" it will create a new database.</p>
-      <p> Click in the link that was created to see the settings of that database. Choose the Setttings option and then View Credentials</p>
+      <p> Click in the link that was created to see the settings of that database. Choose the Settings option and then View Credentials</p>
       <p>You can use those credentials on the connection.js and you can also use them in pgadmin to create your tables and fill them.</p>
       <p> To connect to this remote database using pgadmin you will need to:</p>
       <ul>
-        <li>Create a new Server and choose a name (its the name you want it to be known in pgadmin, not the database name)</li>
+        <li>Create a new Server and choose a name (it is the name you want it to be known in pgadmin, not the database name)</li>
         <li>Go to the connection menu and fill the credentials you got from your database.
-          On the "Mantainance database" field place the name of the Database (it is the only one you have access).
+          On the "Maintainance database" field place the name of the Database (it is the only one you have access).
           Do not forget to click on the checkbox to save the password so you don't have to write it again.
         </li>
-        <li> Go to the Advanced menu and place the name of your database in the "DB restrition" field.
+        <li> Go to the Advanced menu and place the name of your database in the "DB restriction" field.
           If you do not do this pgadmin will show all database names in the server but you still only have access to yours, 
           making it really hard to find your database in the middle of all the other names.
       </ul>
-      <p> And that is it, now you only need to fill the database will tables and data to replicate your local instance.</p>
+      <p> And that is it, now you only need to fill the database with tables and data to replicate your local instance.</p>
 
       <p> If you had to remove the SSL settings for the Pool on the connection.js file you will need to add them now, 
         since the remote database uses SSL to authenticate. We place the code bellow again to help:</p>
