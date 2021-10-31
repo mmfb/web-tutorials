@@ -92,6 +92,17 @@ img.halfterm {
   width:300px;
 }
 
+.fleximg {
+    display: flex;
+    align-items: center;
+}
+.fleximg img {
+    max-width: 40%;
+}
+
+.marked {
+  background-color: darkkhaki;
+}
 
 img.termxl {
   width:800px;
