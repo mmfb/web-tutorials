@@ -21,8 +21,8 @@
       <p><input type="checkbox"> Installing node.js, express.js and other support applications</p>
       <p><input type="checkbox"> Setting up localhost Node.js/Express.js application </p>
       <h2> Other objectives </h2>
-      <p><input type="checkbox"> Setting up a database on a Node.js/Express.js application </p>
-      <p><input type="checkbox"> Using version control with git, github and fork </p>
+      <p><input type="checkbox"> Setting up and using a database on a Node.js/Express.js application </p>
+      <p><input type="checkbox"> Using version control with git and github </p>
       <p><input type="checkbox"> Setting up a online Node.js/Express.js application using HerokuApp </p>
       <p><input type="checkbox"> Creating a postgres database on Heroku and configuring the Node.js/Express.js
         application to use it </p>
@@ -42,11 +42,20 @@
           <a href="#install_vscode">
             Installing an editor (Visual Studio Code) and using it
           </a>
+          <ol>
+            <li> <a href="#pageserver">Changing something on the Web Pages Server</a></li>
+            <li> <a href="#restserver">Changing something on the Rest API Server</a></li>
+          </ol>
         </li>
         <li>
           <a href="#set_database">
-            Configuring a database
+            Configuring a database and using it
           </a>
+          <ol>
+            <li><a href="modelfile">Models</a></li>
+            <li><a href="routesfile">Routes</a></li>
+            <li><a href="rundb">Running</a></li>
+          </ol>
         </li>
         <li>
           <a href="#deploy_heroku">
@@ -217,8 +226,6 @@
           </p>
 
         </li>
-
-
         <li>
           <p id="html"><strong>HTML</strong>
             HypertText Modeling Language – Used to define the content of web pages</p>
@@ -238,6 +245,13 @@
             pages
           <p>Reference: <a href="https://www.w3schools.com/js">
               https://www.w3schools.com/js</a></p>
+        </li>
+
+        <li>
+          <p id="p5"><strong>P5.js</strong>
+            Javascript library for "creative coding". Can be used to develop creative interfaces, 
+            including games.</p>
+            <p>Reference: <a href="https://p5js.org/"> https://p5js.org/</a></p>
         </li>
         <li>
           <p id="rest"><strong>REST</strong>
@@ -269,17 +283,9 @@
             Distributed version control system. Ables developer teams to manage several versions of code
             and colaboratively create applications.
             You can use it directly on a command line or using a client with a graphic interface.
+            In our case VSCode already has an integrated source control management system that supports git 
+            and GitHub, so we already have our client and do not even need to install git.  
           </p>
-        </li>
-        <li>
-          <p id="fork"><strong>Fork</strong>
-            Fork is a git client. It allows you to create and manage a local git repository and to connect it to a
-            remote repository.
-            When installing Fork you will also install Git, if you have not already installed.
-          </p>
-          <p>Reference: <a href="https://git-fork.com/">
-              https://git-fork.com/</a>. Note: the free-evaluation has all the functionalities.
-            For now you only need to close the pop-up windows that sometimes show asking for registation</p>
         </li>
         <li>
           <p id="github"><strong>GitHub</strong>
@@ -323,12 +329,12 @@
       <p> NPM is the Node Package Manager (used to install new modules and manage node projects)</p>
       <p> The generator has many options, we can see them running "express -h"</p>
       <p class="centerImg"><img class="termxl" src="images/expressgen.png" alt="Express generator options"></p>
-      <p>We will now create a project called "unimanager" by running the express generator with options --git,
+      <p>We will now create a project named "myproject" (images may show other project names) by running the express generator with options --git,
         to prepare for a git repository, and --no-view. </p>
       <strong>
-        <pre> express --git --no-view unimanager</pre>
+        <pre> express --git --no-view myproject</pre>
       </strong>
-      <p>A new directory called <strong>unimanager</strong> will be created: </p>
+      <p>A new directory called <strong>myproject</strong> will be created: </p>
       <p class="centerImg"><img class="termxl" src="images/projcreation.png"
           alt="Creating a project with express generator"></p>
       <p>You can use this to create a base structure to any Node/Express project you need.</p>
@@ -360,7 +366,7 @@
           <p>
             The <strong>app.js</strong> file is the file where all initial configurations are made,
             we will need to change this file for instance to include more files to process data
-            (ex: students or classes data)
+            (ex: users data)
           </p>
           <p>
             The <strong>routes</strong> directory is where all the files to process data will be.
@@ -450,7 +456,7 @@
       <p>Let's now try to make some changes. We will not discuss yet all the relevent concepts,
         the idea is just to help to understand the server architecture discussed in the beggining of this tutorial. </p>
 
-      <h2> Changing something on the Web Pages Server</h2>
+      <h2 id="pageserver"> Changing something on the Web Pages Server</h2>
       <p> The Web Pages Server serves files that will present static content i.e. content that
         is not dependent on datasources like a database or on calculations.</p>
       <p> All the files for the Web Pages Server will be in the public directory. </p>
@@ -503,14 +509,14 @@
       <p>You can now use this file to experiment, we will use this project in the next tutorials too.</p>
 
 
-      <h2> Changing something on the Rest API Server</h2>
+      <h2 id="restserver"> Changing something on the Rest API Server</h2>
       <p> The Rest Api Server will provide all data needed by the user, either from datasources like databases or from
         calculations.</p>
       <p> For the Rest Api functionalities we will need to create and edit files in different parts of our project</p>
       <p> The <strong>app.js</strong> defines several settings we may need to change to create new functionalities</p>
       <p> Each different data request will need to have a specific <strong>path</strong> which
         will be defined in the "app.js" file and on a file in the "routes" directory</p>
-      <p class="note"> The data acquisition is usually done in files a "models" directory that will see in another
+      <p class="note"> The data acquisition is usually done in files in a "models" directory that we will see in another
         tutorial. </p>
       <p>For now we will simply work with the "users.js" file in the "routes" directory.
         We will see later that the "index.js" is not working, and that for creating a new file
@@ -518,7 +524,7 @@
       </p>
       <p>
         First lets try to see what data does the "users.js" file provides. For that we will first need
-        to know the <strong>path</strong> to make the data request (remember: each Rest API functionality as its path).
+        to know the <strong>path</strong> to make the data request (remember: each Rest API functionality has its path).
       </p>
       <p>
         Open the "app.js" file, you will see this line: <strong><code>app.use('/users', usersRouter);</code></strong>
@@ -551,8 +557,7 @@
           Normally we would create these variables oustide the "router.get()" so that it could be used by other
           functionalities
           (for example a functionality to add users) but all that will be done later in files inside the "models"
-          directory
-          and later on using the database.
+          directory and using the database.
         </li>
       </ul>
       </p>
@@ -572,14 +577,14 @@
         information.
         Both have similarities, but there are differences, for instance, the names of the attributes have "" on JSON.
       </p>
-      <p> You will learn more about JavaScript and JSON in the next tutorials. You </p>
+      <p> You will learn more about JavaScript and JSON in the next tutorials. </p>
       <p>You can now use this file to experiment, we will use this project in the next tutorials too.</p>
     </section>
 
     <section id="set_database">
       <h2>4- Configuring a database</h2>
-      <p> We still have many concepts to learn before que can use a database,
-        but since this is a instalation tutorial we will cover
+      <p> We still have many concepts to learn before we can fully use a database,
+        but since this is an instalation tutorial we will cover
         also the database configuration of the server. </p>
       <p>First we will need to install the module that will comunicate with the database.
         You will need to stop the server to do this and then run one of the following commands
@@ -600,10 +605,43 @@
       </p>
       <p> If you open the "package.json" file you will see a new dependency was installed</p>
       <h2> Configuring the database</h2>
-      <p> The database configuration is similar for most databases, but it still has differences</p>
+      <p> First we will need to know the settings for the database: hostname, port number, database name, username and password. 
+        All this information can usually be retrieved from our database provider in a single string called connection string, for example:</p>
+      <ul>
+        <li>PostGreSQL: "postgres://root:password@localhost:5432/clicker1"</li>
+        <li>MySQL: "mysql://root:password@localhost:5432/clicker1"</li>
+      </ul>
+      <p> This string should not be directly in our code since it has confidential information (ex: password and username). 
+        To solve this problem we will save this connection string in an environment variable and use that environment variable in our code.
+      </p>
+      <p> We already mentioned how to set environment variables (example for windows: SET DATABASE_URL=postgres://root:password@localhost:5432/clicker1) 
+        but with that method we would need to set the value each time we created a new terminal (when we close the terminal the environment is gone). </p>
+      <p> To avoid setting up the environment variable each time we can use a module called dotenv. 
+        First we need to install this module:<br>
+          <strong> npm install dotenv --save</strong>
+      </p>
+      <p>
+        After installing, <strong> we create  a .env file</strong>, in the base directory (same place the app.js is) with the environment variables we want:<br>
+       </p><p>
+        <strong>DATABASE_URL=postgres://root:password@localhost:5432/clicker1</strong><br>
+        or<br>
+        <strong>DATABASE_URL=mysql://root:password@localhost:5432/clicker1</strong><br>
+      </p>
+      <p> Now we only need to call dotenv configuration method when we start configuring our app to make
+         all those environment variables available 
+        (we only have one variable for now, but we could set more). Insert the following line in the top of the "app.js" file:<br>
+        <strong>require('dotenv').config();</strong><br>
+      </p>
+      <p>
+        We can now use the environment variables that we set in the .env file. 
+        This file will only be used in our development version of the code, it will not be sent to the version control system or the final server.
+        Make sure the .gitignore file includes this line<br>
+        <strong>.env</strong><br>
+        This says that the .env file will be ignored when our code is sent to version control (it is usually already present in most .gitignore files but if it is not you need to add it).</p>
+      <p> The database configuration is similar for most database libraries, but it still has differences</p>
       <section class="columns">
         <section>
-          <p> Lets create a "models" directory and inside a "connection.js" file.
+          <p> Lets <strong> create a "models" directory and inside a "connection.js" file</strong>.
             You can see the result on the right.</p>
           <p> We only have one file in the models directory but in the future we will have more files.
             It is on these files we will make functions with our queries to request and send data to the database.
@@ -626,8 +664,6 @@
         </section>
         <p class="centerImg"><img class="halfterm" src="images/connection.png"
             alt="Models directory and connection file"></p>
-
-
       </section>
       <h3 onclick="showHide('postgresql','mysql','block')">
         Click here to see the code for PostGreSQL</h3>
@@ -637,19 +673,22 @@
             <pre class="code">
 var pg = require('pg');
 
-const connectionString = "postgres://root:password@localhost:5432/students"
+const connectionString = process.env.DATABASE_URL
 const Pool = pg.Pool
 const pool = new Pool({
     connectionString,
-    max: 10,
-    ssl: {
-        require: true, 
-        rejectUnauthorized: false
-    }
+    max: 10<span class="marked">,
+      ssl: {
+          require: true, 
+          rejectUnauthorized: false
+      }</span>
 })
 
 module.exports = pool;</pre>
           </strong>
+          <p> You may not need the part that is marked in gray, in some cases it may even give an error and must be deleted.
+            This part of the code defines settings for secure connections and when we are working on our computer we usually 
+            don't have the credentials to create secure connections. But this code will be needed when we send our final code to the server, since the server usually has secure connections. </p>
         </section>
       </section>
 
@@ -662,13 +701,7 @@ module.exports = pool;</pre>
 var mysql = require('mysql')
 var util = require('util')
 
-var pool  = mysql.createPool({
-    connectionLimit : 10,
-    host     : 'localhost',
-    user     : 'root',
-    password : 'password',
-    database : 'students'
-});
+var pool  = mysql.createPool(process.env.DATABASE_URL);
 
 pool.query = util.promisify(pool.query)
 
@@ -677,7 +710,6 @@ module.exports = pool</pre>
         </section>
 
       </section>
-
       <h3>Clean disconnect</h3>
       <p> It is important that we make sure that our server disconnects when we terminate or crash.
         In this case we need to close all connections to the database to make them available to other usages.
@@ -692,7 +724,6 @@ module.exports = pool</pre>
           <pre class="code">
 var pool = require("../models/connection");
 process.once('SIGTERM', end);
-process.once('SIGINT', end);
 function end() {
   server.close(function (err) {
     if (err) throw err;
@@ -709,9 +740,164 @@ function end() {
         We will to "require" the connection module each time we need to access the database.
         In this case it was to end the connection pool that also closes all connections inside,
         thus increasing the number of available connections to any application that accesses the database.</p>
-      <h3>The model file</h3>
+      <p><strong> We should also run this cleanup when we use Ctrl C, however, in Windows it is somehow
+        complicated to process this event so it was not included in the code 
+        (in linux is just adding the line to process SIGINT event).
+      </strong></p>
+        <h3 id="modelfile">The model file</h3>
+      <h4>NOTE: This sections was only prepared for PostGreSQL (MySQL is similar but has some differences)</h4>
 
-      <h3>The route file</h3>
+        <p> Now we will create a model file for the rooms resources. 
+          <strong>Create the file "roomsModel.js" in the models directory</strong></p>
+        <p> Inside this file we will create methods to manage information about rooms.</p>
+        <p> First we need to obtain our connection to the database by requiring the module we created for the connection. 
+          After that we will create our first method, to obtain all rooms in the room table and return them. See the code bellow:</p>
+
+
+        <section class="columns">
+          <strong>
+            <pre class="code">
+var pool = require('./connection.js')
+
+module.exports.getAllRooms = async function() {
+  try {
+    let sql = "Select * from room";
+    let result = await pool.query(sql);
+    let rooms = result.rows;
+    return { status: 200, result: rooms};
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err};
+  }
+}  
+</pre>
+          </strong>
+        </section>
+        <p>Some remarks about the code:</p>
+        <ul>
+          <li> <strong>require</strong> is a built-in function of node.js that will load a module. 
+            The module is an object that needs to be exported on the other model. 
+            In this case, in the "connection" module we exported the "pool" object that has the "query" method.
+          </li>
+          <li> Using <strong>require</strong> with only the module name will search for the library in the "node_module" directory 
+            i.e. in the modules instaled using "npm install". To load a module we have on our code we need to write
+            the relative path, thus "./connection.js" the connection.js file in the same directory "./". 
+          </li>
+          <li> By default node.js starts the <strong>module.exports</strong> with an empty object. 
+            If in "connection.js" we replaced the object with the pool object, in here we are adding
+            methods to the object. All these methods will be available when any other module uses require of this file.
+          </li>
+          <li> <strong>async</strong> says that this function is Asynchronous. 
+            We do not want this function to stop the full server when it waits for the database to reply, so we use async.
+            The "async" command is mandatory to use the "await" command that will wait for the database reply to the query.
+            <br>
+            There are 3 ways (at the moment) to manage Asynchronous functions <strong onclick="showHide('asyncOptions','','block')">(click to see more).</strong>
+            <ul id="asyncOptions"  style="display:none">
+              <li> Using callback functions: A functions is passed to the Asynchronous function to be called when the 
+                Asynchronous function ends with the result of the Asynchronous function.</li>
+                <li> Promises: A promise allows you to define serveral parameters to a code that will be runned Asynchronously.
+                   One of these parameters is the code that will be runned after the code ends, 
+                   with the result of that code (the .then parameter). Not all functions allow for promises althoug
+                   h you can always create your own promise to wrap any code. </li>
+                <li> Async/Await: These commands are sintatic sugar for promises. 
+                  Meaning you need to have something that is a promise to start with, but the way you use it is 
+                much more similar to sincronous code, which makes it easier for programmers that are not used to work on Asynchronous code.
+                However, promises have more parameters and operations that allow for more advanced usage.</li>
+            </ul>
+          </li>
+          <li>
+            function: Defines a function, in this case the function does not receive any parameter (),
+            but it will return an object since it has a return statement with an object for any possible
+            flow of our code.
+          </li>
+          <li>
+            try/catch: These commands are used for error treatment. Inside the "try" block we place our
+             calculations and if there is any error javascript will call the "catch" block, where we
+             proccess any error. 
+          </li>
+          <li>
+            pool.query: This method receives a string with the sql command (it can also receive a list 
+            of parameters, but that will be talked later) and will run that query on the database.<br>
+            The result is an object with several information including the ".rows" attribute that is a
+            list with as many objects as the number of rows that the query returns. Each object will
+            have attributes with the same name as the columns of the query, and values that correspond to the
+            rows values (we will see an example of a return value later).
+          </li>
+          <li>
+            console.log: This command will write the received value in the server console. This value is not
+            returned to the client, it is only usefull as debug information. You can write several of these
+            commands to debug your code.
+          </li>
+          <li>
+            return: Will return an object with two attributes: status and result. We can return anything, we choose
+            this format because we can return if the call was a success (status 200) or a server error (status 500) and
+            a result information. <br>
+            The result will be the rows of the query in case of success or the error object in case of error 
+            (we are sending the error object to the client later because this is a prototype 
+            and it is easier to debug this way, on a "real"
+            project we should not send sensible information to the client side).
+            <br>
+            200 and 500 correspond to default HTTP error numbers.
+          </li>
+        </ul>
+      <h3 id="routesfile">The route file</h3>
+
+      <p> Now we will create the code that will process requests from the client and call the model to do the calculations. </p>
+      <p><strong>Create a "roomsRoutes.js" file in the "routes" directory</strong> and write the code bellow:</p>  
+      
+      <section class="columns">
+        <strong>
+          <pre class="code">
+var express = require('express');
+var router = express.Router();
+var rModel = require("../models/roomsModel");
+            
+router.get('/', async function(req, res, next) {
+    let result = await rModel.getAllRooms();
+    res.status(result.status).send(result.result);
+});
+            
+module.exports = router;</pre>
+        </strong>
+      </section>
+    
+      <p> Inside the route we will need to create an Express router object (we need to load the express library first).
+         This object will allow us to set several routes and will then be added to the application as a module (in the "app.js" file).<br>
+        To be added to the application <strong>we cannot forget to export the router object: "module.export = router;" </strong></p> 
+      <p> We also need to import any models we need to make the calculations, using the require command</p>
+      <p> Each rule is a method on the router object. In this case we created a method get but it can also be 
+        post (add), put (edit) or delete (and all other types of HTTP methods).</p>
+      <p> Each rule of the same method type (ex: get rules) needs to have a different path (first parameter)
+         and receives a function (second parameter) that will process the request. The function, that is also Asynchronous,
+          will automatically receive an object with the request information and an object that will be used
+          as response. We probably not use the next parameter, it is used by middleware that do preprocessing and then call 
+          next so that express will find the next available rule.
+      </p>
+      <p> In our function we call the method we created on the model file and send the status and result to the client.</p>
+      <h3 id="rundb"> Final settings and running </h3>
+      <p> Our route and model are ready and connected to each other, but the route is not yet connect to the app, 
+        for that we need to add the route to our "app.js" file (the one in the base directory)</p>
+      <p> First we load our route file by adding this line next to the other loading route line:</p>
+      <p><strong>var roomsRouter = require('./routes/roomsRoutes');</strong></p>
+      <p> This will load the router object we exported. </p>
+      <p> Finally we will add the router object to the app (place it next to the other similar lines in the "app.js" file) </p>
+      <p><strong>app.use('/api/rooms', roomsRouter);</strong></p>
+      <p> Notice we also set a path, this will be prepended to the path of each rule in the routes file.
+        This mean that all rules that are related to the same resource have a common initial path and only differ on the rest of the path.
+        <br><strong>It if very important that you define clear paths following the conventions normally used in REST interfaces
+          (we will talk about this in more detail later) </strong>
+      </p>
+      <p> Now run your code using <strong>"npm start"</strong>. If you server is already running you need
+      to stop the server first using Ctrl C in the console and then run the server again (changes only apply when the server starts).</p>
+      <p> Write the full path on the browser to test the new REST endpoint: <strong>localhost:3000/api/rooms</strong></p>
+      <p> The result should be similar to this one:</p>
+      <p><strong>[{"roo_id":1,"roo_name":"Room 1","roo_topcard":"Rock"}]</strong></p>
+      <p> This is JSON. [] define a JSON array, {} a JSON object. Meaning our query returned only one row (one object inside the array).
+        We can also see the three values for the three columns defined on the table, each corresponding to one attribute on the object.
+        Objects in JSON have attribute names inside quotes, while on javascript objects attribute names have no quotes, this is one of the few
+        differences between javascript and JSON objects.</p>
+        <p> You can create many other rules in these routes and model files. We will see these later:<br>
+        <a href="restinterface.html"> Creating a REST interface.</a> </p>
     </section>
 
     <section id="deploy_heroku">
@@ -722,17 +908,11 @@ function end() {
       <p> To set up our website on Heroku using GitHub we will need:</p>
       <ul>
         <li> Create a GitHub account. </li>
-        <li> Create a GitHub repository (remote repository) on that account. </li>
-        <li> Add other collaborators to your repository </li>
-        <li> Clone the repository to our computer (local repository).
-          It will create a directory with all the git repository settings, including which remote repository we are
-          using.</li>
-        <li> Add our code to that repository.
-          If we already created the code in another directory the easy way is to copy-paste (or cut-paste) the code to
-          the repository directory.
-          Make sure the base of the project is directly on the base repository directory i.e. that when you enter the
-          repository directory you see the package.json file and the app.js file.
-          This will be important when we connect Heroku to GitHub </li>
+        <li> Create a GitHub repository (remote repository) on that account using VSCode. <br>
+            If you want you can add other collaborators to your repository using the GitHub website <br>
+            <strong>Make sure the base of the project is directly on the base repository directory</strong> 
+            i.e. that when you enter the repository directory you see the package.json file
+             and the app.js file. This will be important when we connect Heroku to GitHub</li>
         <li> Commit and push our code to the local and remote repositories.</li>
         <li> Create a Heroku account.</li>
         <li> Create a Heroku Node Application </li>
@@ -748,18 +928,20 @@ function end() {
             </li>
           </ul>
       </ul>
-      <h2>Creating a GitHub repository and clone it to your computer </h2>
+      <h2>Creating a GitHub repository using VSCode </h2>
       <p> If you do not have a GitHub account you can register here: <a
           href="https://github.com/">https://github.com/</a></p>
-      <p> Create a new repository. On the top right you have a plus sign menu. Click on it and choose "New
-        Repository". If your repository will have multiple collaborators only one needs to create, the others
-        will be set as collaborators and can clone or make changes to that same repository.</p>
-      <p> Give it a name and <em>set it as public</em>.
-        Check the <strong>README.md</strong> file option, it will allow you to write a description of the project that
-        is shown in your
-        repository GitHub page. </p>
-      <p> You can also choose a license but you do not need the .gitignore since the express generator already
-        created one for you.</p>
+          <section class="fleximg">
+            <p> To create a repository simply press the source control button like shown in the image on the right.
+              After that press the button to publish to github and choose a name (by default is the project name). 
+             You should be logged on to your github account on the web browser before doing this steps, otherwise it will ask you to log on.</p>
+           <img style="padding:0px 10%" src="./images/vscode_github.png"
+              alt="Create github repository on vscode">
+        </section>
+      
+          
+       
+
       <h3> Setting other collaborators</h3>
       <p> Public repositories can be seen by anyone, and anyone can make a clone, but only collaborators
         can make changes to that repository
@@ -772,55 +954,21 @@ function end() {
         They will need to check the email to accept collaboration, but after that they will have access to the
         repository.
       </p>
-      <p> To clone your remote repository to your local computer (local repository) you will <strong>need to have a git
-          client application </strong></p>
-      <p> If you install git you will already have a client with a command line interface, but you will probably
-        want
-        a client with graphical interface.
-        There are several options for git clients with GUI, bellow are 2 suggestions with some information:</p>
-      <ul>
-        <li> Git Fork application ( <a href="https://git-fork.com/">https://git-fork.com/</a>).
-          It will install git and Fork applications. It has a clear GUI with many functionalities.</li>
-        <li> Visual Studio Code already comes with a Source Control functionality that is a git client.
-          You can add more extensions to add new functionalities to Source Control.
-          You still need to install git to use source control ( <a href="https://git-scm.com/">https://git-scm.com/</a>
-          ).
-        </li>
-      </ul>
-      <p> We will consider using the VSCode Source Control so that we do not add more applications, but using Fork
-        may
-        be even easier, when you adapt to it.</p>
-      <p>First install the git application that was mentioned before.
-        You will probably want all the default options except for the text editor that is Vim by default
-        (it is not as easy to work as other editors, I changed it to Notepad++).
-      </p>
-      <p> After this you can run git commands in VSCode by pressing F1 and writing "Git:".
-        When your repository is set you will also have most of these commands in the Source Control tab in the right,
-        but first we need to clone the repository.</p>
+      
       <h3> Clone the repository using VSCode</h3>
-      <p> Open VSCode (any folder or even no folder will do). If you already have VSCode open but you only installed the
-        git application
-        after, you will need to close VSCode and open it again so it detects git executables.
+      <p> If the repository already exists you will want to clone the repository instead of creating a new one.</p>
+      <p> This can be done just by downloading a zip of the code from the GitHub web site, but it can also be done inside VSCode</p> 
+      <p> If you open a VSCode without choosing a project folder you will see an option to clone a repository in the Get Started window 
+        and you can also access this option by pressing the Source Control buttons shown before. </p>
+      <p>Just press the option and copy paste the link of the repository you want to clone</p>     
+      <p> It will ask where you want to create the project and a new directory will be created with all the
+          files and the settings that connect it to the remote GitHub repository
       </p>
-      <p> Press F1 and write "Git: Clode" on the command entry box. See the image bellow:</p>
-      <p class="centerimg"><img class="med" src="./images/git_clone_vscode.PNG" alt="Git Clone in VSCode"></p>
-      <p> It will support cloning directly from GitHub.
-        When you choose the option to clone from GitHub it will ask you for your password to connect to your github.
-        After that your available repositories will show for you to choose one to clone.</p>
-      <p> Choose one repository and the directory you want to clone it too,
-        a directory with the name of the repository will be created will all the code that is in the repository
-        (at the moment only the README.md file) and several other files with the repository settings, including the
-        settings to connect to the remote repository </p>
-      <p> If the repository is not yours you will need to write the path to the repository that consists on the username
-        and the repository name in the following format: {user_name}/{repository_name}.
-        VSCode will autocomplete when you start writing the path.
-        The rest of the steps is the same as if it was your own repository but you will only be able to make changes to
-        that repository if you are a collaborator. </p>
-      <p> You can now copy paste your project code to the repository directory. Make sure that the app.js and
-        package.json files are in the root directory of the project (the one that was created)</p>
-      <p> Open the folder of the repository in VSCode.
-        You can open Source Control with the button on the bar on the left.
-        If you already copy paste your code to the project you will see a number in blue, this says how many
+      <p>You will only be able to push to the GitHub repository if you are the owner or collaborator of that repository</p> 
+     
+     <h3>Commit and push our code to the local and remote repositories. </h3>
+      <p> Open Source Control with the button on the bar on the left.
+        If you already made changes to your code  you will see a number in blue, this says how many
         files there are in the repository that were not yet commited to the local repository. 
         The image bellow shows an example: </p>
       <p class="centerimg"><img style="width:50px" src="./images/vscode_source_control.PNG"
@@ -844,8 +992,7 @@ function end() {
             GitHub. You do not need to Push all Commits, if you keep editing files you can, and should, commit
             those changes to the local repository. When you are sure that you have something that can be shared
             with other collaborators you can Sync it to the remote repository.
-            If you hover above the Sync Changes button it will say how many commits you made since last Sync
-            (in our case we will Push one Commit, with the code we copy paste to the project).
+            If you hover above the Sync Changes button it will say how many commits you made since last Sync.
           </li>
         </ul>
         <img src="./images/vscode_stage.PNG" alt="Stage changes on VSCode">
@@ -898,14 +1045,65 @@ function end() {
          change the connnection.js settings for the new database (you will need to Stage/Commit/Sync after).</p>
       <p> You will need to create the tables and fill them with the data you used on the local database to make a complete 
         replica of your local run instance.</p>
-      <p> You can use variables to avoid having your database password and other settings on the code.
-        For that you need to: </p>
-      <ul>
-        <li>Replace all sensitive data with environment variables. Example:
+        <p> If you want to use the PostGreSQL database you can do the same using a free remote database hosting like
+          <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a> or you can use the  PostGreSQL module
+                in Heroku</p>
+        <p> <strong>To use the PostGreSQL Heroku module  </strong>go to the Resources menu and write PostGres on the Add-ons search bar</p>
+        <p> Choose the option named "Heroku Postgres" it will create a new database.</p>
+        <p> Click in the link that was created to see the settings of that database. Choose the Settings option and then View Credentials</p>
+        <p>You can use those credentials on the .env file and you can also use them in pgadmin to create your tables and fill them.</p>
+        <p> To connect to this remote database using pgadmin you will need to:</p>
+        <ul>
+          <li>Create a new Server and choose a name (it is the name you want it to be known in pgadmin, not the database name)</li>
+          <li>Go to the connection menu and fill the credentials you got from your database.
+            On the "Maintainance database" field place the name of the Database (it is the only one you have access).
+            Do not forget to click on the checkbox to save the password so you don't have to write it again.
+          </li>
+          <li> Go to the Advanced menu and place the name of your database in the "DB restriction" field.
+            If you do not do this pgadmin will show all database names in the server but you still only have access to yours, 
+            making it really hard to find your database in the middle of all the other names.
+        </ul>
+        <p> And that is it, now you only need to fill the database with tables and data to replicate your local instance.</p>
+  
+        <p> If you had to remove the SSL settings for the Pool on the connection.js file you will need to add them now, 
+          since the remote database uses SSL to authenticate. We place the code bellow again to help:</p>
+          <section class="columns">
+            <strong>
+              <pre class="code">
+  var pg = require('pg');
+  
+  const connectionString = "postgres://root:password@localhost:5432/students"
+  const Pool = pg.Pool
+  const pool = new Pool({
+      connectionString,
+      max: 10<span class="marked">,
+      ssl: {
+          require: true, 
+          rejectUnauthorized: false
+      }</span>
+  })
+  
+  module.exports = pool;</pre>
+            </strong>
+          </section>
+  
+
+        <p> You should use variables to avoid having your database password and other settings on the code.
+        For that you need to replace all sensitive data with environment variables (in our examples we already did this). Example:
             <pre><!--
-            -->  const connectionString = process.env.CONNECTION<!--
+            -->  const connectionString = process.env.DATABASE_URL<!--
          --></pre>
-        </li>
+        </p>
+      <p>
+          If you are using the Heroku PostGreSQL database Heroku already sets a environment variable
+          with the connection string for the database with the name DATABASE_URL (the same we used in our dotenv example).
+      </p>
+      <p>    
+          If you are using another variable or did not use this variable name in your code you need to set
+          the variable name inside your Heroku application. You need to do the same for any environment variable you want to set. 
+          Do the following steps for that:
+        </p>
+        <ul>
         <li>
            Go to the Settings menu (last menu, on the top bar) on your Heroku application 
         </li>
@@ -914,47 +1112,6 @@ function end() {
         </li>
         <li> Write the name and value of every environment var you used and press Add for each</li>
       </ul>
-      <p> If you want to use the PostGreSQL database you can do the same using a free remote database hosting like
-        <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a> or you can use the  PostGreSQL module
-              in Heroku</p>
-      <p> To use the PostGreSQL module go to the Resources menu and write PostGres on the Add-ons search bar</p>
-      <p> Choose the option named "Heroku Postgres" it will create a new database.</p>
-      <p> Click in the link that was created to see the settings of that database. Choose the Settings option and then View Credentials</p>
-      <p>You can use those credentials on the connection.js and you can also use them in pgadmin to create your tables and fill them.</p>
-      <p> To connect to this remote database using pgadmin you will need to:</p>
-      <ul>
-        <li>Create a new Server and choose a name (it is the name you want it to be known in pgadmin, not the database name)</li>
-        <li>Go to the connection menu and fill the credentials you got from your database.
-          On the "Maintainance database" field place the name of the Database (it is the only one you have access).
-          Do not forget to click on the checkbox to save the password so you don't have to write it again.
-        </li>
-        <li> Go to the Advanced menu and place the name of your database in the "DB restriction" field.
-          If you do not do this pgadmin will show all database names in the server but you still only have access to yours, 
-          making it really hard to find your database in the middle of all the other names.
-      </ul>
-      <p> And that is it, now you only need to fill the database with tables and data to replicate your local instance.</p>
-
-      <p> If you had to remove the SSL settings for the Pool on the connection.js file you will need to add them now, 
-        since the remote database uses SSL to authenticate. We place the code bellow again to help:</p>
-        <section class="columns">
-          <strong>
-            <pre class="code">
-var pg = require('pg');
-
-const connectionString = "postgres://root:password@localhost:5432/students"
-const Pool = pg.Pool
-const pool = new Pool({
-    connectionString,
-    max: 10<span class="marked">,
-    ssl: {
-        require: true, 
-        rejectUnauthorized: false
-    }</span>
-})
-
-module.exports = pool;</pre>
-          </strong>
-        </section>
     </section>
 
   </main>
