@@ -400,6 +400,10 @@ To avoid problems with caps we passed the received value to lower letter using t
 </p>
 <strong><code><pre>var beats = { rock: 'scissors', scissors: 'paper', paper: 'rock' };</pre></code></strong>
 <p> We can check what card can be beaten by paper by doing <strong> beats['paper']</strong></p>
+<p> <strong>IMPORTANT: </strong> This information should actually be saved in the database, since it
+corresponds to data that models our problem. However, since using this data from the database would require some more concepts
+of databases for now we will do this on the server. Later, when you already have more database concepts, we can see how to 
+model this information in the database and how to use it in our code.</p>
 <p> We can now add the model function:</p>  
 <section class="columns">
   <strong>
