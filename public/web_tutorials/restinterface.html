@@ -17,8 +17,629 @@
   <main>
     <section>
       <h1> Objectives </h1>
-      <h2> Create this page :D </h2>
+      <p><input type="checkbox"> Know what is a REST interface</p>
+      <p><input type="checkbox"> Rest endpoints and documenting a REST interface</p>
+      <p><input type="checkbox"> Organize a REST interface in Node.js/Express.js</p>
+      <p><input type="checkbox"> Creating get endpoints with parameters ( res.params )</p>
+      <p><input type="checkbox"> Creating post endpoints with data ( res.body )</p>
+      <p><input type="checkbox"> Creating get endpoints with filtering parameters ( res.query )</p>
     </section>
-    </main>
+    <section>
+      <h1> Index </h1>
+      <ol>
+        <li>
+          <a href="#rest">Know what is a REST interface</a>
+        </li>
+        <li> <a href="#endpoints">Rest endpoints and documenting a REST interface</a></li>
+        <li> <a href="#creatingRest">Creating REST endpoints in Node.js/Express.js</a>
+          <ol>
+            <li><a href="#allrooms">Get all rooms endpoint</a></li>
+            <li><a href="#oneroom">Get a room by id</a></li>
+            <li><a href="#play">Play one card in a room</a></li>
+            <li><a href="#filter">Filter rooms by name or topcard</a></li>
+          </ol>
+        </li>
+        </ol>
+    </section>
+    <section id="rest">
+      <h1> What is REST? </h1>
+      <p> REST (REpresentational State Transfer) is an architectural style for distributed hypermedia systems.
+        It was the result of a <a href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">
+          dissertation by Roy Fielding in 2000</a>.</p>
+       <p> REST defines some guiding principles and constraints:</p>
+      <ul>
+        <li>
+          <h3>Uniform Interface</h3>
+          <p> Interfaces should be recognizable by their users by using common designs and rules. 
+            We call this the <a href="https://www.d.umn.edu/~gshute/softeng/principles.html"> Principle of Generality </a></p>
+          <p> Constrains for an uniform interface :</p>
+          <ul>
+            <li> <strong>Clearly indentify resources.</strong> A resource corresponds to an entity managed by the application. 
+              Can correspond to a database table but you do not need a resource for each table (for example, you can have an address table
+               but you can access user addresses from the users resource)   
+              Examples:
+            <ul>
+              <li><strong>/api/users</strong> Resource that contains user information. /api/users/2/addresses can obtain
+               the addresses of user with id 2.</li>
+               <li><strong>/api/levels</strong> Obtains general information of all levels. 
+                Specific information of level 2 can be obtained like /api/levels/2, or specifically the characters of that level as /api/levels/2/characters</li>
+              <li><strong>/api/characters</strong> Obtains general information of all characters in the game. This is different from the previous one that obtains 
+                the characters for a specific level, meaning you can access the same information from different directions, using the relationship between entities</li>
+            </ul>
+            </li>
+            <li>
+              <strong>Manipulation of resources through representations.</strong> Clients should be able
+              to receive a resource and do adictional requests for more information about that resource or
+              to modify its state. That means we need to have a uniform way to refer to that resource (one way
+              to do it is to use the primary key of the database to identify each entity, but there are other ways).
+            </li>
+            <li><strong>Self-descriptive messages.</strong> Clients should know how to process the message, so it is important
+            to the data type (Internet Media Type or MIME type). This is actually automatically done by express and in our case it will be JSON. </li>
+              <li> HATEOAS (Hypermedia as the Engine of Application State). This means the client should be able
+                to obtain all available operations from the initial url. Meaning /api/ would have informathion of all resources, 
+                /api/users everything that can be done with users, and so on. There are ways to do this, but must APIs do not do this (we will also not do it). </li>
+              </ul>
+        </li>
+        <li>
+          <h3>Client-Server</h3>
+          <p> There should be a clear separation between server and client. So the server should be created
+            to "server" any request that make senses for the problem at end and not only for a specific client.
+          </p>
+          <p> This allows for the server api to be used, as is, by any client, increasing scalability. </p>
+        </li>
+        <li>
+          <h3>Stateless</h3>
+          <p> State should be saved on client side or database. The server should not save information of previous interactions with the user.</p>
+          <p> In each request the client should send all the information necessary to process that request.</p>
+        </li>
+        <li>
+          <h3>Cacheable</h3>
+          <p> Responses should send information if it is cacheable or not. Cacheable responses can be reused
+            by the client for some periods, while non-cacheable need to be asked to the server each time.
+          </p>
+          <p> We will not worry about this and let Express used the default settings for this.</p>
+        </li>
+        <li>
+          <h3>Layered system</h3>
+          <p> Our architecture should be layered. Each component should only worry about the layer his working in.</p>
+          <p> Our application will probably not be complex enough for this, though by dividing our server by resources and subresources we should achieve some layering.</p>
+        </li>
+        <li>
+          <h3>Code on demand (optional)</h3>
+          <p> This means some requests may send code that would be run on server side. This would be an advanced feature 
+            that we will also not worry about. </p>
+        </li>
+      </ul>
+      <p>A server that follows this guiding principles and constraints is called a RESTful server.
+        Many servers decide to not follow some of the principles (like HATEOAS or stateless) and are still 
+        called RESTful by most.
+      </p> 
+    </section>
+    <section id="endpoints">
+      <h1> Rest endpoints and documenting a REST interface </h1>
+      <p> A rest endpoint is composed by the url and the method.</p>
+      <p> The url is a path or hyperlink for 
+        a specific resource or group of resources. Resources and subresources in the path are represented
+        by plural names. Specific resources are indicated by identifiers. Other parameters and names can also be used to filter resources. 
+      </p>
+      <p> The method identifies the action we want to do to the resource. If resources are all about names, the method is the verb: 
+        GET (obtain), POST (add), PUT (edit full resource), PATCH (edit part of the resource), DELETE (delete). 
+      </p>
+      <p>Lets consider a "small" game:</p> 
+      <ul>
+        <li> You have levels in the game that will have characters, each with its caracteristics.</li>
+        <li> You have users, that are players. Each user has information, that includes the maximum level he was able to run.</li>
+        <li> The users also have characters, that may change after a level is completed.</li> 
+        <li> The users also have a log with information of the battles he has done.</li>
+      </ul>
+      <p> First we need to decide which resources will we need to manage. We can consider only two for now, users and levels.</p>
+      <p> Next we need to define our endpoints. Some examples with a description: </p>
+      <p><strong>The users resource</strong></p>
+      <!--
+        <table border="1">
+        <tr><td colspan="2"> </td></tr>
+        <tr><td><strong>Parameters:</strong></td><td></td></tr>
+      </table>
+    -->
+    <table border="1">
+      <tr><td> Title</td><td><strong> Get user by id</strong><br>
+        Obtains the profile information of the user.</td></tr>
+      <tr><td> Url (method) </td><td><strong>/api/users/:id (get)</strong></td></tr>
+      <tr><td>Parameters:</td><td>  :id is the id of the user</td></tr>
+    </table> <br>
+      <table border="1">
+        <tr><td> Title</td><td><strong>Get user characters</strong><br>
+        Obtains the characters used by the user.</td></tr>
+      <tr><td> Url (method) </td><td> <strong>/api/users/:id/characters (get)</strong></td></tr>
+      <tr><td>Parameters:</td><td>:id is the id of the user</td></tr>
+  </table>
+      <p><strong>The levels resource</strong></p>
+      <table border="1">
+        <tr><td> Title</td><td><strong> Get level information </strong><br>
+          Obtains the information of a specific level, including the list of characters of that level.</td></tr>
+          <tr> <td> Url (method)</td> <td> <strong>/api/levels/:id (get)</strong></td></td></tr>
+        <tr><td>Parameters:</td><td>:id is the id of the level</td></tr>
+      </table>
+      <ul>
+      </ul>
+      <p> Noticed we did not need to define /api/levels/:id/characters because we considered that it would make sense to 
+        send this information when we sent the general level inforamation. But we could decide to have the two separated endpoins.
+      </p>
+      <p> These endpoints will allow us to get information about the player or levels, but it does not let us play the game.</p>
+      <p> We need to need to have "battles". Each battle will use some of the player characters and 
+        the level characters and have a result that could than be shown to the user.</p> 
+      <p> The player characters may change after the battle and the level will increase if he wins a battle in the maximum current level.
+        This would require some effort coding but fortunatly we are only thinking about defining our REST API, and this corresponds to only one endpoint, creating the battle </p>
+      <p> We could create a new resource for battles, it is valid, but the endpoints will probably be much clearer if we
+        create them as <strong>subresources of the users resource</strong>. The main rule we need is to create the battle, but we can also have the log of battles.
+      </p>
+      <table border="1">
+        <tr><td> Title</td><td><strong> Create a battle </strong><br>
+          Create a battle of a user in one level. </td></tr>
+          <tr> <td> Url (method)</td> <td> <strong>/api/users/:id/battles (post)</strong></td></td></tr>
+        <tr><td>Parameters:</td><td>:id is the id of the user</td></tr>
+        <tr><td> Data:</td><td>
+          level - the level the user is playing <br>
+          characters - the user characters the user is using to play <br>
+        </td></tr>
+        <tr><td> Response:</td><td>
+          win or loose<br>
+          characters after battle <br>
+          if level changed <br>
+          information to make the animation
+        </td></tr>
+        <tr><td> Error:</td><td>
+          <strong>Code: 422 Unprocessable  Entry</strong><br> 
+          Possible messages: Invalid level, Invalid character list 
+        </td></tr>
+      </table><br>
+      <table border="1">
+        <tr><td> Title</td><td><strong>Get user battles</strong><br>
+        Obtains the battles made by the user. Each battle says the date, the level the player was, 
+        the level the player played, if it was a loss or victory, 
+        the characters the player used, the changes the characters had</td></tr>
+      <tr><td> Url (method) </td><td> <strong>/api/users/:id/battles (get)</strong></td></tr>
+      <tr><td>Parameters:</td><td>:id is the id of the user</td></tr>
+  </table>
+<p> Notice that for the creation of the battle we needed much more information. Some of the information
+   cannot be send on the parameters, it is sended as data. Parameters are sent in the URL, the data is sent on 
+   the body of the request.
+</p>
+<p> We also declared information about the results. Both normal result and error.</p>
+<p> All endpoints will send responses, we only described it at this point because it is not implicit on the description.
+  When we create our documentation we will need to give examples of the results for each endpoint.
+</p>
+<p> Error responses are also important. Getting the user profile could give us an error that the id did not exist, 
+  but the battle creation has that type of error, and all the errors that correspond to erroneous information sent by the user.</p>
+<p> <strong>Remember that we should have client-server separation.</strong> That means we cannot consider that every possible client will
+send correct information. An example would be a player trying to create a request to play in a level he was not yet able to play (trying to exploit the game).</p>
+
+<p> These tables already provide you with a simple example on how to document your REST interface. 
+  You can see more information you can add to each endpoint here: 
+  <a href="https://bocoup.com/blog/documenting-your-api">REST API Documentation Best Practices</a>
+</p>
+<p> You do not need to use all the elements for each endpoint, only the ones that make sense.
+  Title, URL, Method and result are necessary for all. 
+  Parameters, Data and Errors are only needed for those that have them.  </p>
+<p> You can see another example of REST documentation 
+  <a href="https://docs.google.com/document/d/1gViN7kRhEMq9jiIjk5eDA5ctw39OcliWW7jO5f4-4ho">
+    here</a>  (in Portughese). The example is for an application that would manage information 
+    about music albuns. It is based on the  
+    <a href="https://github.com/cwoodruff/ChinookDatabase"> Chinook opensource database</a>. 
+   </p>
+    </section>
+    <section id="creatingRest">
+      <h3>Creating REST endpoints in Node.js/Express.js</h3>
+      <p> The previous example is still too big for a starting tutorial so we will use a simpler game. 
+        Actually this will be the application we already started on the previous tutorial (if you used the database described in class). </p>
+      <p> We will consider the Rock, Paper, Scissors game. We will consider that at any given time the 
+        database has one of those 3 values and a play will be sending one of those 3 given values. 
+        The player wins if the value he sent beats the value in the database. At that time the value changes to the one the player played.
+      </p>
+      <p> With only one player this game is predictable, but if many players are playing the player will need to play fast or be lucky to win, 
+        since the values will be always changing.</p>
+      <p> On our previous tutorial we already created one resource for rooms (with model and route) and an endpoint to obtain all the rooms:</p>
+      <table border="1" id="allrooms">
+        <tr><td> Title</td><td><strong>Get all rooms information</strong><br>
+        Obtains list of rooms, each with the name and current top card</td></tr>
+      <tr><td> Url (method) </td><td> <strong>/api/rooms (get)</strong></td></tr>
+      <tr><td>Result:</td><td>[{"roo_id":1,"roo_name":"Room 1","roo_topcard":"Rock"}] </td></tr>
+      </table>
+      <p>Notice that it is easy to fill in the result information in the documentation when we already have the implementation, just place one example.
+        Of course if we had many rooms we will not place all the information, something like this would be enough for the documentation:<br>
+        [{"roo_id":1,"roo_name":"Room 1","roo_topcard":"Rock"} ...]
+      </p>
+      <p> We ignored the 500 error. This error will exist for every endpoint but only occurs if something is wrong on the server, for instance if the database is down.
+        It would be correct to include this error for all endpoints, but it is not as important as other errors, and would overcomplicate the documentation.
+      </p>
+      <p> Now to play we need two new rules: one to get the information of a specific room (including the topcard) and another to play a new card to a room. </p>
+      <p> Lets start with the first one. This one is very similar to the previous one but now we receive a parameter to choose which room. 
+        The id of the table is the parameter that is easier to use since each rooms has an unique id (we will see other ways to filter information). </p>
+      <p> So our endpoint will be like this: </p>
+      <table border="1" id="oneroom">
+        <tr><td> Title</td><td><strong>Get a room by id</strong><br>
+        Obtains the information of the room that corresponds to the id received</td></tr>
+      <tr><td> Url (method) </td><td> <strong>/api/rooms/:id (get)</strong></td></tr>
+      <tr><td>Parameters:</td><td>:id is the id of the room</td></tr>
+      <tr><td>Result:</td><td>{"roo_id":1,"roo_name":"Room 1","roo_topcard":"Rock"} </td></tr>
+      <tr><td> Error:</td><td>
+        <strong>Code: 404 Not found</strong> When no room exists with that id <br> 
+        {"msg":"No room with that id"}
+      </td></tr>
+      </table>
+      <p> Notice that in this case the result is not a list, since the id is unique only one room or none will be retrieved. 
+        If no room exists with that id a 404 error will be shown.
+      </p>
+      <p> Code to add on the <strong>roomsRoutes.js</strong> file (before the final "module.exports" line):</p>
+      <section class="columns">
+        <strong>
+          <pre class="code">
+router.get('/:id', async function(req, res, next) {
+  let id = req.params.id;
+  console.log("Get room with id "+id)
+  let result = await rModel.getRoomById(id);
+  res.status(result.status).send(result.result);
+});</pre>
+        </strong>
+  </section>
+  <p> Notice that now we have something different in the path: <strong>:id</strong>. 
+    This corresponds to a parameter that will be sent by the user, the value that the user sends in the place where the 
+    :id is will be saved as a parameter in the request. This is done by one of the parsing middlewares that was included in our application. 
+    </p>
+    <p> Inside the function we have <strong>req.params.id</strong> that is where we retrive the parameter value from the request, and then use it to call
+    the model function <strong>rModel.getRoomById(id)</strong></p>
+    <p> This function must be added, with this name and one parameter, to the <strong>roomsModel.js</strong> file:</p>
+    <section class="columns">
+      <strong>
+        <pre class="code">
+          module.exports.getRoomById = async function (id) {
+            try {
+              let sql = "Select * from room where roo_id = $1";
+              let result = await pool.query(sql, [id]);
+              if (result.rows.length > 0) {
+                let room = result.rows[0];
+                return { status: 200, result: room };
+              } else {
+                return { status: 404, result: { msg: "No room with that id" } };
+              }
+            } catch (err) {
+              console.log(err);
+              return { status: 500, result: err };
+            }
+          }</pre>
+      </strong>
+</section>
+<p> We used the same name for the function and the function receives one parameter ( "function (id)" ).</p>
+<p> Or sql string now has a where clause to filter by roo_id, but the value is $1. 
+  All values of this type will be replaced later with values sent by the user, in this case by the id sent.</p>
+  <p> The reason we do not add the value manualy to the string is that the value needs to be escaped to make sure it is not 
+    considered a SQL command. This escaping can be done by the library we are using. Failing to do this escaping will
+    create a known security mistake that can be used by hackers. This kind of attacks is called "SQL Injection" and consists
+    in the user sending SQL commands instead of simple values and without this escaping the command will be run at our database.
+    The command can be something to get private information or to delete information and can have a huge impact in the application 
+    ( <a href="https://www.w3schools.com/sql/sql_injection.asp"> see more about SQL Injection</a>)
+    </p>
+    <p> In the next line we see that the query is called with the sql string and an array with one parameter.
+       This parameter will be escaped by the library and inserted where the $1 is. We need to have one value in the array
+       for each $ we have in our sql string.
+    </p>
+    <p>Another thing that is different in this function is that the result will always be one or zero rows, since there is only
+      one room or none with that id. The query will always return an array so we return an error 404 if the array is empty or
+      the first element if one is returned.
+    </p> 
+    <p> <strong>NOTE:</strong> This tutorial considers that the students already know the basics of programming. 
+    Some concepts will be explained in class but for basic syntaxe you can check the <a href="https://www.w3schools.com/js/default.asp"> Javascript W3schools tutorial</a>. </p>
+    <p> And that is it, we do not need to change the <strong>app.js</strong> file since the route file was already connected to the app.
+     Each REST resource will correspond to a new routes file with several endpoints, but you will only connect the route file to the app once.</p> 
+    <p> You can test this endpoint on your browser by writting <strong>localhost:3000/api/rooms/1</strong></p>
+     <p> Our next task is to create the endpoint to make plays. We could create this inside a resource for plays, but a play is made by an user in a room, 
+      we do not have users yet, but we do have rooms, and it makes sense for the play endpoint to be associated to the room. So our endpoint will be like this:</p>
+      <table border="1" id="play">
+        <tr><td> Title</td><td><strong> Play a card in a room </strong><br>
+          Plays a card in a room. If the card beats the room top card the top card of the rooms changes to the new card.
+        It will return to the user if he won or not and what was the top card. </td></tr>
+          <tr> <td> Url (method)</td> <td> <strong>/api/rooms/:id/play (post)</strong></td></td></tr>
+        <tr><td>Parameters:</td><td>:id is the id of the room</td></tr>
+        <tr><td> Data:</td><td>
+        <code><pre>
+        {
+          "cardPlayed": "paper"
+        } </pre></code>        
+        </td></tr>
+        <tr><td> Response:</td><td>
+          If the player wins: <br>
+          <code><pre>
+{
+  "victory": true,
+  "msg": "You Won!",
+  "current_topcard": "paper"
+}</pre></code>              
+          If the player looses <br>
+          <code><pre>
+{
+  victory: false,
+  msg: "You Lost! That card does not beat the top card.",
+  "current_topcard": "rock"
+}</pre></code>
+        </td></tr>
+        <tr><td> Errors:</td><td>
+          <strong>Code: 404 Not found</strong> When no room exists with that id <br> 
+          {"msg":"No room with that id"} <br>
+          <strong>Code: 400 Bad Request</strong> When an invalid card was sent<br> 
+          {   "msg": "Card value is not valid (rock,paper,scissors)" } 
+        </td></tr>
+      </table><br>
+</section>
+<p> We have considered this endpoint a POST since we considered that we are adding a play to the room.
+  We could also consider it a PUT or PATCH if we consider we are trying to change the topcard with our play.
+  However, it would never be a GET endpoint like the previous ones.</p>
+<p> This POST endpoint has both parameters and data. Parameters will go on the URL and data in the body of the message, 
+  and will have different ways to be processed in our code. </p>
+<p> Add the endpoint to the route file:</p>  
+<section class="columns">
+  <strong>
+    <pre class="code">
+router.post('/:id/plays', async function(req, res, next) {
+  let id = req.params.id;
+  let cardPlayed = req.body.cardPlayed.toLowerCase();
+  console.log(`Played card ${cardPlayed} on room with id ${id}`);
+  let result = await rModel.play(id,cardPlayed);
+  res.status(result.status).send(result.result);
+});
+      </pre>
+  </strong>
+</section>
+<p> First notice that we defined a post rule so we needed to use the "router.post" instead of "router.get". </p>
+<p> We have the id parameter again, retrieved with <strong>req.params.id</strong> but now we also
+have information in the body of the message that is retrievd using <strong>req.body</strong>.
+To avoid problems with caps we passed the received value to lower letter using the toLowerCase method of the String data.</p>
+<p> Both the id and the played card are passed to the model method. We need to create a model method called "play" that receives those two values.</p> 
+<p> First we will create a auxiliary data structure that will help us determine which card beats other card.
+  We will use a javascript object since it can be used like an hashmap, key/value data structure where the 
+  key will be one card and the value the card that looses with the key:
+</p>
+<strong><code><pre>var beats = { rock: 'scissors', scissors: 'paper', paper: 'rock' };</pre></code></strong>
+<p> We can check what card can be beaten by paper by doing <strong> beats['paper']</strong></p>
+<p> We can now add the model function:</p>  
+<section class="columns">
+  <strong>
+    <pre class="code">
+module.exports.play = async function (id, value) {
+  try {
+    if (!beats[value]) {
+      return { status: 400, result: { msg: "Card value is not valid (rock,paper,scissors)" } };
+    }
+    let sql = "Select * from room where roo_id = $1";
+    let result = await pool.query(sql, [id]);
+    if (result.rows.length == 0) {
+      return { status: 404, result: { msg: "No room with that id" } };
+    }
+    let room = result.rows[0];
+    if (beats[value] != room.roo_topcard.toLowerCase()) {
+      return {
+        status: 200,
+        result: {
+          victory: false,
+          msg: "You Lost! That card does not beat the top card.",
+          current_topcard: room.roo_topcard
+        }
+      };
+    }
+    let sql2 = "UPDATE room SET roo_topcard = $1 WHERE roo_id = $2";
+    let result2 = await pool.query(sql2, [value, id]);
+    if (result2.rowCount == 0) {
+      return { status: 500, 
+                result: { msg: "Not able to update. Many possible reasons (ex: room was deleted during play)" } };
+    }
+    return {
+      status: 200,
+      result: {
+        victory: true,
+        msg: "You Won!",
+        current_topcard: value
+      }
+    };
+
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}</pre>
+  </strong> </section>
+<p> This code has several parts. First we receive the id and value as parameters </p>
+<p> Next we check if the card value is valid. If we try to use our "hashmap" and the card 
+  value is not one of the keys the "beats[value]" will have <strong>undefined</strong> that will be
+evaluated as false by the if condition and enter the if returning the error: </p>
+<code><pre>
+  if (!beats[value]) {
+    return { status: 400, result: { msg: "Card value is not valid (rock,paper,scissors)" } };
+  }  </pre></code>
+</section>
+<p> After that we do our first query to retrieve the topcard of the room sending an error if the room does not exist: </p>
+<code><pre>
+  let sql = "Select * from room where roo_id = $1";
+  let result = await pool.query(sql, [id]);
+  if (result.rows.length == 0) {
+    return { status: 404, result: { msg: "No room with that id" } };
+  }</pre></code>
+<p> If the room exists we will check if the value of the room top card looses to the played card. 
+  If not we send the information that the user lost:</p>
+  <code><pre>
+  let room = result.rows[0];
+  if (beats[value] != room.roo_topcard.toLowerCase()) {
+    return {
+        ...
+          victory: false,
+        ...
+        }
+    };
+  }</pre></code>
+  <p>If the card sent wons we update the room top card and send the information that the user won:</p>
+  <p><strong>WARNING: </strong> We are making two separeted queries to the database but these queries depend on each other.
+  This should be done using a <strong>transaction</strong>. Without a transaction the top card of the room may change between the moment
+we check the value of the room and the moment we change the value, and thus the results may not be correct. With a transaction
+the database makes sure the value of the table is not changed until the transaction finishes, and any request to that value will 
+have to wait until the transaction finishes. You may learn more about transactions later, for now we will not worry about this possibility. </p>
+ <code><pre>
+  let sql2 = "UPDATE room SET roo_topcard = $1 WHERE roo_id = $2";
+  let result2 = await pool.query(sql2, [value, id]);
+  ...
+  return {
+    ...
+      victory: true,
+     ...
+    }
+  };</pre></code>
+  <p> Notice that this query needs to receive two parameters so we have $1 and $2 and an array with two values</p>
+  <p> We also have an error check in the middle (first ...). This error will occour if the update is not done.
+    Since we made all verifications to the values sent by the client, this can only occour on a server of database error 
+    and is again a 500 error (server error) that was ommited from the documentation but that is important to check on code, 
+    so we do not send the victory message if no changes were made. 
+</main>
+<code><pre>
+  if (result2.rowCount == 0) {
+    return { status: 500, 
+              result: { msg: "Not able to update. Many possible reasons (ex: room was deleted during play)" } };
+  }</pre></code>
+  <p> Since this endpoint is not a GET you cannot test it directly in the browser. When writing an URL in the browser
+    you are always making GET requests. To test this endpoint you will need a program like 
+    <a href="https://www.postman.com/"> Postman</a>. You can download the App or run it from the browser 
+    (the App will be the one demonstrated in classes).
+  </p>
+  <p> To test write <strong>localhost:3000/api/rooms/1/plays</strong> in the url and in the body tab
+  write <strong>{ "cardPlayed":"paper" }</strong> (or another card value). Do not forget to set the
+  datatype of the body to "raw" and then on the right to "JSON" instead of "Text" (you have a class short tutorial with more details 
+  and printscreens)
+  </p>
+  <p> Now you can play your game. Ask some colleagues to play with you. If you have your online server it will be easy. 
+    If you are only running locally your colleagues will need to replace the localhost by your IP and they need to be on the 
+  same network (ask the professor for help if you are not able to try this).</p> 
+  <p>We can add more endpoints now. For instance, if we have many rooms we may want to have an endpoint to filter the rooms by name or by topcard.</p>
+  <p>Filters can be done using query parameters on the url, for instance: <strong>/api/rooms/filter?name=Room 1&topcard=rock</strong>. You can see the documentation bellow:</p>
+  <table border="1" id="filter">
+    <tr><td> Title</td><td><strong>Get the rooms by name and/or top card</strong><br>
+    Obtains the information of the rooms that correspond to the name and/or the top card given. 
+  Both values can be send or only one of them. Name will do partial match while top card will allow only full match.</td></tr>
+  <tr><td> Url (method) </td><td> <strong>/api/rooms/filter?name=:name&topcard=:topcard (get)</strong></td></tr>
+  <tr><td>Parameters:</td><td>:name Show only rooms that have that the name includes the text on this parameter<br>
+  :topcard Show only rooms that have this value has topcard</td></tr>
+  <tr><td>Result:</td><td>[{"roo_id":1,"roo_name":"Room 1","roo_topcard":"Rock"}] </td></tr>
+  <tr><td> Error:</td><td>
+    <strong>Code: 400 Bad Request</strong> When no parameters to filter are sent<br> 
+    {"msg":"No filters defined (name or topcard)"}
+  </td></tr>
+
+  </table>
+  <p>In this case we only send an error if no filter parameter is sent, an invalid parameter will result on an empty result list. 
+    If the parameters match any rooms a list with those rooms is sent. If no room exist an empty list will be sent. </p> 
+    <p> Add the endpoint to the route file:</p>
+    <p> <strong>WARNING:</strong> You need to add this endpoint before the /api/rooms/:id endpoint.
+    If not calling /api/rooms/filter?... will result in calling /api/rooms/:id with id equal to "filter".
+  By placing this endpoint first, the requests with filter will match this endpoint and any other value will call the 
+  /api/rooms/:id endpoint. It is also possible to say that the :id parameter is only valid for numbers 
+  (<a href="https://expressjs.com/en/guide/routing.html"> you can user regular expressions in the route paths</a>).</p>  
+    <section class="columns">
+      <strong>
+        <pre class="code">          
+router.get('/filter', async function(req, res, next) {
+  let filters = req.query;
+  console.log("Get rooms filtered by:");
+  console.log(filters);
+  let result = await rModel.getRoomByNameOrTopCard(filters);
+  res.status(result.status).send(result.result);
+});</pre>
+      </strong>
+    </section>
+   <p> The only thing new is the <strong>req.query</strong> data. This will correspond to an object with one
+  attribute for each parameter that was on the query string (after the ? in the URL). Example: 
+  <strong>/api/rooms/filter?name=Room 1&topcard=rock</strong> will correspond to the object
+  <strong>{ name: 'Room', topcard: 'rock' }</strong></p>
+  <p> On the model file you will need to create the method that receives the query object:</p>
+  <section class="columns">
+    <strong>
+      <pre class="code">          
+        module.exports.getRoomByNameOrTopCard = async function (parameters) {
+          try {
+            if (!parameters.name && !parameters.topcard) {
+              return { status: 400, result: { msg: "No filters defined (name or topcard)" } };
+            }
+            let nparam = 1;
+            let values = [];
+            let sql = "Select * from room where";
+        
+            if (parameters.name) {
+              sql += ` roo_name LIKE $${nparam}`;
+              values.push("%"+parameters.name+"%");
+              nparam++;
+            }
+            if (parameters.topcard) {
+              if (parameters.name) sql+=" AND"
+              sql += ` roo_topcard LIKE $${nparam}`;
+              values.push(parameters.topcard);
+              nparam++;
+            }
+            let result = await pool.query(sql, values);
+            let rooms = result.rows;
+            return { status: 200, result: rooms };
+          } catch (err) {
+            console.log(err);
+            return { status: 500, result: err };
+          }
+        }  
+        </pre>
+    </strong>
+  </section>
+<p> The first thing we check is if we receive at least one parameter, if not we send an error.
+  Javascript will not give an error if we try to access an object attribute that does not exist, it will
+  just return undefined for that, and undefined is considered to be false in a boolean expression.
+</p>
+<code><pre>
+if (!parameters.name && !parameters.topcard) {
+  return { status: 400, result: { msg: "No filters defined (name or topcard)" } };
+}</pre></code>
+<p>The next line define variables we will need. The "nparams" will allow us to know at what count
+  of parameters we are, so we can generate the $1, $2, etc for our SQL string. The values will start with
+  and empty list where we will add each value that will correspond to the $1, $2 etc in the sql query.
+  And finally the initial query string where we will also add more text corresponding to each filtered parameter. 
+</p>
+<code><pre>           
+  let nparam = 1;
+  let values = [];
+  let sql = "Select * from room where";</pre></code>
+  <p> We then check for each filtered parameter that has a defined value and create 
+    the string to add to the query string and the value to add to the list.</p>
+  <p> For the name parameter we push the value with "%" on both sides, so that SQL will allow
+     for a partial match anywhere in the middle of the text.</p>
+   <code><pre>
+  if (parameters.name) {
+    sql += ` roo_name LIKE $${nparam}`;
+    values.push("%"+parameters.name+"%");
+    nparam++;
+  }</pre></code> 
+  <p> Using ` ` instead of " " allows us to insert values inline in the string. Each time we write
+    ${} in the string the expression inside the {} will be evaluated and add to the string in that place. In this case
+    the value inserted will be the current nparam value, and it will preceded by $ to make the $1, $2 etc. 
+  The "push" array method will add the received value to the end of the array. 
+  "++" operator increments the value of the variable by one.</p>
+  <p> <strong>IMPORTANT:</strong> Notice that we have a space before the roo_name. Do not forget spaces when concatenating query strings.
+  Without it we will end up with "... whereroo_name ..." and the database would give us an error for our query.</p>
+<p>For the topcard parameter we need first to check if we already place the name filter on the query string. If so we need
+  to add the AND keyword to make a valid SQL query. In this case we did not add the "%" to our value since we want an exact match.
+</p> 
+<code><pre>
+  if (parameters.topcard) {
+    if (parameters.name) sql+=" AND"
+    sql += ` roo_topcard LIKE $${nparam}`;
+    values.push(parameters.topcard);
+    nparam++;
+  }</pre></code> 
+<p> The last lines are already know to us, make the query and send the results. Since it is a list 
+  (even if the filter gives us one o zero rooms) we do not need to make aditional checks, similar to our first endpoint. </p>
+<p> You can test this endpoint in your browser like this <strong>localhost:3000/api/rooms/filter?name=1&topcard=paper</strong></p>
+<h4>To do:</h4>
+<p> You can now add more endpoints or even new resources. You may want to create new tables on your database also. Group up with some 
+  of your colleagues and think how to add new functionalities or to make this game more complex. Think which endpoints you would need, 
+  make the documentation, and try to implement your idea. </p>
+  <p> You can also do the same for a completly new idea, for instance for your own group project.</p>
 </body>
 </html>
