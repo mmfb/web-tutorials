@@ -608,7 +608,7 @@
       <p> First we will need to know the settings for the database: hostname, port number, database name, username and password. 
         All this information can usually be retrieved from our database provider in a single string called connection string, for example:</p>
       <ul>
-        <li>PostGreSQL: "postgres://root:password@localhost:5432/clicker1"</li>
+        <li>PostGreSQL: "postgres://postgres:password@localhost:5432/clicker1"</li>
         <li>MySQL: "mysql://root:password@localhost:5432/clicker1"</li>
       </ul>
       <p> This string should not be directly in our code since it has confidential information (ex: password and username). 
@@ -623,7 +623,7 @@
       <p>
         After installing, <strong> we create  a .env file</strong>, in the base directory (same place the app.js is) with the environment variables we want:<br>
        </p><p>
-        <strong>DATABASE_URL=postgres://root:password@localhost:5432/clicker1</strong><br>
+        <strong>DATABASE_URL=postgres://postgres:password@localhost:5432/clicker1</strong><br>
         or<br>
         <strong>DATABASE_URL=mysql://root:password@localhost:5432/clicker1</strong><br>
       </p>
@@ -1072,7 +1072,7 @@ module.exports = router;</pre>
               <pre class="code">
   var pg = require('pg');
   
-  const connectionString = "postgres://root:password@localhost:5432/students"
+  const connectionString = process.env.DATABASE_URL
   const Pool = pg.Pool
   const pool = new Pool({
       connectionString,
