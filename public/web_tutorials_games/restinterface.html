@@ -338,7 +338,7 @@ router.get('/:id', async function(req, res, next) {
         <tr><td> Title</td><td><strong> Play a card in a room </strong><br>
           Plays a card in a room. If the card beats the room top card the top card of the rooms changes to the new card.
         It will return to the user if he won or not and what was the top card. </td></tr>
-          <tr> <td> Url (method)</td> <td> <strong>/api/rooms/:id/play (post)</strong></td></td></tr>
+          <tr> <td> Url (method)</td> <td> <strong>/api/rooms/:id/plays (post)</strong></td></td></tr>
         <tr><td>Parameters:</td><td>:id is the id of the room</td></tr>
         <tr><td> Data:</td><td>
         <code><pre>
@@ -510,7 +510,8 @@ have to wait until the transaction finishes. You may learn more about transactio
     <a href="https://www.postman.com/"> Postman</a>. You can download the App or run it from the browser 
     (the App will be the one demonstrated in classes).
   </p>
-  <p> To test write <strong>localhost:3000/api/rooms/1/plays</strong> in the url and in the body tab
+  <p> To test first choose the POST method instead of GET in the combobox. 
+    Then  write <strong>localhost:3000/api/rooms/1/plays</strong> in the url and in the body tab
   write <strong>{ "cardPlayed":"paper" }</strong> (or another card value). Do not forget to set the
   datatype of the body to "raw" and then on the right to "JSON" instead of "Text" (you have a class short tutorial with more details 
   and printscreens)
