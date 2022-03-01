@@ -1,0 +1,158 @@
+<html>
+
+<head>
+  <title>Node.js Web App</title>
+  <link rel="stylesheet" href="../stylesheets/style.css">
+  <script src="../javascripts/utils.js"></script>
+</head>
+
+<body>
+  <header id="header"></header>
+  <script>
+    (async () => {
+      await includeHtml("../header.html", "header", "..")
+      document.getElementById("web").classList.add("here")
+    })();
+  </script>
+  <main>
+    <section>
+      <h1> Objectives </h1>
+      <p><input type="checkbox"> Learn a little of HTML and CSS to make our first web page.</p>
+      <p><input type="checkbox"> Request information from the server using AJAX</a></p>
+      <p><input type="checkbox"> Learn the basics of P5.js</p>
+      <p><input type="checkbox"> Show information from AJAX requests using P5.js </p>
+      <p><input type="checkbox"> Organize our code using objects</p>
+      <p><input type="checkbox"> Send information to the server using AJAX and the GUI we create on P5.js</p>
+    </section>
+    <section>
+      <h2>1- Change the index.html in the public directory to be our game page</h2>
+      <p>Normally we would create a simple main page in index.html that introduced the game and with a link or button to the game itself.
+        For now we will skip this and go directly to our game page, since it is the main objective of our project.</p>
+      <p> HTML files define the static content of a web page and the grouping of that content into an organized document.
+      </p> 
+      <p> HTML means HyperText Markup Language. HyperText means we have hyperlinks that may connect parts of the text to other pages or other parts of the same page.
+          Markup Language means there is a markup syntax that defines types of contents and organizes the document 
+      </p>
+      <p> <strong>IMPORTANT:</strong> HTML does not define how content will show visually, that will be done using CSS. 
+        However, browsers define some base CSS rules for many HTML elements and so you will still have a basic formatting even before making your CSS.</p>
+      <p> You can see more about HTML <a href="https://www.w3schools.com/html/">here</a> but we can list some of the elementsyou can use:</p>
+      <ul>
+          <li> Text: From simple paragraphs (p element) to several title texts of increasing importance (h1 is the most important, h2 is right next and so on)</li>
+          <li> Images (img element): You can link image files from inside your server of outside images using their Url</li>
+          <li> Links (a element): Links are extremely important since they allow our pages to be Hypertext instead of simple text, meaning you can link to other pages 
+              or to other parts of your page using links</li>
+          <li> Tables (table, tr and td elements) and lists (ul, ol and li elements): Make sure the content you
+              want to show is a table or list. Do not use table just to align something visually, that will be done with CSS grid or flex 
+              (with advantages, like allows us to change the layout to allow for mobiles, for instance)
+          </li>
+          <li> Layout elements (header, nav, footer, aside, section, article, figure/figcaption elements ):
+              These elements are <strong>extremly important</strong> since they define the structure of our web page.
+              Nothing worse in the current days than a page that only uses divs for everything.
+              The layout elements are close to how information is shown for instance in a newspaper or magazine, 
+              defining clear layout elements that have specific meaning. For instance search engines like google know that
+              a Header is more important than a section, and CSS can also use these tags to create rules that apply to many layouts.
+              You can see a basic introduction to these elements <a href="https://www.w3schools.com/html/html_layout.asp">here</a>.
+          </li> 
+          <li>Since HTML files are what is called to show a page, Html also have links to CSS (link element) and Javascrit (script element) files.</li>
+          
+      </ul>
+      <ol>
+        <li>
+            <p> One of the members of the group creates the initial code using express-generator: </p>
+            <strong><code><pre> express --git --no-view &lt;project-name&gt;</pre></code></strong>
+            <p> Like we did in the instalation tutorial (<a href="./instalation.html#generator">here</a>)</p>
+        </li>
+        <li> <p>That same member creates the repository by going to the Source Control tab on the left panel and 
+            doing the 3 git commands:</p>
+            <ul>
+                <li> Stage all files to be commited using the + sign that appears when you mouseover Changes.</li>
+                <li> Commit by written a message in the message entry and then pressing the V button above.</li>
+                <li> When all is commited a button should show for you to create a repository on GitHub. When pressed it will:
+                    <ul>
+                        <li> Create a new GitHub repository (private or public, depending on what you choose) with the name you choose 
+                            (by default is the name you gave to your project folder)</li>
+                        <li> Set the git remote of your project to that that newly created repository </li>
+                        <li> Push all the files to that GitHub repository</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <p> We did this in the instalation tutorial (<a href="./instalation.html#github">here</a>)</p>
+        </li>
+        <li> <p> Now that same member goes to GitHub and invites the other members: </p>
+        <ul>
+            <li> Go to your news GitHub repository and then to the Settings menu (the last one, in the right)</li>
+            <li> On the menu on the left hoose Collaborators (you will need to write your password)</li>
+            <li> Press the Add People button for each collaborator and write the username.</li>
+            <li> Each collaborator will need to go to the email they set for GitHub and accept the invite. 
+                The repository will now show on their GitHub account
+            </li>
+        </ul>
+        <p>These steps were described also in the instalation tutorial (<a href="./instalation.html#collabs">here</a>)</p> 
+        </li>
+        <li>
+            <p> Each collaborator can now not only clone the repository but also sync any changes he does</p>
+            <p> Open a new VSCode window and you will have a "Clone GitHub Repository" button on the Get Stared tab.
+                You also have a button Clone Repository in the Source Control menu.
+            </p>
+            <p> Press the button click on the option "clone from GitHub" and choose the repository</p>
+            <p> It will ask you to choose a folder and it will create a subfolder with all the project code, a local git repository with
+                all the versions, and set up the remote to the GitHub repository from where you cloned</p>
+            <p> Each time you Sync your code modifications your colleagues will be able to see the changes by using Sync or Pull</p>
+            <p> We talked about to clone and sync your changes in the instalation tutorial
+                (<a href="./instalation.html#clone">here</a>  and <a href="./instalation.html#sourcecontrol">here</a> respectively).
+            </p> 
+        </li>
+      </ol>
+      <p> And that is it, you can also set Heroku to this repository and create your project database</p>
+    </section>
+    <section>
+ s       <h2>2- Define your project and REST Api</h2>
+        <ul>
+            <li> First define what will be your project (if you have not already) in general terms</li>
+            <li> Now see what functionalities you would like to have</li>
+            <li> Identify what entities you will need. From those and their relations you will start creating the database.
+                From those, the database and the functionalities you will determine the rest resources you need            </li>
+            <li> Start defining endpoints you will need for the functionalities you defined and define to what resource they correspond</li>
+            <li> Divide the work between all collaborators and start creating the documentantion as we talked about in the <a href="./restinterface.html">rest interface tutorial</a> </li>
+        </ul>
+    </section>
+    <section>
+        <h2>3- Create your code</h2>
+        <p> Since you are learning, this step and step 2 will iterate together until you 
+            reach the goal.  
+            You will create some rules and try to implement, 
+            and then go back to change something because you found out there is a better
+             way, you need to add something more or the project idea changed.</p>
+        <p> Divide the tasks by all collaborators. Does not mean you cannot help each other or work together, but
+            you each have your own tasks that you are responsible for, and can work by yourself also. 
+            Some tasks may be done has a group.
+        </p>
+        <p> Do not forget to test:
+            <ul>
+                <li> Test the database queries on the database client first (pgadmin)</li>
+                <li> Test the server endpoints individually using the browser (get) or postman</li>
+                <li> The client side (when you start that part) is the last thing to test, since it depends on all others</li>
+            </ul>
+        </p>
+        <p> Also be carefull with:
+            <ul>
+                <li> The paths of the endpoints and methods used. Follow what was teached in class to define a
+                    REST interface that follows a clear template
+                </li>
+                <li> Names. Always use the same naming convention for Routes and Models files, for variables, 
+                    for function names</li>
+                <li> Always set the try/catch and always place some console.log on the catch to print the error</li>
+                <li> Always write something on the beggining of the route code to see that you got to that endpoint and what was sent</li>
+                <li> If you are having a hard time debugging start placing some console.log in the code to see what is happening 
+                    (don't forget to delete them after if they are too many)</li> 
+            </ul>
+        </p>
+        <p> The basics of creating a rest api were described in the <a href="./restinterface.html"> rest interface tutorial</a>
+            but you will learn more techniques on the course,  make your own research and combine all those to create specific solutions. 
+            You will also learn how to create the client-side code during the course (first try <a href="./firstgui.html">here</a>). </p>
+    </section>
+  </main>
+</body>s
+
+</html>
