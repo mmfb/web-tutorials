@@ -1,158 +1,694 @@
 <html>
 
 <head>
-  <title>Node.js Web App</title>
-  <link rel="stylesheet" href="../stylesheets/style.css">
-  <script src="../javascripts/utils.js"></script>
+    <title>Node.js Web App</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <script src="../javascripts/utils.js"></script>
 </head>
 
 <body>
-  <header id="header"></header>
-  <script>
-    (async () => {
-      await includeHtml("../header.html", "header", "..")
-      document.getElementById("web").classList.add("here")
-    })();
-  </script>
-  <main>
-    <section>
-      <h1> Objectives </h1>
-      <p><input type="checkbox"> Learn a little of HTML and CSS to make our first web page.</p>
-      <p><input type="checkbox"> Request information from the server using AJAX</a></p>
-      <p><input type="checkbox"> Learn the basics of P5.js</p>
-      <p><input type="checkbox"> Show information from AJAX requests using P5.js </p>
-      <p><input type="checkbox"> Organize our code using objects</p>
-      <p><input type="checkbox"> Send information to the server using AJAX and the GUI we create on P5.js</p>
-    </section>
-    <section>
-      <h2>1- Change the index.html in the public directory to be our game page</h2>
-      <p>Normally we would create a simple main page in index.html that introduced the game and with a link or button to the game itself.
-        For now we will skip this and go directly to our game page, since it is the main objective of our project.</p>
-      <p> HTML files define the static content of a web page and the grouping of that content into an organized document.
-      </p> 
-      <p> HTML means HyperText Markup Language. HyperText means we have hyperlinks that may connect parts of the text to other pages or other parts of the same page.
-          Markup Language means there is a markup syntax that defines types of contents and organizes the document 
-      </p>
-      <p> <strong>IMPORTANT:</strong> HTML does not define how content will show visually, that will be done using CSS. 
-        However, browsers define some base CSS rules for many HTML elements and so you will still have a basic formatting even before making your CSS.</p>
-      <p> You can see more about HTML <a href="https://www.w3schools.com/html/">here</a> but we can list some of the elementsyou can use:</p>
-      <ul>
-          <li> Text: From simple paragraphs (p element) to several title texts of increasing importance (h1 is the most important, h2 is right next and so on)</li>
-          <li> Images (img element): You can link image files from inside your server of outside images using their Url</li>
-          <li> Links (a element): Links are extremely important since they allow our pages to be Hypertext instead of simple text, meaning you can link to other pages 
-              or to other parts of your page using links</li>
-          <li> Tables (table, tr and td elements) and lists (ul, ol and li elements): Make sure the content you
-              want to show is a table or list. Do not use table just to align something visually, that will be done with CSS grid or flex 
-              (with advantages, like allows us to change the layout to allow for mobiles, for instance)
-          </li>
-          <li> Layout elements (header, nav, footer, aside, section, article, figure/figcaption elements ):
-              These elements are <strong>extremly important</strong> since they define the structure of our web page.
-              Nothing worse in the current days than a page that only uses divs for everything.
-              The layout elements are close to how information is shown for instance in a newspaper or magazine, 
-              defining clear layout elements that have specific meaning. For instance search engines like google know that
-              a Header is more important than a section, and CSS can also use these tags to create rules that apply to many layouts.
-              You can see a basic introduction to these elements <a href="https://www.w3schools.com/html/html_layout.asp">here</a>.
-          </li> 
-          <li>Since HTML files are what is called to show a page, Html also have links to CSS (link element) and Javascrit (script element) files.</li>
-          
-      </ul>
-      <ol>
-        <li>
-            <p> One of the members of the group creates the initial code using express-generator: </p>
-            <strong><code><pre> express --git --no-view &lt;project-name&gt;</pre></code></strong>
-            <p> Like we did in the instalation tutorial (<a href="./instalation.html#generator">here</a>)</p>
-        </li>
-        <li> <p>That same member creates the repository by going to the Source Control tab on the left panel and 
-            doing the 3 git commands:</p>
-            <ul>
-                <li> Stage all files to be commited using the + sign that appears when you mouseover Changes.</li>
-                <li> Commit by written a message in the message entry and then pressing the V button above.</li>
-                <li> When all is commited a button should show for you to create a repository on GitHub. When pressed it will:
-                    <ul>
-                        <li> Create a new GitHub repository (private or public, depending on what you choose) with the name you choose 
-                            (by default is the name you gave to your project folder)</li>
-                        <li> Set the git remote of your project to that that newly created repository </li>
-                        <li> Push all the files to that GitHub repository</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <p> We did this in the instalation tutorial (<a href="./instalation.html#github">here</a>)</p>
-        </li>
-        <li> <p> Now that same member goes to GitHub and invites the other members: </p>
-        <ul>
-            <li> Go to your news GitHub repository and then to the Settings menu (the last one, in the right)</li>
-            <li> On the menu on the left hoose Collaborators (you will need to write your password)</li>
-            <li> Press the Add People button for each collaborator and write the username.</li>
-            <li> Each collaborator will need to go to the email they set for GitHub and accept the invite. 
-                The repository will now show on their GitHub account
-            </li>
-        </ul>
-        <p>These steps were described also in the instalation tutorial (<a href="./instalation.html#collabs">here</a>)</p> 
-        </li>
-        <li>
-            <p> Each collaborator can now not only clone the repository but also sync any changes he does</p>
-            <p> Open a new VSCode window and you will have a "Clone GitHub Repository" button on the Get Stared tab.
-                You also have a button Clone Repository in the Source Control menu.
+    <header id="header"></header>
+    <script>
+        (async () => {
+            await includeHtml("../header.html", "header", "..")
+            document.getElementById("web").classList.add("here")
+        })();
+    </script>
+    <main>
+        <section>
+            <h1> Objectives </h1>
+            <p><input type="checkbox"> Learn a little of HTML and CSS to make our first web page.</p>
+            <p><input type="checkbox"> Request information from the server using AJAX</a></p>
+            <p><input type="checkbox"> Learn the basics of P5.js</p>
+            <p><input type="checkbox"> Show information from AJAX requests using P5.js </p>
+            <p><input type="checkbox"> Organize our code using objects</p>
+            <p><input type="checkbox"> Send information to the server using AJAX and the GUI we create on P5.js</p>
+        </section>
+        <section>
+            <h2>1- Change the index.html in the public directory to be our game page</h2>
+            <p>Normally we would create a simple main page in index.html that introduced the game and with a link or
+                button to the game itself.
+                For now we will skip this and go directly to our game page, since it is the main objective of our
+                project.</p>
+            <p> HTML files define the static content of a web page and the grouping of that content into an organized
+                document.
             </p>
-            <p> Press the button click on the option "clone from GitHub" and choose the repository</p>
-            <p> It will ask you to choose a folder and it will create a subfolder with all the project code, a local git repository with
-                all the versions, and set up the remote to the GitHub repository from where you cloned</p>
-            <p> Each time you Sync your code modifications your colleagues will be able to see the changes by using Sync or Pull</p>
-            <p> We talked about to clone and sync your changes in the instalation tutorial
-                (<a href="./instalation.html#clone">here</a>  and <a href="./instalation.html#sourcecontrol">here</a> respectively).
-            </p> 
-        </li>
-      </ol>
-      <p> And that is it, you can also set Heroku to this repository and create your project database</p>
-    </section>
-    <section>
- s       <h2>2- Define your project and REST Api</h2>
-        <ul>
-            <li> First define what will be your project (if you have not already) in general terms</li>
-            <li> Now see what functionalities you would like to have</li>
-            <li> Identify what entities you will need. From those and their relations you will start creating the database.
-                From those, the database and the functionalities you will determine the rest resources you need            </li>
-            <li> Start defining endpoints you will need for the functionalities you defined and define to what resource they correspond</li>
-            <li> Divide the work between all collaborators and start creating the documentantion as we talked about in the <a href="./restinterface.html">rest interface tutorial</a> </li>
-        </ul>
-    </section>
-    <section>
-        <h2>3- Create your code</h2>
-        <p> Since you are learning, this step and step 2 will iterate together until you 
-            reach the goal.  
-            You will create some rules and try to implement, 
-            and then go back to change something because you found out there is a better
-             way, you need to add something more or the project idea changed.</p>
-        <p> Divide the tasks by all collaborators. Does not mean you cannot help each other or work together, but
-            you each have your own tasks that you are responsible for, and can work by yourself also. 
-            Some tasks may be done has a group.
-        </p>
-        <p> Do not forget to test:
+            <p> HTML means HyperText Markup Language. HyperText means we have hyperlinks that may connect parts of the
+                text to other pages or other parts of the same page.
+                Markup Language means there is a markup syntax that defines types of contents and organizes the document
+            </p>
+            <p> <strong>IMPORTANT:</strong> HTML does not define how content will show visually, that will be done using
+                CSS.
+                However, browsers define some base CSS rules for many HTML elements and so you will still have a basic
+                formatting even before making your CSS.</p>
+            <p> You can see more about HTML <a href="https://www.w3schools.com/html/">here</a> but we can list some of
+                the elementsyou can use:</p>
             <ul>
-                <li> Test the database queries on the database client first (pgadmin)</li>
-                <li> Test the server endpoints individually using the browser (get) or postman</li>
-                <li> The client side (when you start that part) is the last thing to test, since it depends on all others</li>
-            </ul>
-        </p>
-        <p> Also be carefull with:
-            <ul>
-                <li> The paths of the endpoints and methods used. Follow what was teached in class to define a
-                    REST interface that follows a clear template
+                <li> Text: From simple paragraphs (p element) to several title texts of increasing importance (h1 is the
+                    most important, h2 is right next and so on)</li>
+                <li> Images (img element): You can link image files from inside your server of outside images using
+                    their Url</li>
+                <li> Links (a element): Links are extremely important since they allow our pages to be Hypertext instead
+                    of simple text, meaning you can link to other pages
+                    or to other parts of your page using links</li>
+                <li> Tables (table, tr and td elements) and lists (ul, ol and li elements): Make sure the content you
+                    want to show is a table or list. Do not use table just to align something visually, that will be
+                    done with CSS grid or flex
+                    (with advantages, like allows us to change the layout to allow for mobiles, for instance)
                 </li>
-                <li> Names. Always use the same naming convention for Routes and Models files, for variables, 
-                    for function names</li>
-                <li> Always set the try/catch and always place some console.log on the catch to print the error</li>
-                <li> Always write something on the beggining of the route code to see that you got to that endpoint and what was sent</li>
-                <li> If you are having a hard time debugging start placing some console.log in the code to see what is happening 
-                    (don't forget to delete them after if they are too many)</li> 
+                <li> Layout elements (header, nav, footer, aside, section, article, figure/figcaption elements ):
+                    These elements are <strong>extremly important</strong> since they define the structure of our web
+                    page.
+                    Nothing worse in the current days than a page that only uses divs for everything.
+                    The layout elements are close to how information is shown for instance in a newspaper or magazine,
+                    defining clear layout elements that have specific meaning. For instance search engines like google
+                    know that
+                    a Header is more important than a section, and CSS can also use these tags to create rules that
+                    apply to many layouts.
+                    You can see a basic introduction to these elements <a
+                        href="https://www.w3schools.com/html/html_layout.asp">here</a>.
+                </li>
+                <li>Since HTML files are what is called to show a page, Html also have links to CSS (link element) and
+                    Javascrit (script element) files.</li>
             </ul>
+            <p>The basic HTML file structure:</p>
+            <code><pre>
+&lt;html&gt;
+  &lt;head&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre></code>
+            <p> The head element corresponds to metadata, things that are not visible in
+                the web page but that is fundamental to define settings that allow the page to work.
+            </p>
+            <p> The body element contains all the visible content of the page </p>
+            <p> A base "head" for our project (image represents the client-side javascript code arquitecture): </p>
+            <section class="fleximg">
+            <code><pre>
+              &lt;head&gt;
+                &lt;title&gt;Rock, Paper, Scissors game&lt;/title&gt;
+                &lt;link rel="stylesheet" href="./stylesheets/style.css"&gt;
+                &lt;script src="./javascripts/p5.min.js"&gt;&lt;/script&gt;
+                &lt;script src="./javascripts/renderers/card.js"&gt;&lt;/script&gt;
+                &lt;script src="./javascripts/renderers/board.js"&gt;&lt;/script&gt;
+                &lt;script src="./javascripts/requests/roomRequests.js"&gt;&lt;/script&gt;          
+                &lt;script src="./javascripts/managers/boardManager.js"&gt;&lt;/script&gt;
+                &lt;script src="./javascripts/gamelib.js"&gt;&lt;/script&gt;
+              &lt;/head&gt;</pre></code>
+         <img src="./images/rps_arquitecture.png" alt="">     
+</section>
+            <p> Title defines the title of our web page, not the visible one, but the one
+                that is used outside the page, for instance in the tab of the page in the browser.</p>
+            <p> The link tag connects to our CSS where we define the visual aspect of our page.</p>
+            <p> The script tags connect to our Javascript code. The order of the files matters, since some files
+                need the code on the others. The files corresponds to: </p>
+            <ul>
+                <li>
+                    <p>
+                        First we added the P5 library. We needed to download the library from <a
+                            href="https://p5js.org/download/"> here</a>
+                        and place it in the javascript folder together with our own javascript files (you may choose
+                        another organization,
+                        specially if the number of javascript files gets large). We choose the "min" version, but any
+                        version will do (min version is shorter in size).
+                        The next files will need this library to use P5 so we need to place this first on our scripts
+                        list.
+                    </p>
+                </li>
+                <li>
+                    <p>On card.js and board.js we will define GUI elements for showing cards, and show the board.
+                        We need to place these before the others that use them. For intance, board will use the cards, so
+                        it needs to come first.</p>
+                </li>
+                <li>
+                    <p> On gamerequests.js we will have the code to communicate with our rest server.
+                    </p>
+                </li>
+                <li>
+                    <p> boardManager.js manages both the GUI and the requests. 
+                        In some literature it is called a mediator (design pattern), in other literature a controller 
+                        (Model-View-Controller or MVC), but the idea is always the same, keep the GUI elements and the calculations separated.
+                    </p>
+                    <p>
+                        In this case the board manager will interact with the board GUI element, and the board has the card GUI elements inside: 
+                        a card that corresponds to the top card in the table, and one card for each possible card value, so that the player can choose
+                        what card to play. It will also make requests to the server using the room requests file.
+                    </p>
+                    <p> Some examples of what the board will be doing: </p>
+                    <ul>
+                        <li> Checking if the top card of the board was clicking and if so asking the server what is the current top card (refresh).</li>
+                        <li> Checking if one of the values to play (cards with those values) were clicked and if so
+                            make a play request to the server using the request file.
+                        </li> 
+                        <li> Changing the values on the board: the topcard value when it changes after an action, the message when a play is made 
+                            (say if the player wins or looses)</li>
+                    </ul>
+                    <p> The manager can be connected to several Gui elements and request files. We can have a manager for each diferent window of our 
+                        game, but for complex windows that have modular parts the manager can connect to submanagers that run those modular parts. 
+                        The idea is to divide our code to make it less complex and more manageble.
+                    </p>
+                </li>
+ 
+                <li>
+                    <p> Finally gamelib.js is where the game cicle is, requests are
+                        made and shown visually using the GUI elements. </p>
+                </li>
+            </ul>
+            <p> You should create the javascript files and folders that are mentioned in here (p5 library you only download, as already mentioned)
+                but for now you can leave the files empty. This way you will have no error and will be ready to create your code on these files later.
+            </p>
+            <p> On body the first thing we define is a basic layout of our web page content:
+                header,nav,main and footer. On header we have the title of the game.
+                On nav some references (links to other pages).
+                Footer as some credits (may have some contacts also).
+                And main will have our game, since thats the main porpose.
+            </p>
+            <code><pre>                &lt;body&gt;
+                &lt;header&gt;
+                  &lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Rock-paper-scissors.svg/330px-Rock-paper-scissors.svg.png" alt="rock paper scissors chart"&gt;
+                  &lt;section&gt;
+                    &lt;h1&gt; Rock, Paper, Scissors&lt;/h1&gt;
+                    &lt;h3&gt; A simple game for everyone&lt;/h3&gt;
+                  &lt;/section&gt;
+                &lt;/header&gt;
+                &lt;nav&gt;
+                   &lt;a href="https://en.wikipedia.org/wiki/Rock_paper_scissors"&gt; Wiki of the game&lt;/a&gt;
+                   &lt;a href="https://www.rpsgame.org/"&gt;Another game of Rock,Paper, Scissors&lt;/a&gt;
+                &lt;/nav&gt;
+                &lt;main id="game"&gt;
+                &lt;/main&gt;
+                &lt;footer&gt;
+                  &lt;p&gt;Made by Miguel Bugalho&lt;/p&gt;
+                &lt;/footer&gt;
+              &lt;/body&gt;</pre></code>
+            <p>Notice that on our main we have an id, we can use that on javascript to place our game canvas
+                (the place where we draw our game) although we could do it even without the id </p>
+            <p> You can see all the HTML put together 
+                <a href="./files/index.html.txt">here</a></p>
+                <p>Now if you open localhost:3000 you will see the contents you created but they are not yet visually appealing</p> 
+            
+        </section>
+        <section>
+            <h2>2- Change the style.css in the public/stylesheets directory to change the visual of your page</h2>
+            <p> CSS allows us to change things like colors, sizes, borders and the position of elements. You can see the bases of CSS 
+                <a href="https://www.w3schools.com/css/">here</a>.</p>
+            <p>First delete what is inside the file, we will create our own from the beggining.</p>
+            <p> CSS files are composed by rules, each rule has a seletor and several declarations.
+                The selector defines what HTML elements on the page the rule shoudl apply. The declarations say what 
+                visual "effects" will apply to the elements. You can see more about selectors 
+                <a href="https://www.w3schools.com/cssref/css_selectors.asp">here</a>.
+            </p>              
+            <p>CSS means Cascating StyleSheets. This means rules "cascate" you can have several rules that apply to the same element.
+                If two rules have conflicting declarations (like changing the color to blue and red) the most specific rule
+                will prevail, or if both are equally specific the second rule will "override" the first.
+                This will work also if you link different CSS files, this is very common. For instance, you can have a "global"
+                CSS with the general rules of your web site, for instance the colors, and have specific CSSs for some of the pages that either
+                have exceptions or have extra elements to define visually.
+            </p> 
+            <p>
+                Lets start with some rules to apply colors and sizes:
+            </p>
+            <code><pre>
+                  body {
+                    background-color: burlywood;
+                  }
+                  header > img { width: 150px; }
+                  header {
+                     background-color: coral;
+                     color: white;
+                     font-size: 1.2em;
+                  }
+                  nav {  background-color: brown; }
+                  nav a { color: white }
+                  footer { 
+                    background-color: coral;
+                      color: white
+                  }</pre></code>
+        <p>Some remarks:</p>
+        <p> "header > img" means the img directly inside the header whereas 
+            "nav a" means any a element inside the nav (even if inside another element)
         </p>
-        <p> The basics of creating a rest api were described in the <a href="./restinterface.html"> rest interface tutorial</a>
-            but you will learn more techniques on the course,  make your own research and combine all those to create specific solutions. 
-            You will also learn how to create the client-side code during the course (first try <a href="./firstgui.html">here</a>). </p>
+        <p> You can define colors by their name or using rgb values, see more in 
+            <a href="https://www.w3schools.com/colors/default.asp">here</a>.
+        </p>
+        <p> "1.5em" means 1.2 times the "normal" size. Carefull that if you apply this multiple times in different levels 
+            (ex: the parent of this element having 1.5em for font size) it will multiply each time.
+        To know more about different types of units see 
+    <a href="https://www.w3schools.com/css/css_units.asp">here</a>. </p>
+        <p> Notice also we defined the color for the text of the links with the selector "nav a" instead
+            of defining the color directly on the selector "nav". This is not random, we really needed to do this.
+            Browsers have a default color for links (blue) and since a rule for "a" is more specific then
+            the rule for the parent "nav", the selector "nav" would not apply the rule to links. "nav a" is
+            more specific than a rule for "a", so it will override the browsers default rule.
+        </p>
+        <p> Next we will make some adjustments so content is not right next to the borders 
+            by adding some padding and/or margins. The way CSS defines these "spaces" is called "box model"
+        and you can learn the basics for it <a href="https://www.w3schools.com/css/css_boxmodel.asp">here</a> </p>
+        <code><pre>
+            body {
+                margin: 0;
+                height: 100vh;
+              }
+              header {
+                 padding:10px;
+              }
+              header > section {
+                text-align: center
+              }
+              nav {  
+                padding:10px;
+              }
+              nav a {
+                margin:5px;
+                padding:5px;
+                border: 1px solid white;
+              }
+              footer { 
+                padding: 10px 20%;
+                text-align: right;
+              }</pre></code>
+            <p> Since CSS cascates you can place these rules after the ones you already had, but it would be 
+                more correct to group all the declarations for the same tag together, for example, 
+                placing the "padding:10px" inside the "header { }" that already exists instead of creating a new one. </p> 
+            <p>Placing zero margin and 100vh on body will make the page fit the heigth of the available space for the page, the viewport.
+               This means no scrolling will be needed and no empty space in the bottom, as long as everything fits in the available space. 
+            </p>
+            <p> We also placed some paddings on all 4 sides for header and nav  and centered the text in the header</p>
+            <p> For the links we placed a border and both margin and padding. You can see most of the box-model here, 
+                the padding defines the space inside the border and the margin the space outside. Margins will colapse by default, 
+                meaning if you have two neighbor elements one with 10px margin and the other with 20px, the margin between the 2 will be 20px, 
+                the maximum of both values. </p> 
+            <p> On the footer we placed 10% of padding on the top and bottom and 20% padding on the left and right.
+                Since the text is small and we also aligned to the right, the 20% will mostly be at the right but leaving 20% space to the border.
+            </p>
+            <p>There are still 3 things we need to do:</p>
+            <ol>
+                <li> We need to place the image and text of the header side by side. This can be done in several ways but the easiest one is using flex</li>
+                <li> We need to place the links as a column, which we can also do using flex</li>
+                <li> We need fit all elements on page to fit in a nice grid, this can be done using combinations of flex or grids.
+                    In this case we don't have that many elements to fit on  the grid, but for more complex layouts the grid display
+                    will be easier.
+                </li>
+                <li> You can learn more about the flex display <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">here</a> and about
+                the grid display <a href="https://css-tricks.com/snippets/css/complete-guide-grid/">here</a>. </li> 
+            </ol>
+            <p> Lets see the code:</p>
+            <code><pre>
+                  body {
+                    display: grid;
+                    grid-template-columns: 200px auto;
+                    grid-template-areas: 'h h' 'n m' 'f f';
+                    grid-template-rows: 170px auto 70px;
+                  }
+                  header {
+                     grid-area: h;
+                     display: flex;
+                     align-items: center;
+                  }
+                  header > section {
+                    width: calc(100% - 320px);
+                  }
+                  nav {  
+                    display: flex;
+                    flex-direction: column;
+                    grid-area: n;
+                 }
+                  footer { 
+                    grid-area: f;
+                  }
+                  main {
+                    grid-area: m;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  } </pre></code>
+              <p> Like before these new declarations should be placed inside each rule, instead of creating new rules</p>
+              <p> We start by defining a grid in the body with 2 columns and 3 rows.  
+            </p>   
+            <p>The template areas define where each element in the body will be placed, 'h h' means that, in the first row, the
+                header will span the 2 columns whereas the second group 'n m' means that in the second row nav will go in the first column 
+                and main will go in the second column</p>
+            <p> The auto value means that that element will use the rest of the available space (if there were more than one auto they would share equally).
+                By default elements already occuppy all the space of the page horizontally, so auto on the columns will say that the main 
+                element will fill the rest of the width of the page. 
+                Auto only works for rows because we set the height of the body for the entire view port, so the main element
+                will also strech to fill all the available space vertically.
+            </p>
+            <p> For the template areas to work we need to define the "grid-area" value for each element, with the name we used on the template-areas</p>
+            <p>In the header we used flex. By default flex places elements in a row. Align-items center will align the elements vertically, 
+                in this case it will center the text vertically. Elements will normally only use the size their content occupies, so to center the text we made some calculations to set its size.
+                The text will fill 100% of the width minus twice the size occupied by the image and the padding.
+                The image ocuppies 150px plus the 10px of the padding, by removing the 320px we are left with 160px for the image and padding on the left and 
+                an equal amount of 160px of empty space on the right, with the text block using the space on the middle. This way when we align the text
+                on the block it will also be aligned for the page, since we have equal 160px space in each side. 
+            </p> 
+            <p>
+                For nav we also use flex but as a column. If we used aligh-items:center here it would center the elements horizontaly, since 
+                align-items works for the "other direction". To align them vertically we could use justify-content, but we are fine with having 
+                the link in the start of the block, which is the default.
+            </p>
+            <p> We also used flex with align-items and justify-contents as center for the main element, that will allow for anything that we place on the main element to
+                be centered vertically and horizontally
+            </p>
+            <p><strong>NOTE:</strong> By default flex only uses one row/column. Even if we place too many elements it will try to squeze them inside
+            or overflow the available space (see how to manage overflow <a href="https://www.w3schools.com/css/css_overflow.asp">here</a> ).
+        You can use "flex-wrap:wrap" to make flex jump to the next row or column if an element does not fit the current one. 
+        We will not need this, so we will not go into details, you can see more on the reference if was given for flex.  </p>
+        <p> And that is it, we have all the visuals for our web page. You can see the full CSS 
+            <a href="./files/style.css.txt">here</a></p>
+        </section>
+        <section>
+            <h2>3- Create the gamerequests.js file in the javascript directory to define requests to your REST API</h2>
+            <p> Before defining any visual elements of our GUI we need to get information 
+                to show on those elements by making requests to our REST API</p>
+            <p> These will be AJAX requests and we will use the fetch function to do them. This function is an asynchronous
+                function and we will be using the async/await command we already explained for the server-side. The function 
+                is declared as async and when whe call the fetch we do "await" for the code to wait for the server reply, and 
+                then we return the result we obtained.
+            </p>
+            <p> The first request function is to obtain the information about a room, including the 
+                top card currently on that room, so we can show it to the player:</p>
+            <code><pre>               
+async function getRoom(roomId) {
+    try {
+        const response = await fetch(`/api/rooms/${roomId}`);
+        if (response.status == 200) {
+           var room = await response.json();
+           return room;
+        } else {
+            // Treat errors like 404 here
+            console.log(response);
+        }
+    } catch (err) {
+        // Treat 500 errors here
+        console.log(err);
+    }
+}           </pre></code>
+       <p> Again we have the error treatment with try/cath. In this case we are only printing to console, but if
+           it is an error you want to show to the user you need to return something that the manager can use to show that error.          
+        <p> The fetch function considers that the default method is get, so we only needed to call it with the URL of the rest endoint.</p>
+        <p> 
+            The return value we receive back is not yet data, it is a response with several information, including the status. 
+            A status 404 it is not considered an error by fetch, so we need to treat it here. 
+            Only status 200 means success, so any other status will need to be treated (again we only printed to console). 
+        </p>
+        <p> On success we retrieve the data from the request (in json format) and return it.</p>
+        <p> We also need a function to request a play to be made:</p>
+        <code><pre>
+            async function play(roomId, card) {
+                try {
+                    const response = await fetch(`/api/rooms/${roomId}/plays`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                          },
+                        body: JSON.stringify({ cardPlayed: card}) 
+                    });
+                    if (response.status == 200) {
+                       var  result= await response.json();
+                       return result;
+                    } else {
+                        // Treat errors like 404 here
+                        console.log(response);
+                    }
+                } catch (err) {
+                    // Treat 500 errors here
+                    console.log(err);
+                }
+            }</pre></code> 
+            <p> This code is similar but now we have a POST request and we also need to send data. 
+                Fetch allows you to send a second parameter with an object with all these definitions.
+            We say the method type (POST), the format we are sending the information (Content-type is JSON)
+        and the information we want to send in the body. For this last part we created and object with the 
+        information we needed and then converted the objet to JSON using JSON.stringify</p>
+        <p> And that is it for making requests, but we still need an interface to see if it is working.</p>
+        <p> On the gamelib.js file write the following code for a simple GUI:</p>
+        <pre><code>
+var show;
+
+async function setup() {
+    var canvas = createCanvas(600, 300);
+    canvas.parent('game');
+    var room = await getRoom(1);
+    show = room.roo_topcard; 
+}  
+function draw() {
+    background(220);
+    textSize(20);
+    fill(0,0,0);
+    textAlign(CENTER, CENTER);
+    text(show,width/2,height/2);
+}
+async function mouseClicked() {
+    var room = await getRoom(1);
+    show = room.roo_topcard;     
+}
+async function keyPressed() {
+    let playCard = '';
+    switch(key) {
+        case 'r': playCard = "rock"; break;
+        case 'p': playCard = "paper"; break;
+        case 's': playCard = "scissors"; break;
+    }
+    if (play) {
+        var result = await play(1,playCard);
+        show = result.msg;    
+    } 
+}</code></pre>
+<p> This code shows the basics of P5.js, that many authors call the game cycle.</p>
+<p> A global variable "show" is declared to represent the message that will be shown in the interface</p>
+<p> The function setup is the first code to be called, before P5 calls draw. In this case we made the function 
+    async so that we can make server requests and use "await" to wait for the reply. In here we created 
+    the drawing cavas with the size we wanted and them requested the top card of the room (room 1) and placed
+    that name as the message that would be shown.
+</p>  
+<p>Next we have the draw function that will write the "show" message in the middle of the screen.
+    Much of these commands are from the P5 library so you can use the <a href="https://p5js.org/reference/"> reference page </a> to see what each command does.~
+    By default this function is called every X milliseconds, so any modification to the show variable will be drawn.
+</p>
+<p>The mouseCLicked function is the function P5 calls each time a mouse is clicked anywhere inside the canvas.
+    If the mouse is clicked we simple request the new top card from the server and set the value to be shown.
+    We will see we can use this in many ways, for instance it is possivel to obtain the coordinates of what was
+    clicked, so if we have different GUI elements we can make some calculation to see what element was clicked.
+</p>
+<p> The kreypress function is called each time a key is pressed. Depending on the key, the function will make a new 
+request for a play and after that we retrieve the top card again in case something changed (we do not need to do this
+since the play request already sends the top card that was left after the play, independently of the play won or not).
+</p>
+<p> <strong>Refresh your page and try the game!</strong></p>
+</section>
+<section>
+<h2>4- Create renderers code (card.js and board.js)</h2>
+<p> Both these files will be used to render the GUI elements on the P5 canvas using P5 commands.
+    They also both define a class that corresponds to the entity they are depicting. </p>
+<p> The concept of class is related to Object Oriented Programming (OOP). 
+    In OOP the first approach is to identify the entities of the problem. Each entity will correspond to a class,
+and relations between entities will correspond to relations between classes. </p>
+<p> The entity characteristics are represented in the class as attributes, and the 
+    possible actions of that entities has methods. </p>
+<p> In OOP we also have the concept of objects. Objects correspond to specific instances of
+    a class. If we create a class Car to represent the corresponding entity, the car with plate
+23-24-TI will be one of the possible objects of that class. </p>
+<p> Our getRoom also request returns an object, with the attributes that define the characteristics 
+    of the room we are playing, like the topcard. In this case this object is created by the library
+that makes requests to the database, directly from the table row information. The object also has no methods, only information.
+To destinguish these objects from the GUI objects we will create, we will call these <strong>Data Objects</strong>.</p> 
+<p> Card and Board classes that were defined represent GUI elements, and have both attributes that define
+    the characteristics of that element, and methods that define the actions we can do to that element, like
+    drawing or checking if something was clicked. </p>
+<p> Most of the code inside both of these files is related to calculations needed to draw the GUI element.
+    To avoid making this tutorial more extense you can access the code of both files using the following links</p>
+    <ul><li> <a href="./files/card.js.txt">Link for the card.js code</a></li>
+    <li><a href="./files/board.js.txt">Link for the board.js code</a></li></ul>
+<p> Classes in javascript will have a constructor, where attributes are defined using the "this" keyword.
+    Anywhere inside the class the "this" keyword will allow us to distinguish between attributes of the class and any other variable or parameter.
+    You will always need to use "this" to access the class attributes.
+</p>
+<p> You can also define "static" attributes like cardImages. This attribute is global to the class, whereas attributes 
+    like "this.x" and "this.card" can be different for each object, there is only one cardImages value for all objects.  
+Since cardImages is a class attribute it is accessed using the class name "Card.cardImages".</p>
+<p> This attribute will be used as an Hash table (similar to the "beat" variable we used before)
+     to retrive an image given the name of the card. It will be initialized in the beggining when the program loads
+     the images. </p>
+<p> Finally you can define methods, static or non-static. Static methods can only use static variables, 
+    but are called using the name of the class ("Card.initImgs(...)") which means than can be called at any time,
+even if no objects were created. Non-static methods can also access the object attributes, but you need to create an object first,
+since each object can have different values for their attributes. The object is created through the constructor, using the new keyword.  </p>
+<p>We also defined several constants. It is <strong>good practice</strong> to define constants for any value that has some meaning.
+    Not only it is easier to have a name associated with the number ("no magic numbers") but it also makes it easier to change values and "tune"
+    our GUI as needed
+</p> 
+<p>Many of the const values that we use to define our GUI are also relative to the width and heigth.
+    This allows for the element to be resized and still "look good" (within some limits).
+This is also <strong>good pratice</strong> and it can take some pratice to create this type of flexible code 
+and still make it "readable". </p> 
+<p>Let's see some examples on the two classes we have:</p> 
+    <h3> Card.js code remarks</h3>
+<p>This code defines the Card class that will allow us to create several card images in our GUI and interact with them.</p>
+<p> The initImgs will initialize our images hashtable so we can draw cards with the correct image.</p>
+<p> The draw method is the main method. It makes all the calculations to draw the card using the attributes and constants.
+    It uses several P5 methods to define colors and other settings and to draw text and figures.
+    We will not talk about each of these P5 commands, you can check the P5 reference and examples, and you can also ask your 
+    teacher if some command is not clear after that. You will also have more example throughout classes
+</p>
+<p> The set and getCard methods allow you to change the card value (which will also change the image) and to see
+    what is the current value. The getCard methods is not yet used on our code, but it can be useful later.
+    <strong>Do not be affraid to create some extra methods if they make sense, a class is a module, and modules should
+        be coded in a way that they have full functionality, so they can be used even in situations you did not thought initially.
+    </strong>
+</p>
+<p> Finally the click method receives the X and Y position where the mouse was clicked and return true if
+    that position is inside the card, meaning someone clicked the card. What should happen when a card is clicked is actually
+    something we will only define in the BoardManager.
+</p>
+<h3> Board.js code remarks</h3>
+<p>Our board class will actually only be used once, since we only have one board, but
+    it is defined in a way that would allow us to create several boards if we wanted
+</p>
+<p> Inside the board we have cards. In terms of OOP we say that the Board has an association to the Card.
+    We actually have two types of associations. A single association, that corresponds to the "this.roomCard" attribute, and it will
+    correspond to the card that is currently the top card on that room. And a multiple association, a list of cards in the 
+    "this.cardValues" attribute, that corresponds to the possible card values the player can play.   
+</p>
+<p> Inside the Board constructor we create the card objects using "new Card(...)" where "..." correspond
+    to the parameters we defined in the Card constructor. After creating this objects we can call the
+    non static methods we defined on the Card class on those objects, for example to draw the top card:
+    <strong>this.roomCard.draw();</strong>
+</p>
+<p> In terms of methods we have:</p>
+<p> A method to draw the board that will draw all the cards in their determined position and labels to explain what those cards mean, and bellow
+    a text that will correspond to a message that will give feedback to player interactions. For instance by saying if he won or lost after a play.
+</p>
+<p> To methods to see if cards were clicked. The roomCardClicked method only returns true or false in case the room card was clicked or not.
+    The valueClicked will return the value of the card that was clicked or false if no value card was clicked. This will allow 
+    us to check what the player is interacting with.
+</p>
+<p>The setRoomCard will change the roomCard value, and will be used to sincronize the value with the one that is 
+    on the database (by making server requests on some player interactions).
+</p>
+<p> The resetMsg and setResult both change the messange text. Reset will set the message to the default value, while
+    setResult will show the win or loose message depending on the boolean value received.
+</p> 
+</section>
+<section>
+<h2>5- Create the boardManager.js </h2>
+<p> We now have renderers to create the interface and a request file to obtain data.
+    The question is how we combine these, since we want things like, a player clicks on a value card 
+    and that value is sent to the server as the players play. 
+</p>
+<p> We do not want the renderers to call the requests, since that is not theirs responsability.
+    We also do not want the requests to change the interface. Any of those would create a 
+    <strong>strong coupling</strong> which is to be avoided since it makes our code less flexible.
+</p>
+<p> This is what the BoardManager class will do, connect both parts of our code. The manager will have 
+    responsability of managing the interactions between GUI and requests but it will not need to 
+    know the details of either, only the methods it needs to call (black box). 
+     You can </p>
+<a href="./files/boardManager.js.txt">see boardManager.js code in here</a></p>
+<p> The first thing we define is the list of card values we are using. We didn't needed this
+    if our database kept some information about the possible values, but we do not have it in the
+    database ... yet!</p>
+<p> When we create the BoardManager object we can decide which room we will be using, this will be used for our requests.</p>
+<p> The methods of the BoardManager provide all the interaction and settings needed for the game:</p>
+<p> The preloadImages method uses the P5 function loadImage to load the image to P5, that we then use to
+    set the cardImages static variable in the Card class (using initImgs).
+</p>
+<p> initBoard is async since we will need to make requests to our server and "await" for them.
+    This method gets the information of the room and creates a new board with the correct initial top card.
+    Those commands cannot be run on the BoardManager constructor since the constructor cannot be async, so 
+    we created this method, otherwise it would make sense to create the board inside the constructor 
+    (other possibility would be to create the board with an "empty" topcard and them update it, but we are not 
+    allowing this "empty" value for cards).
+</p>
+<p> Notice that the BoardManager only works with the Board GUI element, and not the Card. This happens because the cards
+    are inside the Board GUI element, so we do not need to work with them directly. But it is possible for the manager
+    to work with different GUI elements, it will depend on the interface you are building.
+</p> 
+<p>We also have a draw method, that will simply call the draw of the board when the board is initialized.</p>
+<p> We also have 2 auxiliary methods: The refresh that obtains the top card of the room and changes the top card on the GUI, and
+    the play that receives the value that the player choose sending it to the server and changing both the message on the GUI and the top card
+    accordingly to the response received from the server. </p>
+    <p> Both methods will be called in the click method. This method will check if the
+        room card on the board GUI was clicked, and if so refresh the value of that card to the
+        one on the database. And if not, it will check if any of the value cards was clicked. If so
+        the value choosen by the player is played using the play method.
+    </p>
     </section>
-  </main>
-</body>s
+    <section>
+        <h2>6- Update the gamelib.js file to use all this new functionality</h2>
+        <p> Our initial version of the interface was very simple. Just delete that version and replace it to the one that 
+            uses all this knew code. You can see the code you need bellow:
+        </p>
+        <code><pre>
+const width = 1000;
+const height = 400;
+const room = 1;
+
+var boardMan;
+
+function preload() {
+    BoardManager.preloadImages();
+    boardMan = new BoardManager(width,height,0,0,room);
+    boardMan.initBoard();
+}
+
+function setup() {
+    var canvas = createCanvas(width, height);
+    canvas.parent('game');
+}
+function draw() {
+    background(220);
+    boardMan.draw();
+}
+function mouseClicked() {
+    boardMan.click(mouseX,mouseY);     
+}</pre></code>
+<p> The code actually seems simpler, and probably is, all the complexity is now hidden in several 
+    layers of code. Each element is much simpler than the final result we obtain when putting everything together.
+    This method of "divide and conquer" is what allows developers to tackle very complex problems.
+<p>All the methods we are using in this code correspond to specific P5 methods:</p>
+<p>The preload method in P5 is used to make calculation that need to be completed before the program starts.
+    For example preloading images before trying to draw them. 
+    Usually this means that the rest of the code is only called after this finishes, but when we use
+    async functions it may not work that way (NOTE: still needs more testing to know exactly what is happening, 
+    but it seems it is not a major problem to our games). 
+</p> 
+<p> In our preload we loaded the images and created our board (both manager and GUI board, since the manager created the GUI element)</p>
+<p>The setup method is called only onde when the application starts. We used it to 
+    create our canvas and setting it to the HTML element with id "game" which was our main element.
+</p>
+<p> Width, height and room can be changed. Both canvas and board will adapt to knew values since we 
+    wrote our code to adapt to these parameters (within limits).
+</p>
+<p>The draw method by default will be called in a loop. We can change the refresh rate if we want, and can even
+    stop the method to work on a loop and decide to loop it manually. In our case we use the "background"
+    P5 command to clear the canvas and than we call the BoardManager draw method to draw everything again, thus
+    showing any modifications that may have happened to the GUI between calls in the loop.
+    We need to clear the screen or else the canvas will keep all previous drawings.
+</p>
+<p> Finally the mouseClicked will check for user interactions, calling the BoardManager click method with the coordinates of X and Y for the mouse.
+    mouseX and mouseY are updated to the values of the mouse by P5 (the values are relative to the top left corner of the canvas). </p>
+<p> In this case we do not use keys. The keyPressed method we used before is called by P5 on any key pressed but
+    we only need the mouse to interact with the game (we could also use both if we wanted).
+</p> 
+<p> <strong>NOTE:</strong> If we wanted to create different windows we would only need to create a new manager,
+and possibly some GUI elements and requests for those window needs. If the main interaction would still be drawing and clicking we would 
+only need to change the object on the boardMan variable to an object of the new window and the main
+game loop would then be using that new window. Of course that in that case we should rename our 
+"boardMan" variable to "manager", <strong>always write names that make sense in your code</strong>.</p>
+<p> And that is it. You should now be able to refresh your main page and <strong>play the game</strong>.
+    You don't even need to restart the server since all this code is inside the "public" folder and all files
+    there will be readed from disk when needed, not like the server files that are read into memory when the 
+    server starts (so any change to them only applies when we restart the server).
+</p>
+</section>
+
+
+        
+</main>
+
+</body>
 
 </html>
