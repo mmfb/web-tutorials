@@ -4,9 +4,10 @@
   <title>Rock, Paper, Scissors game</title>
   <link rel="stylesheet" href="./stylesheets/style.css">
   <script src="./javascripts/p5.min.js"></script>
-  <script src="./javascripts/card.js"></script>
-  <script src="./javascripts/board.js"></script>
-  <script src="./javascripts/gamerequests.js"></script>
+  <script src="./javascripts/renderers/card.js"></script>
+  <script src="./javascripts/renderers/board.js"></script>
+  <script src="./javascripts/requests/roomRequests.js"></script>
+  <script src="./javascripts/managers/boardManager.js"></script>
   <script src="./javascripts/gamelib.js"></script>
 </head>
 
@@ -28,5 +29,9 @@
     <p>Made by Miguel Bugalho</p>
   </footer>
 </body>
-
+<!--
+  <a href="https://www.flaticon.com/free-icons/rock" title="rock icons">Rock icons created by Icongeek26 - Flaticon</a>
+  <a href="https://www.flaticon.com/free-icons/blank-paper" title="blank paper icons">Blank paper icons created by JunGSa - Flaticon</a>
+  <a href="https://www.flaticon.com/free-icons/scissors" title="scissors icons">Scissors icons created by BomSymbols - Flaticon</a>
+-->
 </html>
