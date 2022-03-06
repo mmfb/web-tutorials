@@ -174,7 +174,8 @@
             The idea is simple:
           <ol>
             <li>Create a local git repository that will allow us to manage versions and connect to a remote repository.
-              The creation and managing of the repository can be made with a git client. VSCode already has a git client integrated.
+              The creation and managing of the repository can be made with a git client.
+              VSCode already has a GUI for git but you will need to <a href="https://git-scm.com/downloads"> install git</a> so VSCode can run the commands .
             </li>
             <li>Push the latest version (using the git client) to a remote git repository like <a href="github">
                 GitHub</a>.</li>
@@ -586,6 +587,10 @@
       <p> We still have many concepts to learn before we can fully use a database,
         but since this is an instalation tutorial we will cover
         also the database configuration of the server. </p>
+      <p> First you will need to have a database, either a local or a remote. How to install or run instructions on 
+        your database will not be covered by these tutorials. You can create the database using 
+        the commands on <a href="./files/RPS22-creates-v10.sql">this script</a> and insert 
+        some initial data using the commands on <a href="./files/RPS22-inserts-v10.sql"> this script</a>.</p>
       <p>First we will need to install the module that will comunicate with the database.
         You will need to stop the server to do this and then run one of the following commands
         (depending on which database you are using):</p>
@@ -667,7 +672,7 @@
       </section>
       <h3 onclick="showHide('postgresql','mysql','block')">
         Click here to see the code for PostGreSQL</h3>
-      <section id="postgresql" style="display:none">
+      <section id="postgresql" >
         <section class="columns">
           <strong>
             <pre class="code">
@@ -907,7 +912,7 @@ module.exports = router;</pre>
       </p>
       <p> To set up our website on Heroku using GitHub we will need:</p>
       <ul>
-        <li> Create a GitHub account. </li>
+        <li> Create a GitHub account (you can ignore the step of creating the first repository since we will use VSCode for that). </li>
         <li> Create a GitHub repository (remote repository) on that account using VSCode. <br>
             If you want you can add other collaborators to your repository using the GitHub website <br>
             <strong>Make sure the base of the project is directly on the base repository directory</strong> 
@@ -931,16 +936,42 @@ module.exports = router;</pre>
       <h2 id=github"">Creating a GitHub repository using VSCode </h2>
       <p> If you do not have a GitHub account you can register here: <a
           href="https://github.com/">https://github.com/</a></p>
+        <p> You will also nee to install Git if you have not done so already. Install Git from <a href="https://git-scm.com/downloads">here</a>. 
+          You will also need to <strong>set up your name and email for git</strong>, this will allow to identify your commits on group projects.
+        Open the terminal and run the two commands bellow with the name and email you want to use:</p>
+        <strong><code><pre>
+          git config --global user.name "Your Name Comes Here"
+          git config --global user.email you@yourdomain.example.com
+        </pre></code></strong>
+        <p> After isntalling Git you will need to restart VSCode, he will find the Git installation when it restarts.</p>
           <section class="fleximg">
-            <p> To create a repository simply press the source control button like shown in the image on the right.
+            <section>
+            <p> With Git installed you can create the repository directly on VSCode. To create a repository simply press the source control button like shown in the image on the right.
               After that press the button to publish to github and choose a name (by default is the project name). 
              You should be logged on to your github account on the web browser before doing this steps, otherwise it will ask you to log on.</p>
+            <p>If you already have a repository on GitHub you can still send your code to that repository, as long as the repository is completly
+               empty (not even a README file). Just open a terminal on your VSCode and run the commands 
+               listed bellow (change "username" to your GitHub username and "repname" to the name you gave to your repository):              
+            </p>
+            <strong><code><pre>
+              git init
+              git add *
+              git commit -m "first commit"
+              git branch -M main
+              git remote add github https://github.com/username/repname.git
+              git push -u github main</pre></code></strong>
+            </section>
            <img style="padding:0px 10%" src="./images/vscode_github.png"
               alt="Create github repository on vscode">
-        </section>
-      
-          
-       
+        </section>  
+        <p> You will be using VSCode to manage our git repository but you can also use the command line git commands if you want.
+          There are many more commands on git then the ones the VSCode GUI makes available, and command line commands exists anywhere
+          git is installed. You have an <a href="https://git-scm.com/docs/gittutorial"> introduction to git commands</a> and 
+          the <a href="https://git-scm.com/docs">git reference manual</a> on the git website.  </p> 
+        <p> If your GitHub repository already has something you cannot send your code there, the closest 
+          thing you can do is to clone the repository from GitHub (see bellow how to clone) and then move all
+        your code to the directory created when  you cloned. Or you can just create a new repository, if what 
+        you have in the previous one is not important</p>
 
       <h3 id="collabs"> Setting other collaborators</h3>
       <p> Public repositories can be seen by anyone, and anyone can make a clone, but only collaborators

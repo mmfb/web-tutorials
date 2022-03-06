@@ -570,7 +570,19 @@ and still make it "readable". </p>
 </p>
 <p> The resetMsg and setResult both change the messange text. Reset will set the message to the default value, while
     setResult will show the win or loose message depending on the boolean value received.
+    In the setResult card we used the Javascript function <strong>setTimeOut</strong> to
+    reset the message to the default message after some time. This function receives as second parameter
+    the amount of time to wait, in milliseconds, and as first parameter the funcion to be called when the time passes.
+    In this case we passed an <strong>arrow function</strong>, a shorter way to declare a function. 
+    There is also a <strong>setInterval</strong> function that instead of calling the function once
+    will continuasly be calling the function after the defined time ellapses.
+    You can learn more about these concepts in the links bellow.
 </p> 
+<ul>
+    <li><a href="https://www.w3schools.com/jsref/met_win_settimeout.asp">More about setTimeOut</a></li>
+    <li><a href="https://www.w3schools.com/jsref/met_win_setinterval.asp">More about setInterval</a></li>
+    <li><a href="https://www.w3schools.com/js/js_arrow_function.asp">More about arrow functions</a></li>
+</ul>
 </section>
 <section>
 <h2>5- Create the boardManager.js </h2>
@@ -594,7 +606,20 @@ and still make it "readable". </p>
 <p> The methods of the BoardManager provide all the interaction and settings needed for the game:</p>
 <p> The preloadImages method uses the P5 function loadImage to load the image to P5, that we then use to
     set the cardImages static variable in the Card class (using initImgs).
+    <strong> You will need to create a directory called "assets" inside the public directory and download the following 
+        image files there (or other images you create but they need to have the same name and extension).</strong>
 </p>
+<p> If you use these images you will need to place the references to the author. </p>
+<ul><li>Image <a href="./files/paper.png">paper.png</a><br>
+    <a href="https://www.flaticon.com/free-icons/blank-paper" title="blank paper icons">Blank paper icons created by JunGSa - Flaticon</a>
+</li>
+<li>Image <a href="./files/rock.png">rock.png</a><br>
+    <a href="https://www.flaticon.com/free-icons/rock" title="rock icons">Rock icons created by Icongeek26 - Flaticon</a>
+</li>
+<li>Image <a href="./files/scissors.png">scissors.png</a><br>
+    <a href="https://www.flaticon.com/free-icons/scissors" title="scissors icons">Scissors icons created by BomSymbols - Flaticon</a>
+</li>
+</ul>
 <p> initBoard is async since we will need to make requests to our server and "await" for them.
     This method gets the information of the room and creates a new board with the correct initial top card.
     Those commands cannot be run on the BoardManager constructor since the constructor cannot be async, so 
