@@ -183,11 +183,11 @@ module.exports = router;</pre></code>
      </p>
      <p> <strong>WARNING:</strong> If you change only the case of a filename Git will consider that the 
         file is the same and will not rename the file, meaning that on GitHub the file would continue to be lower cased.
-    You can use the "mv" command of git to rename the files. In the terminal use the following commands to rename:</p>
-    <strong><code><pre>
-        git mv public/assets/paper.png public/assets/Paper.png
-        git mv public/assets/rock.png public/assets/Rock.png
-        git mv public/assets/scissors.png public/assets/Scissors.png</pre></code></strong>
+        <strong>You will need to rename each of the files</strong> to a different name (ex: rocky.png), commit those files, and 
+        then rename the file again to the name with first letter in caps (ex: Rock.png) and commit again.
+        Since the file actually changed name since the previous commit in both commits, git will consider the change. 
+        (NOTE: Some references say "git mv" should work, but it did not work me, if it works for you, great!).
+    </p>
     <p> Finally, we need to change our post model function <strong>play</strong>. 
         First, delete the <strong>"var beats=..." </strong>
         line, we will not need it anymore now that we have the card table.
@@ -259,21 +259,51 @@ module.exports = router;</pre></code>
             class since this is a function with many details.</strong></p>
         </section>
         <section id="changerules">
-            <h2>2- Change the game to a more complex one (database and server change) </h2>
+            <h2>2- Change the game to use more complex rules (database and server change) </h2>
             <p> We will now change our game to Rock, Paper, Scissors, Lizard, Spock. This game was
                 introduced in the Big Bang Therory series and not only has five values but each
                 value also can beat two other values. You can see a description of the game and context
                 <a href="https://bigbangtheory.fandom.com/wiki/Rock,_Paper,_Scissors,_Lizard,_Spock"> here</a>
                 (includes a video of that part of the episode).
             </p>
-            <p> Since each card can not beat two other a new table was need called cwc (card wins card).
-                This means we will need to change our models again, but this time we will not need to make any modifications to the client, 
-                except for the fact that we now need 2 more images with the name equal to the 2 new values (the images are actually on the server).
+            <p> Either you create a new database and change to that database in the .env file, 
+                or you drop the tables on the
+                database you are using. Either way you will then run the scripts to create the new database:
+                <a href="./files/RPS22-creates-v30.sql">creates script</a> and <a href="./files/RPS22-inserts-v30.sql">inserts script</a>.
+            </p>
+            <p> Since each card can now beat two others a new table was created with the name cardwcard (card wins card).
+                This means we will need to change our models again, but this time we will not need to make any modifications to the client.
+                We do however need 2 more images with the name equal to the 2 new values (the images are on the assets directory).
                 You can download the two images here (do not forget to include the references): 
             </p>
-            <ul><li></li>
-            <li></li></ul>
-
+            <ul><li>
+                <a href="./files/Lizard.png">Lizard.png</a><br>
+                <a href="https://www.flaticon.com/free-icons/lizard" title="lizard icons">Lizard icons created by Freepik - Flaticon</a></li>
+            <li><a href="./files/Spock.png">Spock.png</a><br>
+                <a href="https://www.flaticon.com/free-icons/spock" title="spock icons">Spock icons created by Freepik - Flaticon</a></li></ul>
+            <p>
+                Now lets start changing our models. If we try again our get functions for the room model on this new database they all still work.
+                All our gets for rooms work with the room and card table, and their foreign key, and that was not changed.
+                Our getCards on the card model also does not need to be changed, since we are using it to retrieve all cards, with id and names,
+                and that information is still on the card table.  
+            </p>
+            <p>
+                Our post method however will need to be changed. Our first SQL query will still try to match the room number the same way, but now
+                it will need to use the cardwcard table to make the check to see if the played value wins over the topcard on the room.
+                Change that first query string to this new one:
+            </p>
+            <code><pre class="code">
+            let sql = `select * from room, card, cardwcard
+                where room.roo_id = $1 and
+                room.roo_topcard_id = cardwcard.cwc_clooses_id and
+                card.crd_id = cardwcard.cwc_cwins_id and
+                card.crd_name ILIKE $2;`</pre></code>
+            <p>We now match the loosing id of the cardwcard table to the topcard of the room and the 
+                winning id to the card we want the name to match to the value the player played.
+                Again we will only get one row or none, being the first a win and the second a loss.
+                However, now there are always 2 cards that can win over the one on the room, for instance
+                for Rock we now have Paper and Spock.
+            </p> 
         </section>
            
   </main>
