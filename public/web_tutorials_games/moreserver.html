@@ -20,17 +20,263 @@
       <p><input type="checkbox"> Practice what you learned by creating more REST resources and rules </p>
       <p><input type="checkbox"> Reflect on the right way to code</a></p>
     </section>
-    <section id="changerules">
-      <h2>1- Change our database and server so that the rules for the game are on the database </h2>
-    <p>First you will need to either create a new database or clear the previous one. You can create the new version 
-        of the database running the commands on these scripts: <a href="http://"> creation script</a> and 
-    <a href="http://">populate script</a>.</p>
-    <p>
-        
+    <section id="saverulesdb">
+      <h2>1- Change our database  so that the rules for the game are on the database </h2>
+    <p> The new database version will allow us to have the rules of the game inside. It now has two tables:</p>
+    <ul>
+        <li> A table that defines the valid values for cards and the card that looses againts those. 
+            This table can be used to get the possible card values and check if a card wins agains the top card of the room.</li>
+        <li> The room table that now instead of the top card value has the identifier that corresponds to one of the possible
+            values on the card table.
+        </li> 
+    </ul>
+      <p>Lets replace the old database for this new one. 
+          First you will need to either create a new database or clear the previous one. 
+        Then you can create the new version 
+        of the database running the commands on these scripts: <a href="./files/RPS22-creates-v20.sql"> creation script</a> and 
+    <a href="./files/RPS22-inserts-v20.sql">populate script</a>.</p>
+    <p> Now we will need to change our models to adapt to the new changes. 
+        We will change them in a way that will return and receive the same information.
+        If we treat the model as black box, and keep the same interface, we do not need to change 
+        neither the routes nor the client-side</p>
+    <p>Let's start with the model functions for the "get" endpoints:</p>
+    <ul>
+        <li>
+            <p> On the <strong>getAllRooms</strong> function change the value of the variable "sql" to: </p>
+            <code><pre>
+                let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+                from room, card where roo_topcard_id = crd_id`;</pre></code>
+            <p> Since the name of the card is on the "card" table we need to join the two tables in the query.
+                We also need to filter only the columns we had before and change the name of 
+                the column "crd_name" to "roo_topcard" so that what is returned is equal to what we had before.
+            </p>
+            <p> We used `` insteaf of "" to be able to write strings in more than one line (it would not work with "")</p>
+        </li>
+        <li> 
+            <p>For the function <strong>getRoomById</strong> you will do the same and change the value of the  variable "sql" to</p>
+            <code><pre>
+                let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+               from room, card where roo_topcard_id = crd_id and roo_id = $1`;</pre></code>
+            <p> The only difference is that in this case we will have the filter by room id, like we had before.</p>
+        </li>
+        <li> <p> Finally for the function <strong>getRoomByNameOrTopCard</strong> you will need to change three strings:</p>
+        <ol>
+            <li> <p>You need to change the initial sql string to:</p>
+            <code><pre>
+                let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+                from room, card where roo_topcard_id = crd_id`</pre></code> </li>
+            <li><p> Inside the "if(parameters.name)" change the append to the sql string to:</p>
+                <code><pre>
+                    sql += ` and roo_name ILIKE $${nparam}`;</pre></code>
+                <p> We added the "and" since we already have a comparison on the where clause. 
+                    We also changed from LIKE to ILIKE, to make the comparison case insensitive.
+                    ILIKE is not standard of sql but exists on Postgres 
+                    (see <a href="https://www.postgresql.org/docs/8.3/functions-matching.html">here</a>
+                     if you want to know more).
+                </p></li>
+            <li><p>Inside the "if(parameters.topcard)" remove the "if" that adds the "and" (now we always need to have an "and")
+                and change the append to the sql string to:</p>
+                <code><pre>
+                    sql += ` and crd_name ILIKE $${nparam}`;</pre></code></li>
+        </ol></li>
+    </ul>
+    <p> If now you restart you server and go to your client it will not be working yet, 
+        not even the visualization of the topcard that only depends on what we already changed. 
+        The reason for this is that in the boardManager we used lower case names for the cards and
+        in the database the first letter is in caps.
     </p>
-      </section>
-    
+    <p> This is actually something that we said we were doing wrong, the variable with those values, and the "beats" variable in the model, should not exist.
+        Those values should be obtained from the database, and since we now have a card table, we can have an endpoint to get those values.
+    </p>
+    <p> Create a <strong>"cardsModel.js"</strong> file and place the code to obtain all the card information from the database:</p>
+    <code><pre class="code">
+var pool = require('./connection.js')
+
+module.exports.getAllCards = async function () {
+    try {
+      let sql = `Select * from card`;
+      let result = await pool.query(sql);
+      let cards = result.rows;
+      return { status: 200, result: cards };
+    } catch (err) {
+      console.log(err);
+      return { status: 500, result: err };
+    }
+  }</pre></code>
+  <p>It is very similar to what we had for the rooms. Now create a <strong> "cardsRoutes.js"</strong> file and place the
+      code for creating an endpoint to obtain all the card values:
+  </p> 
+  <code><pre class="code">
+var express = require('express');
+var router = express.Router();
+var cModel = require("../models/cardsModel");
+            
+router.get('/', async function(req, res, next) {
+    console.log("Get all cars")
+    let result = await cModel.getAllCards();
+    res.status(result.status).send(result.result);
+});
+
+module.exports = router;</pre></code>
+<p> We are not done yet. We still need to connect this new route to our app. 
+    Go to the <strong>"app.js"</strong> file and add 
+    these two new lines next to the other similar lines:
+</p>
+<code><pre class="code">
+    var cardsRouter = require('./routes/cardsRoutes');
+    app.use('/api/cards',cardsRouter);</pre></code>
+<p> Now restart the server and if you call the new endpoint (localhost:3000/api/cards) it will return all the 
+    cards information.
+</p>    
+<p> If you do not want all the columns you can define what columns you want on your select and even give other names 
+    instead of using *, like we have done previously.</p>
+ <p> With this new endpoint we can change the client to use this information instead of the fixed
+     array of values. This way we will never have this problem if there are some adjustments in the card names.
+ </p>
+ <p> First we need to create the <strong>"cardRequests.js"</strong> file on the requests directory with the following code to 
+     retrieve the cards from our new endpoint:</p> 
+     <code><pre class="code">
+        async function getCards() {
+            try {
+                const response = await fetch(`/api/cards`);
+                if (response.status == 200) {
+                   var cards = await response.json();
+                   return cards;
+                } else {
+                    // Treat errors like 404 here
+                    console.log(response);
+                }
+            } catch (err) {
+                // Treat 500 errors here
+                console.log(err);
+            }
+        }</pre></code>
+    <p> We also need to inclunde that file in the scripts of our <strong>index.html</strong> file:</p>
+    <code><pre class="code">
+        ...
+        &lt;script src="./javascripts/renderers/board.js"&gt;&lt;/script&gt;
+        &lt;script src="./javascripts/requests/cardRequests.js"&gt;&lt;/script&gt;
+        &lt;script src="./javascripts/requests/roomRequests.js"&gt;&lt;/script&gt;
+        ...</pre></code>
+    <p> Then, in the <strong>boardManager.js</strong> file we will need to make two changes:</p>
+    <p> 1- Instead of a constant <strong>"const playValues=..."</strong> we will now have a variable
+    with an empty list that will be filled later using the new request:</p>
+    <code><pre class="code">var playValues=[];</pre></code>
+    <p> 2- Inside the static function <strong>preloadImages</strong> we will now fill the playValues list
+     with the values from the request. The function now need to be async since we need to "await"
+     for the request. See the full changed function (the parts that changed are marked):</p>
+     <code><pre class="code">
+        <span class="marked">static</span> async preloadImages() {
+            let cardImgs = {}
+            <span class="marked">let cards = await getCards();
+            for (let card of cards) {
+                let playValue = card.crd_name;
+                playValues.push(playValue);</span>
+                cardImgs[playValue] = loadImage('./assets/'+playValue+'.png');
+            }
+            Card.initImgs(cardImgs);
+        }    
+     </pre></code>
+     <p> You will also need to change the names of the images to match the names of the card values.
+         In windows it will probably work with the lower case names, but for Mac and Linux file names
+         are case sensitive (<strong>and Heroku is Linux</strong>). 
+     </p>
+     <p> <strong>WARNING:</strong> If you change only the case of a filename Git will consider that the 
+        file is the same and will not rename the file, meaning that on GitHub the file would continue to be lower cased.
+    You can use the "mv" command of git to rename the files. In the terminal use the following commands to rename:</p>
+    <strong><code><pre>
+        git mv public/assets/paper.png public/assets/Paper.png
+        git mv public/assets/rock.png public/assets/Rock.png
+        git mv public/assets/scissors.png public/assets/Scissors.png</pre></code></strong>
+    <p> Finally, we need to change our post model function <strong>play</strong>. 
+        First, delete the <strong>"var beats=..." </strong>
+        line, we will not need it anymore now that we have the card table.
+         Then change the code to the code bellow (the parts that changes are marked):</p>
+    <code><pre class="code">
+        module.exports.play = async function (id, value) {
+            try {
+             <span class="marked"> if (!parseInt(id)) {
+                return { status: 400, result: { msg: "Room id must be a number" } };      
+              }
+              let sql = `select * from room, card
+                where room.roo_id = $1 and
+                room.roo_topcard_id = card.crd_winsover_id 
+                and card.crd_name ILIKE $2;`
+              let result = await pool.query(sql, [id,value]);
+              if (result.rows.length == 0) {
+                let sqlr = `select * from room, card where room.roo_id = $1 
+                            and room.roo_topcard_id = card.crd_id`;
+                let resultr = await pool.query(sqlr, [id]);
+                let room = resultr.rows[0];
+                if (!room) {</span>
+                  return { status: 404, result: { msg: "No room with that id" } };
+                } else {
+                  return {
+                    status: 200,
+                    result: {
+                      victory: false,
+                      msg: "You Lost! That card does not beat the top card.",
+                      current_topcard: <span class="marked">room.crd_name</span>         
+                    }
+                  };
+                }
+              }
+              <span class="marked">let card_id =  result.rows[0].crd_id;
+              let card_name = result.rows[0].crd_name;</span>
+              let sql2 = "UPDATE room SET roo_topcard_id = $1 WHERE roo_id = $2";
+              let result2 = await pool.query(sql2, [ <span class="marked"> card_id, id </span> ]);
+              if (result2.rowCount == 0) {
+                return { status: 500, 
+                         result: { msg: "Not able to update. Many possible reasons (ex: room was deleted during play)" } };
+              }
+              return {
+                status: 200,
+                result: {
+                  victory: true,
+                  msg: "You Won!",
+                  current_topcard: <span class="marked">card_name</span>
+                }
+              };
+            } catch (err) {
+              console.log(err);
+              return { status: 500, result: err };
+            }
+          }    </pre></code>
+        <p> The first part is completly different since we replaced the "beats" data structure with the "card table".
+            The first if is actually a new error check, making sure the room id we send is an integer:
+        </p>
+        <p> Next we have our main verification query. This query will return zero lines or one, being one if
+            we can find a room with the id we are looking and where the 
+            topcard looses against the card the player played. 
+        </p>
+        <p> If no line is returned either we choose an invalid room (return 404) or our 
+            card does not beat the topcard of that room (return 200 saying we lost).
+            To see if the room exists we made the query on the variable "sqlr".
+        </p>
+        <p> All the other modifications were done to make sure the correct names and ids are now used, since now
+            we don't have a value in the room topcard but an id.  </p>
+        <p><strong>Read the code and try to understand the details. If you have any questions ask the teacher in 
+            class since this is a function with many details.</strong></p>
+        </section>
+        <section id="changerules">
+            <h2>2- Change the game to a more complex one (database and server change) </h2>
+            <p> We will now change our game to Rock, Paper, Scissors, Lizard, Spock. This game was
+                introduced in the Big Bang Therory series and not only has five values but each
+                value also can beat two other values. You can see a description of the game and context
+                <a href="https://bigbangtheory.fandom.com/wiki/Rock,_Paper,_Scissors,_Lizard,_Spock"> here</a>
+                (includes a video of that part of the episode).
+            </p>
+            <p> Since each card can not beat two other a new table was need called cwc (card wins card).
+                This means we will need to change our models again, but this time we will not need to make any modifications to the client, 
+                except for the fact that we now need 2 more images with the name equal to the 2 new values (the images are actually on the server).
+                You can download the two images here (do not forget to include the references): 
+            </p>
+            <ul><li></li>
+            <li></li></ul>
+
+        </section>
+           
   </main>
-</body>s
+</body>
 
 </html>
