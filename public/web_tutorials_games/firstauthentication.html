@@ -1,0 +1,291 @@
+<html>
+
+<head>
+    <title>Node.js Web App</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <script src="../javascripts/utils.js"></script>
+</head>
+
+<body>
+    <header id="header"></header>
+    <script>
+        (async () => {
+            await includeHtml("../header.html", "header", "..")
+            document.getElementById("web").classList.add("here")
+        })();
+    </script>
+    <main>
+        <section>
+            <h1> Objectives </h1>
+            <p><input type="checkbox"> Understanding some of the technical decisions to make basic authetication </p>
+            <p><input type="checkbox"> Know how to use the cookie-parse module to manage cookies on server-side</p>
+            <p><input type="checkbox"> Know how to use the sessionStorage (Web Storage) to save information between
+                pages</p>
+            <p><input type="checkbox"> Learn how to create HTML dynamically </p>
+            <p><input type="checkbox"> Pratice the skills you learned to create more REST endpoints and client-side
+                javascript</p>
+        </section>
+        <section id="playerdb">
+            <h2>1- Add a users table (we will call it player) and create the REST endpoints for authentication</h2>
+            <p> Add a new table to the database (you can create a new database or add the table to the database you are
+                using).
+                This table will hold our user login and profile information (we could separate them further).
+                We will call the table "player", since we will only consider players for now:
+            </p>
+            <code><pre class="code">
+        create table player (
+        	ply_id serial,
+            ply_name VARCHAR(60),
+            ply_passwd VARCHAR(60),
+            primary key(ply_id)
+        )
+        insert into player (ply_name,ply_passwd) values ('John','Doe')
+    </pre></code>
+            <p> We will need to create three functionalities for authentication: </p>
+            <ul>
+                <li> <strong>login</strong> It will be a post, since we will register that the player as logged in.
+                    It will receive the username and password and, if they match, register the login.</li>
+                <li> <strong>get profile</strong> It will return information about the player if the player is logged
+                    in.
+                    Otherwise it will say that the player is not logged. Information like passwords will never be sent,
+                    all password verifications
+                    or similar must be done inside the server/database.
+                </li>
+                <li> <strong>logout</strong> It is also a post, since we will remove the login status.</li>
+            </ul>
+            <p> We will have a new REST resource for players and three new endpoints:</p>
+            <table border="1">
+                <tr>
+                    <td> Title</td>
+                    <td><strong>Login the player</strong><br>
+                        Receives the username and password and if they match a player it will save the id of the player
+                        on a cookie.</td>
+                </tr>
+                <tr>
+                    <td> Url (method) </td>
+                    <td> <strong>/api/players/login (post)</strong></td>
+                </tr>
+                <tr>
+                    <td>Data:</td>
+                    <td>
+                        {"name":"John","password":"Doe"}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Result on success:</td>
+                    <td> {"msg":"User logged in"} <br>
+                        <strong>NOTE:</strong> A cookie will be saved with the id of the user
+                    </td>
+                </tr>
+                <tr>
+                    <td> Error:</td>
+                    <td>
+                        <strong>Code: 401 Unauthorized </strong> If password and/or name do not match <br>
+                        {"msg": "Wrong password or username."}
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table border="1">
+                <tr>
+                    <td> Title</td>
+                    <td><strong>Get player profile</strong><br>
+                        It will return information like the name of the user (no password or id sent) from the player
+                        that is logged on
+                        (the player that corresponds to the id on the saved cookie).</td>
+                </tr>
+                <tr>
+                    <td> Url (method) </td>
+                    <td> <strong>/api/players/profile (get)</strong></td>
+                </tr>
+                <tr>
+                    <td>Result on success:</td>
+                    <td>
+                        {"ply_name":"John"} <br>
+                        Cookie expiration will be updated
+                <tr>
+                    <td> Error:</td>
+                    <td>
+                        <strong>Code: 401 Unauthorized </strong> If the player is not logged (no cookie)<br>
+                        {"msg": "You are not logged in."}
+                        <strong>Code: 404 Not Found </strong> If the id in the cookie does not correspond to a
+                        player<br>
+                        {"msg": "No user with that id" }<br>
+                        <strong>NOTE:</strong> This should only occur if the user was deleted after he logged on,
+                        otherwise,
+                        since the id was saved by the server in the cookie, it should be a valid id.
+                        You could consider it a 500 error if it depends on something that is not available for the
+                        client to do.
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table border="1">
+                <tr>
+                    <td> Title</td>
+                    <td><strong>Logout the player</strong><br>
+                        It will remove the id of the player of the cookie.</td>
+                </tr>
+                <tr>
+                    <td> Url (method) </td>
+                    <td> <strong>/api/players/logout (post)</strong></td>
+                </tr>
+                <tr>
+                    <td>Result on success:</td>
+                    <td> {"msg":"User logged in"} <br>
+                <tr>
+                    <td> Error:</td>
+                    <td>
+                        <strong>Code: 401 Unauthorized </strong> If the player is not logged (no cookie) <br>
+                        {"msg": "You are not logged in."
+                    </td>
+                </tr>
+            </table>
+
+
+            <h3> For these functionalities we will need to use Cookies </h3>
+            <p> Cookies are another way to send information between client and server, specially on stateless servers
+                where
+                no information about the client is saved. They are usefull for authentication since they will be saved
+                on the client
+                side, and automatically sent to the server. </p>
+            <p> On the client side the cookie is on a file, with information about the data that was saved and the
+                site/page that created it.
+                Each time the client makes a request to the server of the cookie the cookie information is sent.
+            </p>
+            <p> On the server we can also save information on the cookie, on the result that will be
+                sent to the client. When the client gets the result it will save that information on the cookie.
+            </p>
+            <p> You can edit or see cookies on the client side using javascript, but we will not need to. </p>
+            <p> Cookies created on the server side can be marked to not be editable by the client javascript, but it is
+                still
+                possible to see the value. However, if we sign the information, it will not be readable by the client,
+                and anything
+                that the client writes that was not signed can be ignored.
+            </p>
+            <p> In Node.js/Express.js we have 3 functionalies that will allow us to manage cookies:</p>
+            <ul>
+                <li> <strong>cookie-parser</strong> This module automatically parses any cookie received and creates an
+                    attribute value pair
+                    that will be saved in one of two objects:
+                    <ul>
+                        <li> Signed cookies will be saved in "req.signedCookies" (ex: userId attribute will be acessible
+                            using
+                            "req.signedCookies.userId")</li>
+                        <li> Unsigned cookies will be saved in "req.cookies"</li>
+                    </ul>
+                    <p> The module is installed by default using the express-generator and two lines are placed on
+                        app.js to
+                        configure the module:
+                    </p>
+                    <code><pre class="code">
+                var cookieParser = require('cookie-parser');
+                ...
+                app.use(cookieParser()); </pre></code>
+                    <p> If you will use signed cookies you will need to define a secret when calling cookieParser(). For
+                        example:</p>
+                    <code><pre class="code"> app.use(cookieParser('VERY SECRET SECRET')); </pre></code>
+                </li>
+                <li><strong>res.cookie(_name_, _value_ [, _options_ ]) </strong>
+                    This is an express function that will create a new cookie with the given name and value
+                    or set the value to an existing one.
+                    The options define settings like expiration and signing. The code bellow creates a signed cookie
+                    with name "userId"
+                    value 1 and with the 1 hour expiration. It also marks the cookie to not be accessible to client side
+                    javascript.
+                    <code><pre class="code">
+    res.cookie("userId", 1, {  maxAge: 60*60*1000,  httpOnly: true, signed:true});</pre></code>
+                    <p> You can see the documentation <a href="https://expressjs.com/en/4x/api.html#res.cookie">here</a>
+                    </p>
+                </li>
+                <li><strong>res.clearCookie(_name_ [, _options_]) </strong>
+                    This is an express function that will delete the cookie with the given name.
+                    The options must be equal to the ones that created the cookie except for expiration.
+                    Bellow you can see the code to delete the cookie we created before
+                    <code><pre class="code">
+    res.clearCookie("userId", {  httpOnly: true, signed:true});
+    </pre></code>
+                    <p> You can see the documentation <a
+                            href="https://expressjs.com/en/4x/api.html#res.clearCookie">here</a> </p>
+                </li>
+            </ul>
+
+            <h2 style="color:red"> BELLOW HERE IT IS STILL ON CONSTRUCTION (mostly references to the code that will be explained on classes)</h2>
+            <p style="color:red"> The tutorial will be finished (need more time)</p>
+            
+            <h3> Creating our authentication functions and endpoints </h3>
+            <p> Authentication will be used on the player resources but it is a good idea to separate
+                the functionalty that will work with the authentication cookies from the functionalities That
+                will retrieve information from the database.
+            </p>
+            <p> Inside the models folder create the file <strong>authentication.js</strong>.
+                You can find the code <a href="./files/authentication.js">here</a></p>
+            <p> After that you can create the model (code <a href="./files/playersModel.js">here</a> ) 
+                and routes (code <a href="./files/playersRoutes.js">here</a>).</p>
+            <p> Finally you need to connect the new routes to the app by placing the following lines in app.js:</p>
+            <code><pre class="code">
+                var usersRouter = require('./routes/playersRoutes');
+                app.use('/api/users', usersRouter);</pre></code>
+            <p> You can actually edit the lines for the "old" users route, and delete the "user.js" file from the routes folder, 
+                we are not using it anymore. </p>
+           
+            <p><strong> Test the endpoints you created using Postman</strong></p>
+           
+                <h3> The client side </h3>
+            <p> For the client side you need to rename the "index.html" file to "game.html".
+                The "index.html" will now be our login page. </p>
+            <p> Code for the new <strong>index.html</strong> <a href="./files/newindex.html.txt">here</a></p>
+            <p> Code for the new request javascript file (create file <strong>userRequests.js</strong> on requests folder)
+                 <a href="./files/userRequests.js">here</a> </p>
+            <p> Code for the new authentication javascript (create the folder authentication inside the javascript folder
+                and create file <strong>authentication.js</strong> inside that) <a href="./files/authentication.js">here</a>
+            </p>
+            <p> When authenticated the <strong>rooms.html</strong> is called. You will need to create this page.
+            You can see the code <a href="./files/rooms.html.txt">here</a>.
+         This html uses the general style of the site, but has also specific rules. For those rules you need to
+        create the <strong>rooms.css</strong> file in the stylesheets folder. You can see the code for that file 
+    <a href="./files/rooms.css">here</a></p>
+            <p>The rooms.html also needs some javascript</p>
+            <p> First we need to create a general file that will manage the login sessions.
+                Create the  <strong>session.js</strong>) inside the authentication folder. 
+                This file will have a function 
+                to get the profile information and a logout function. 
+                Profile information is only available if the player
+                is logged, otherwise it will redirect to the login page.</p>
+            <p> You can see the code for the session.js <a href="./files/session.js">here</a>.</p>
+            <p> We will also need to create the <strong>rooms.js</strong> file in the javascripts folder with the code bellow:</p>     
+            <code><pre class="code">
+                window.onload = async function() {
+                    let userInfo = await getUserInfo();
+                    document.getElementById("username").innerHTML = userInfo.ply_name;   
+                }</pre></code>
+            <p>For now this will only check if we are logged and show the name of the user and a link to the game.
+                If we are not logged it will show a popup and send the user to the login page.
+                Next we will let the user choose the room on this page, but we need to introduce a new concept for that
+            </p>    
+            <p> <strong> You can try the website now. The game itself does not check for login, but we can add that later.</strong></p>
+            <h3> Choosing the room</h3>
+            <p> For this functionality we need the concept of Web Storage. Web Storage is another way to 
+                save information on the browser, but unlike cookies, the information is only accessible in 
+                the client-side. You can use sessionStorage, that will run until the tab/browser is closed, or localStorage
+                that will persist in the same computer.</p>
+                <p> You can learn more about Web Storage <a href="https://www.w3schools.com/html/html5_webstorage.asp">here</a></p>
+            <p> Change the code on the <strong>rooms.js</strong> file to the code <a href="./files/rooms.js">here</a></p>
+            <p> Now the id of the room will be saved in sessionStorage and we can use it to play the game on that room</p>
+            <p> On the <strong>gamelib.js</strong> file delete the line: </p>
+            <code><pre class="code">const room = 1;</pre></code>
+            <p> On the javascripts folder create a new file called <strong>game.js</strong> with the code 
+            <a href="./files/game.js">here</a>. This will check if a room exists and set the room id that will be used on the gamelib.js file.</p>
+            <p> We will need to change the HTML to include the new javascripts. We can also
+                include the changes to have the username (and login check) on the page like we did for the rooms page.</p> 
+            <p> See the code for the new HTML for the <strong>game.html</strong> 
+                <a href="./files/newgame.html.txt">here</a> (replace the previous
+            code for this new one).</p>
+             
+        </section>
+
+
+    </main>
+</body>
+
+</html>
