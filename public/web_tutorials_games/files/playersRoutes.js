@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 var uModel = require("../models/playersModel");
-var auth = require("../utils/authentication")
+var auth = require("../models/authentication")
             
 router.post('/login', async function(req, res, next) {
     console.log("Login")

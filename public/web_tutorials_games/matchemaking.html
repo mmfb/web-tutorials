@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <title>Node.js Web App</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <script src="../javascripts/utils.js"></script>
+</head>
+
+<body>
+    <header id="header"></header>
+    <script>
+        (async () => {
+            await includeHtml("../header.html", "header", "..")
+            document.getElementById("web").classList.add("here")
+        })();
+    </script>
+    <main>
+        <section>
+            <h1> Objectives </h1>
+            <p><input type="checkbox"> Pratice Node/Express and javascript </p>
+            <p><input type="checkbox"> See an example of match making </p>
+        </section>
+        <section>
+            <h2>1- Redifining our game to make it a match between 2 players </h2>
+            <p> So far or game has been a multiplayer game with no matchmaking. 
+                All players that enter the room may play. </p>
+            <p> We now want to make it a two player game with the following pipeline:</p>
+            <ul>
+                <li>One player will choose an empty room and create the match, 
+                    defining how many rounds that match has. </li>
+                <li>The second player will choose a room with an incomplete match and join that match.</li>
+                <li> For each round each player will choose a card</li>
+                <li> When both have choosen the card the game will
+                return the result of the match to be shown.</li>
+                <li> If there are still rounds left the players will be able to play the new round. </li>
+                <li> If there are no rounds left both players will see the final result. </li>
+            </ul>
+            <p> What will we need to change on our code:</p>
+            <ul>
+                <li> Our rooms will not have a topcard, since now all play information will be on the matches. </li>
+                <li> Our rooms page will still show all rooms, but there will be three types of rooms: empty, full and 
+                    the rooms with one player waiting (say the player name ).<br> 
+                    Only the rooms that are empty or with player waiting can be clicked.<br>
+                    We will need to change the endpoint to get all rooms and get room by id so that they return
+                     the current match information for the rooms. The play endpoint will be removed from the rooms 
+                     resource and will be created on the matches resource. 
+                </li>
+                <li> When we click on a valid room we will will enter the match making page instead of the game:
+                    <ul>
+                        <li> If it is an empty room we can create a new match and define the number of rounds, 
+                            and than wait for another player to enter.</li>
+                        <li> If we enter a room with a match and a player waiting we can accept to play that match</li>
+                    </ul>
+                    We will need to create the matches REST resource and enpoints to manage matches. In particular:
+                    <ul>
+                        <li> Create a new match, in a room and  with the player that created the match as one of the players</li>
+                        <li> Join a match </li>
+                        <li> Player checks the state of the match: playing, waiting for the other player, see result 
+                            (after both players made their play), finished (max turns reached).
+                             </li>
+                        <li> Make a play on the match (only possible if on the "playing" state). 
+                            It will be similar to what we had before for the room, but the result will not have 
+                        a victory information since that will only be shown after both players played. </li>
+                        <li> See results and see one result. Can be used in the "see result" state, but can also be used
+                             to see the results of the match any other time.
+                        </li>
+                        <li> The client interface will also need to change.</li>
+                    </ul>
+                </li>
+            </ul>     
+        </section>
+
+
+    </main>
+</body>
+
+</html>
