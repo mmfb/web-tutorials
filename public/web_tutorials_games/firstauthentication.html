@@ -272,6 +272,24 @@
                 <p> You can learn more about Web Storage <a href="https://www.w3schools.com/html/html5_webstorage.asp">here</a></p>
             <p> Change the code on the <strong>rooms.js</strong> file to the code <a href="./files/rooms.js">here</a></p>
             <p> Now the id of the room will be saved in sessionStorage and we can use it to play the game on that room</p>
+            <p> We also need to had a function on our <strong>roomRequests.js</strong> file to get all rooms 
+                (we only have the one that gets one room given the id): </p>
+                <code><pre class="code">                   
+async function getRooms() {
+    try {
+        const response = await fetch(`/api/rooms`);
+        if (response.status == 200) {
+           var rooms = await response.json();
+           return rooms;
+        } else {
+            // Treat errors like 404 here
+            console.log(response);
+        }
+    } catch (err) {
+        // Treat 500 errors here
+        console.log(err);
+    }
+}</pre></code>
             <p> On the <strong>gamelib.js</strong> file delete the line: </p>
             <code><pre class="code">const room = 1;</pre></code>
             <p> On the javascripts folder create a new file called <strong>game.js</strong> with the code 
