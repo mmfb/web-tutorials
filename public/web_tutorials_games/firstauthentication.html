@@ -38,8 +38,8 @@
             ply_name VARCHAR(60),
             ply_passwd VARCHAR(60),
             primary key(ply_id)
-        )
-        insert into player (ply_name,ply_passwd) values ('John','Doe')
+        );
+        insert into player (ply_name,ply_passwd) values ('John','Doe');
     </pre></code>
             <p> We will need to create three functionalities for authentication: </p>
             <ul>
@@ -220,6 +220,11 @@
             </p>
             <p> Inside the models folder create the file <strong>authentication.js</strong>.
                 You can find the code <a href="./files/authentication.js">here</a></p>
+            <p> Remember that to used signed cookies you need to set a secret to your cookie-parser module.
+                Go to <strong>app.js</strong> and change the <strong>app.use(cookieParser());</strong> to:
+            </p> 
+            <code><pre class="code"> app.use(cookieParser('VERY SECRET SECRET')); </pre></code>
+           
             <p> After that you can create the model (code <a href="./files/playersModel.js">here</a> ) 
                 and routes (code <a href="./files/playersRoutes.js">here</a>).</p>
             <p> Finally you need to connect the new routes to the app by placing the following lines in app.js:</p>
