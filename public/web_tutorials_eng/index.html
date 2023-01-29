@@ -1,0 +1,38 @@
+<html>
+
+<head>
+  <title>Web Tutorial</title>
+  <link rel="stylesheet" href="../stylesheets/style.css">
+  <script src="../javascripts/utils.js"></script>
+</head>
+
+<body>
+  <header id="header"></header>
+  <script>
+    (async () => {
+      await includeHtml("../header.html", "header", "..")
+      document.getElementById("web").classList.add("here")
+    })();
+  </script>
+  <main>
+    <section>
+      <h1> Objective </h1>
+      <p>These tutorials address the topic of building a restfull web server using Node.js/Express.js</p>
+      <p>We will be creating a Node.js/Express.js project with a REST api connect to a database and web page server with
+        HTML, CSS and Javascript</p>
+      <p>We will use static web pages and dynamic client side pages that use AJAX callsto make requests
+        to the REST api</p>
+    </section>
+    <section>
+      <h1> Index </h1>
+      <ol>
+        <li>
+          <a href="instalation.html">Installation and configuration of a Node.js/Express.js application</a>
+        </li>
+      </ol>
+    </section>
+
+  </main>
+</body>
+
+</html>

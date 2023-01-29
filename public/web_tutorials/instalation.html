@@ -2,30 +2,29 @@
 
 <head>
   <title>Node.js Web App</title>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
   <link rel="stylesheet" href="../stylesheets/style.css">
   <script src="../javascripts/utils.js"></script>
 </head>
 
-<body>
+
+<body onload='includeHtml("../header.html","header","..")'>
   <header id="header"></header>
-  <script>
-    (async () => {
-      await includeHtml("../header.html", "header", "..")
-      document.getElementById("web").classList.add("here")
-    })();
-  </script>
   <main>
     <section>
       <h1> Objectives </h1>
-      <p><input type="checkbox"> Understand the architecture of a restfull web application</p>
-      <p><input type="checkbox"> Installing node.js, express.js and other support applications</p>
-      <p><input type="checkbox"> Setting up localhost Node.js/Express.js application </p>
+      <ul class="objectives">
+        <li> <input type="checkbox"> Understand the architecture of a restfull web application</li>
+        <li> <input type="checkbox"> Installing node.js, express.js and other support modules</li>
+        <li> <input type="checkbox"> Setting up localhost Node.js/Express.js application </li>
+      </ul>
       <h2> Other objectives </h2>
-      <p><input type="checkbox"> Setting up a database on a Node.js/Express.js application </p>
-      <p><input type="checkbox"> Using version control with git, github and fork </p>
-      <p><input type="checkbox"> Setting up a online Node.js/Express.js application using HerokuApp </p>
-      <p><input type="checkbox"> Creating a postgres database on Heroku and configuring the Node.js/Express.js
-        application to use it </p>
+      <ul class="objectives">
+        <li><input type="checkbox"> Setting up a database on a Node.js/Express.js application </li>
+        <li><input type="checkbox"> Using version control with git and github </li>
+        <li><input type="checkbox"> Setting up a online Node.js/Express.js application using Cyclic hosting </li>
+      </ul>
     </section>
     <section>
       <h1> Index </h1>
@@ -34,13 +33,8 @@
           <a href="#restapp">The architecture of a restfull web application</a>
         </li>
         <li>
-          <a href="#install_node">
-            Installing Node.js/Express.js and creating a project
-          </a>
-        </li>
-        <li>
-          <a href="#install_vscode">
-            Installing an editor (Visual Studio Code) and using it
+          <a href="#create_server">
+            Creating a Node.js/Express.js project
           </a>
         </li>
         <li>
@@ -49,8 +43,8 @@
           </a>
         </li>
         <li>
-          <a href="#deploy_heroku">
-            Setting up a website: Github and Heroku
+          <a href="#deploy_cyclic">
+            Setting up a website: Github and Cyclic
           </a>
         </li>
       </ol>
@@ -62,902 +56,948 @@
         the corresponding resources/concepts.</p>
       <p class="centerImg"><img class="large" src="images/restfullapp.png"
           alt="Rest application architecture with node/express"></p>
-      <ul>
-        <li>
-          <p>At the top right you see two IDE (Integrated Development Environment) used to create code and manage
-            databases:
-          </p>
-          <ul>
-            <li>
-              <p><strong><a href="o	https://code.visualstudio.com/">Visual Studio Code</a></strong>
-                Editor for code, including all things web (
-                <a href="#html">HTML</a>, <a href="#css">CSS</a>,
-                <a href="#javascript">Javascript</a>, etc)
-              </p>
-              <p>You can also get Notepad++ - Also and editor for any type of text file – lighter and good for quick
-                modifications:
-                <a href="https://notepad-plus-plus.org/downloads/">https://notepad-plus-plus.org/downloads/</a>
-              </p>
-            </li>
-            <li>
-              <p><strong>Database Client Application</strong>
-
-                Applications to manage and develop databases, they will depend on the database used. Examples:
-              </p>
-              <ul>
-                <li>
-                  <p><strong><a href="https://dev.mysql.com/downloads/workbench/">Workbench</a></strong>
-                    Allows the design and management of MySql databases and similar </p>
-                </li>
-                <li>
-                  <p><strong><a href="https://www.pgadmin.org/">pgAdmin</a></strong>
-                    Open Source administration and development platform for PostgreSQL </p>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <p>Bellow the IDEs, connect to the DB Client you see the databases.
-            This constitutes the base of the three tiers that usually constitute a web application:
-            <strong>Database | Server | Client </strong>.
-          </p>
-          <p> For local server you can use a local or a remote database,
-            but for an online server you will need a remote database,
-            because it would be really hard to connect to the local server.</p>
-        </li>
-        <li>
-          <p> In the top middle you see a depiction of the <a href="#node_express">Node.js/Express.js</a> server. The
-            server is divided in two parts:
-          <ul>
-            <li><strong>Web Pages Server</strong>
-              Will serve HTML, CSS, Javascript and other files (ex: images) to the browser clients
-            </li>
-            <li>
-              <p><strong><a href="#rest">REST</a> API Server</strong>
-                Will serve data requested by web pages on the browser (using <a href="#ajax">AJAX</a>
-                and <a href="#json">JSON</a>) and could also serve data to
-                other applications (using JSON).</p>
-              <p>
-                Since the REST API is responsible to manage data, only this part of the server will communicate with the
-                database.
-              </p>
-            </li>
-          </ul>
-          </p>
-        </li>
-        <li>
-          <p> In the top left side you see the client side:
-          <ul>
-            <li>
-              <p><strong>Browser</strong>
-                Browsers like chrome, safari or edge will need web pages composed by HTML, CSS, images, etc.
-                All these files will be sent by the Web Pages Server.</p>
-              <p> Some of these pages will also need data.
-                These pages will have javascripts that will request the data from the REST API Server
-                (the one that can obtain data from the Database) and insert that data on the web pages </p>
-              <p>Some pages will also send data to the REST API also using javascript.</p>
-            </li>
-            <li>
-              <p><strong>Apps</strong>
-                Applications like mobile applications or desktop programs can also comunicate with the server.
-              </p>
-              <p> Since applications will have their own interface they only need the data so they only connecto to the
-                REST API Server.</p>
-            </li>
-
-          </ul>
-          </p>
-        </li>
-        <li>
-          <p> In the bottom, inside the cloud, you have a depiction of the online web server.
-            It replicates the same elements as the local web server: clients,
-            Node.js/Express.js server and database (the online database).
-            The Node.js/Express.js server is divided in the same way in Web Page Server and REST API Server.
-          </p>
-          <p>
-            To create an online server you need a provider.
-            We give as example the <a href="#heroku">Heroku</a> platform that suports Node.js servers.
-            Heroku supports several ways to deploy applications but the simplest one is probably
-            using a <a href="#git">git</a> repository.
-          </p>
-          <p>
-            The idea is simple:
-          <ol>
-            <li>Create a local git repository that will allow us to manage versions and connect to a remote repository.
-              The creation and managing of the repository can be made with a git client like <a href="#fork">Fork</a>.
-            </li>
-            <li>Push the latest version (using the git client) to a remote git repository like <a href="github">
-                GitHub</a>.</li>
-            <li>Connect the GitHub repositorywith Heroku.
-              After configuring this connection Heroku will automatically deploy the latest version
-              of the code each time the GitHub repository is updated.</li>
-          </ol>
-          </p>
-          <p>
-            You can see more details on how to deploy a Node Web Application on Heroku on <a
-              href="#deploy_heroku">another section of this tutorial</a>.
-          </p>
-
-
-        </li>
-
-      </ul>
-      <h3>Other concepts and applications</h3>
-      <ul>
-        <li>
-          <p id="node_express"><strong>Node.js and Express</strong>
-            Allows for the creation of a server that will manage the requests and responses
-            of web pages and other data. We will see this in more detail in this tutorial and following</p>
-          <p><strong>Node.js </strong>
-            Open source server environment – It is programmed in javascript</p>
-          <p>Reference: <a href="https://nodejs.org/en/docs/guides/">
-              https://nodejs.org/en/docs/guides/ </a>
-          <p>
-          <p><strong> Express.js </strong>
-            Node.js web application framework (it is a Node.js module) – Used to create web applications more easily</p>
-          <p> References:
-          <ul>
-            <li>
-              Express generator – Tool to quickly create an application skeleton:
-              <a href="https://expressjs.com/en/starter/generator.html">
-                https://expressjs.com/en/starter/generator.html </a>
-            </li>
-            <li>
-              Routing:
-              <a href="https://expressjs.com/en/starter/basic-routing.html">
-                https://expressjs.com/en/starter/basic-routing.html </a>
-            </li>
-            <li>
-              API Reference:
-              <a href="https://expressjs.com/en/4x/api.html">
-                https://expressjs.com/en/4x/api.html </a>
-            </li>
-          </ul>
-          </p>
-
-        </li>
-
-
-        <li>
-          <p id="html"><strong>HTML</strong>
-            HypertText Modeling Language – Used to define the content of web pages</p>
-          <p>Reference: <a href="https://www.w3schools.com/html/">
-              https://www.w3schools.com/html/ </a>
-            (w3schools is your "go to" resource for websites)</p>
-        </li>
-        <li>
-          <p id="css"><strong>CSS</strong>
-            Cascating Style Sheets – Used to describe the style (presentation) of the web pages</p>
-          <p>Reference: <a href="https://www.w3schools.com/css">
-              https://www.w3schools.com/css</a></p>
-        </li>
-        <li>
-          <p id="javascript"><strong>Javascript</strong>
-            Programming language for web development – Used to make calculations and modifications to and for your web
-            pages
-          <p>Reference: <a href="https://www.w3schools.com/js">
-              https://www.w3schools.com/js</a></p>
-        </li>
-        <li>
-          <p id="rest"><strong>REST</strong>
-            REpresentational State Transfer (just a concept, nothing to install) - Defines a way to provide
-            communication between computer systems.
-            Applications that follow REST rules are called RESTfull Application</p>
-          <p>Reference: <a href="https://www.restapitutorial.com/lessons/whatisrest.html">
-              https://www.restapitutorial.com/lessons/whatisrest.html</a></p>
-          <p>How to document a rest application: <a href="https://bocoup.com/blog/documenting-your-api">
-              https://bocoup.com/blog/documenting-your-api</a></p>
-        </li>
-        <li>
-          <p id="ajax"><strong>AJAX</strong>
-            Asynchronous JavaScript And XML (just a concept, nothing to install) - Allows the communication of web pages
-            with the server and dynamically updating the page without reloading the whole page (much more convenient
-            than the other option).
-            We will not use XML we will use JSON </p>
-        </li>
-        <li>
-          <p id="json"><strong>JSON</strong>
-            JavaScript Object Notation (just a concept, nothing to install) –
-            A syntax for storing and exchanging data –
-            We will use it to send and receive data between web pages and server </p>
-          <p>Reference: <a href="https://www.w3schools.com/js/js_json_intro.asp">
-              https://www.w3schools.com/js/js_json_intro.asp</a></p>
-        </li>
-        <li>
-          <p id="git"><strong>Git</strong>
-            Distributed version control system. Ables developer teams to manage several versions of code
-            and colaboratively create applications.
-            You can use it directly on a command line or using a client with a graphic interface.
-          </p>
-        </li>
-        <li>
-          <p id="fork"><strong>Fork</strong>
-            Fork is a git client. It allows you to create and manage a local git repository and to connect it to a
-            remote repository.
-            When installing Fork you will also install Git, if you have not already installed.
-          </p>
-          <p>Reference: <a href="https://git-fork.com/">
-              https://git-fork.com/</a>. Note: the free-evaluation has all the functionalities.
-            For now you only need to close the pop-up windows that sometimes show asking for registation</p>
-        </li>
-        <li>
-          <p id="github"><strong>GitHub</strong>
-            It is a development platform – It is used to allow a community of developers to host and manage their code,
-            including previous versions
-          </p>
-          <p>Reference: <a href="https://github.com/">
-              https://github.com/</a></p>
-        </li>
-        <li>
-          <p id="heroku"><strong>Heroku</strong>
-            It is a PaaS (platform as a service) – We can use it to host our website (needs GitHub to get the code to
-            deploy)
-          </p>
-          <p>Reference: <a href="https://www.heroku.com/">
-              https://www.heroku.com/</a></p>
-        </li>
-      </ul>
-    </section>
-
-    <section id="install_node">
-      <h2>2- Installing Node.js/Express.js and creating a project</h2>
-      <p>Go to the site: <a href="https://nodejs.org/en/">https://nodejs.org/en/</a></p>
-      <p>Choose the LTS version (recommended for most users). Download and install Node.js.</p>
-      <p>Run the command line terminal for node.js: </p>
-      <p class="centerImg"><img src="images/nodecmd.png" alt="Node Cmd on Start Menu"></p>
-      <p>Change to your working directory on the command line terminal to the place you want to create the project
-        directory </p>
-      <p>You can copy the path from windows explorer:</p>
-      <p class="centerImg"><img src="images/explorerpath.png" alt="Copy path from windows explorer"></p>
-      <p> On the command line console write "cd " (don't forget the space after) and then left click with the mouse:</p>
-      <p class="centerImg"><img class="term" src="images/changedir.png" alt="Change directory"></p>
-      <p> If your directory is on another drive, like in the case above, you will see that you are still at the same
-        place.
-        You will need to change drive. If the drive is D you write “D:”.
-        After changing drive you will also be in the directory you have choosen.
-        Windows cmd keeps a "current directory" for each drive, but you can only work with one at each time.</p>
-      <p class="centerImg"><img class="term" src="images/changedrive.png" alt="Change drive"></p>
-      <p>Let’s install the express generator, this will allow you to create a project much faster. Run the command:</p>
-      <strong><code>npm install -g express-generator</code></strong>
-      <p> NPM is the Node Package Manager (used to install new modules and manage node projects)</p>
-      <p> The generator has many options, we can see them running "express -h"</p>
-      <p class="centerImg"><img class="termxl" src="images/expressgen.png" alt="Express generator options"></p>
-      <p>We will now create a project called "unimanager" by running the express generator with options --git,
-        to prepare for a git repository, and --no-view. </p>
-      <strong>
-        <pre> express --git --no-view unimanager</pre>
-      </strong>
-      <p>A new directory called <strong>unimanager</strong> will be created: </p>
-      <p class="centerImg"><img class="termxl" src="images/projcreation.png"
-          alt="Creating a project with express generator"></p>
-      <p>You can use this to create a base structure to any Node/Express project you need.</p>
-
-    </section>
-
-    <section id="install_vscode">
-      <h2>3- Installing an editor (Visual Studio Code) and using it</h2>
-      <p>After creating the project, we only need to use an editor to make changes to it. The editor will include a
-        terminal to run any commands we need.</p>
-      <p>>Go to the site <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
-      <p>Download and install the file. When installing, on the second screen, choose the option to add VSCode to the
-        context menu of directories in explorer. See image bellow:</p>
-      <p class="centerImg"><img src="images/vscodeopendir.png" alt="Open project directory with VSCode"></p>
-      <p> If you choose that option, when you right click the directory, you should now have an option to open the
-        directory with VSCode. </p>
-      <p> You can also open VSCode and choose the menu "File" and the option "Open Folder" (or "Open" in MacOS)</p>
-      <p> Make sure you choose the directory you just created (inside you must have a file named "app.js")</p>
-      <p class="centerImg"><img src="images/vscodeopen.png" alt="Open project directory from File menu"></p>
-      <p>You can now see all the files and directories created for the project.
-        When clicked files will open on the right and you can edit them</p>
-      <section class="columns">
-        <p class="centerImg"><img src="images/projfiles.png" alt="Node/Express project files and directories"></p>
-        <section>
-          <p>The <strong>www</strong> file on the <strong>bin</strong> directory is the
-            script to start the server. You should not change this file, although you can do it,
-            for instance to directly change the default port where the server will be run (you will see).
-          </p>
-          <p>
-            The <strong>app.js</strong> file is the file where all initial configurations are made,
-            we will need to change this file for instance to include more files to process data
-            (ex: students or classes data)
-          </p>
-          <p>
-            The <strong>routes</strong> directory is where all the files to process data will be.
-            This will correspond to the <em>REST API Server</em> described in the architecture.
-            The routes files will accept requests and provide responses, we will create a new directory
-            called <strong>models</strong> to contain the code for actually processing data (ex: make
-            queries to the database)
-          </p>
-          <p>
-            The <strong>public</strong> directory will hold all the HTML, CSS, javascript and other files
-            (ex: images) for the web pages. This will correspond to the <em>Web Pages Server</em>
-            described in the architecture.
-          </p>
-          <p>
-            The <strong>package.json</strong> is where we save settings for our server like
-            module dependencies or scripts
-          </p>
-        </section>
-      </section>
-      <p>We can now manage our project files. We can also run commands using the VSCode terminal
-        (we do not need the windows command line): </p>
-      <p class="centerImg"><img class="term" src="images/vscodeopenterm.png" alt="Open terminal on VSCode"></p>
-      <p>Make sure the terminal is on the correct directory. Run "dir" ("ls" on MacOS) on the terminal and
-        see if the <strong>app.js</strong> file is listed. If it is not you have opened the wrong directory
-        (open the right one before continuing).
-      </p>
-      <p class="centerImg"><img class="termxl" src="images/listdirectory.png"
-          alt="Running dir to check if we see app.js"></p>
-      <p>We can now install and run the server using "npm" (node package manager)</p>
-      <strong>
-        <pre><!-- 
-      -->npm install
-<!--  -->npm start</pre>
-      </strong>
-
-      <section class="columns">
-        <p class="centerImg"><img class="term" src="images/nodestart.png" alt="Starting the server with 'npm start'">
-        </p>
-
-        <section>
-          <p><strong>install</strong> will install all modules defined in the <strong>package.json</strong>
-            dependencies and the sub-modules they need. A new directory called node_modules will be
-            created that holds all the modules and sub-modules.</p>
-          <p class="note">Install only needs to be run once, unless you delete the node_modules directory. You may want
-            to delete the node_modules directory if you want to make a zip of your project.
-            The node_modules holds a large number of files but it can be created at any time using "npm install"
-            (this directory is not placed on git repositories for exactly this reason)</p>
-          <p><strong>start</strong> will start the server using the script identified as start in
-            <strong>package.json</strong> (that will call the www file that in turn will load all settings defined in
-            the app.js file).
-          </p>
-          <p class="note"> After running this command the terminal will accept no more commands, since the server is now
-            running on the terminal and it
-            will be used to prompt outputs of the server. You can terminate the server by clicking the terminal and
-            pressing <strong>Ctrl+C</strong>.
-            It will ask if you want to terminate the server (just press Y). You can restart the server again using "npm
-            start" like before.</p>
-        </section>
-      </section>
-      <p>The server is now running. You can see the result by writing <a href="http://localhost:3000">localhost:3000</a>
-        in a browser.
-      <ul>
-        <li>localhost means you are running the server locally</li>
-        <li>
-          <p>3000 is the port where the server is running, you can change this by going to the www file and changing the
-            default port (is not the correct way, but it is the easiest way).</p>
-          <p class="note"> The correct way would be setting the PORT enviroment variable in the terminal using:</p>
-          <p class="note">For cmd: <strong><code>set PORT=80</code></strong> </p>
-          <p class="note">For powershell: <strong><code>$env:PORT=80</code></strong></p>
-          <p class="note">For MacOS: <strong><code>export PORT=80</code></strong></p>
-          <p class="note">Both cmd and powershell are terminals for windows, you can see which one you have in the top
-            right corner of the terminal if you only have one terminal open.
-            You can open new terminals (cmd or powershell) using the plus sign.
-            If you have more then one terminal open they will show in a column on the right side.
-            You can kill a terminal using the garbage can symbol or by left clicking the terminal name and chosing kill.
-          </p>
-          <section class="columns">
-            <p class="centerImg"><img class="all" src="images/termone.png" alt="One terminal on VSCode"></p>
-            <p class="centerImg"><img class="all" src="images/termtwo.png" alt="Two terminals on VSCode"></p>
-          </section>
-        </li>
-      </ul>
-      </p>
-      <p>You can see the result of running "localhost:3000" in the server bellow:</p>
-      <p class="centerImg"><img style="border:1px solid black" class="small" src="images/localhost3000.png"
-          alt="Result of localhost:3000"></p>
-      <p>Let's now try to make some changes. We will not discuss yet all the relevent concepts,
-        the idea is just to help to understand the server architecture discussed in the beggining of this tutorial. </p>
-
-      <h2> Changing something on the Web Pages Server</h2>
-      <p> The Web Pages Server serves files that will present static content i.e. content that
-        is not dependent on datasources like a database or on calculations.</p>
-      <p> All the files for the Web Pages Server will be in the public directory. </p>
-      <p> Anything we place after "localhost:3000/" will be first searched in the public directory (it is the default
-        action but it can be changed).
-        For instance "localhost:3000/index.html" will
-        correspond to the "index.html" file in the public directory. However, the name "index.html" is special, if no
-        file name is given the server will check if there is an "index.html" file on the directory.
-      </p>
-      <p> That means that when we wrote "localhost:3000" the server will search, and in this case find, the "index.html"
-        file, that is the
-        file we saw in our browser. If you look at the terminal in VSCode you will see it wrote some output there:
-      </p>
-      <p class="centerImg"><img class="term" src="images/termoutput.png" alt="Terminal output for call localhost:3000">
-      </p>
-      <p>
-        The "GET / 200" means the server successfully found something for "localhost:3000" (the index.html file).
-        The second line "GET /stylesheets/style.css 200" is there because the "index.html" file asked for this file.
-        The file "style.css" in the "stylesheets" directory has rules that indicate how the browser should show the
-        contents in "index.html".
-
-      </p>
-      <p>You will learn more about HTML and CSS files, but for now we will change the "index.html".
-        On the left side of the VSCode screen click on the index.html, it will open in the right side.
-        Change the file as shown bellow and make sure you save (Ctrl+S or on the menu File).
-      </p>
-      <p class="note"> Make sure you save the files after editing. You can see if you have any unsaved
-        file on the top left corner of VSCode <img src="images/notsaved.png">. Just use the "Save All" option in the
-        File menu if you
-        have any unsaved file and do not know where it it.
-      </p>
-      <section class="columns">
-        <p class="centerImg"><img class="big" src="images/unimanagerindex.png" alt="Changed index.html code"></p>
-        <p class="centerImg"><img class="big" style="border:1px solid black" src="images/unimanagerindexres.png"
-            alt="Result from changed index.html code"></p>
-      </section>
-      <p>Notice the result on the right side. We used "set PORT=80" to change the port, and since 80 is the default port
-        we didn't need to write ":80".</p>
-      <p class="note"> The server must be running (npm start) for us to see anything. For the Web Page Server
-        (for the Rest Api Server it will be different)
-        you do not need to restart the server when you edit files (only save the files).
-        If for some reason the changes do not show, either you have an error, or the browser is using the cashe
-        and is still showing previous versions of the page
-        (either clean the cashe or open the server on a window with no session, also called anonimous windows).
-      </p>
-      <p> The center of the browser should now show the text you wrote inside the "body", and the tab name also
-        changed to show what you wrote inside the "title" which is in the "head" element.
-        We will see more about these HTML tags in the next tutorials.
-      </p>
-      <p>You can now use this file to experiment, we will use this project in the next tutorials too.</p>
-
-
-      <h2> Changing something on the Rest API Server</h2>
-      <p> The Rest Api Server will provide all data needed by the user, either from datasources like databases or from
-        calculations.</p>
-      <p> For the Rest Api functionalities we will need to create and edit files in different parts of our project</p>
-      <p> The <strong>app.js</strong> defines several settings we may need to change to create new functionalities</p>
-      <p> Each different data request will need to have a specific <strong>path</strong> which
-        will be defined in the "app.js" file and on a file in the "routes" directory</p>
-      <p class="note"> The data acquisition is usually done in files a "models" directory that will see in another
-        tutorial. </p>
-      <p>For now we will simply work with the "users.js" file in the "routes" directory.
-        We will see later that the "index.js" is not working, and that for creating a new file
-        we would need to add some settings on the "app.js" file.
-      </p>
-      <p>
-        First lets try to see what data does the "users.js" file provides. For that we will first need
-        to know the <strong>path</strong> to make the data request (remember: each Rest API functionality as its path).
-      </p>
-      <p>
-        Open the "app.js" file, you will see this line: <strong><code>app.use('/users', usersRouter);</code></strong>
-      </p>
-      <p> This means that any path to any functionality related to users will start by "localhost/users" (or
-        "localhost:3000/users" if you have not changed the port).</p>
-      <p>Now open the "users.js" file inside the "routes" directory you will see:</p>
-      <strong><code><pre><!--
-      -->router.get('/', function(req, res, next) {
-<!--  -->  res.send('respond with a resource');
-<!--  -->});<!--
-   --></pre></code></strong>
-      <p>So the final path to call this will be "localhost/users/" (or "localhost:3000/users/").
-        Write that on the browser and try, it should only show the string that is inside the send.
-        Notice it is not returning a web page, just data.</p>
-      <p>Make the following changes:
-      <ul>
-        <li> In the "app.js" file change to <strong><code>app.use('/api/users', usersRouter);</code></strong>.
-          Using "/api/" for all REST API paths is a good pratice since now we know that any data request will have
-          "/api/" and it will not be confused with web pages (for instance a users web page).</li>
-        <li>
-          Change the code in the "users.js" to:
-          <strong><code><pre><!--
-    -->router.get('/', function(req, res, next) {
-<!--  -->  let users=[{name:"John Doe", birthDate:"19/02/1999"}];
-<!--  -->  res.send(users);
-<!--  -->});<!--
- --></pre></code></strong>
-          This code creates in Javascript a variable with a list with the information of one user and sends it.
-          Normally we would create these variables oustide the "router.get()" so that it could be used by other
-          functionalities
-          (for example a functionality to add users) but all that will be done later in files inside the "models"
-          directory
-          and later on using the database.
-        </li>
-      </ul>
-      </p>
-      <p> Test the functionality now. Remember that you need to stop the server (Ctrl-C in the terminal window)
-        and restart again (npm start). Also remember that the path is now "localhost/api/users" (or
-        "localhost:3000/api/users").
-      </p>
-      <p>You can try to run the path before restarting and you will see that is not yet working (if you already
-        restarted you can make another
-        modification and try, it will not show the changes).</p>
-      <p class="centerImg"><img class="term" src="images/restres.png" alt="Output for rest call">
-      </p>
-
-      <p>Notice that on the result the data is slightly different than what we wrote.
-        We wrote <strong>JavaScript</strong> but Node.js converted it to <strong>JSON</strong>.
-        While JavaScript is a programming language JSON is a data-interchange format i.e. is used to send and receive
-        information.
-        Both have similarities, but there are differences, for instance, the names of the attributes have "" on JSON.
-      </p>
-      <p> You will learn more about JavaScript and JSON in the next tutorials. You </p>
-      <p>You can now use this file to experiment, we will use this project in the next tutorials too.</p>
-    </section>
-
-    <section id="set_database">
-      <h2>4- Configuring a database</h2>
-      <p> We still have many concepts to learn before que can use a database,
-        but since this is a instalation tutorial we will cover
-        also the database configuration of the server. </p>
-      <p>First we will need to install the module that will comunicate with the database.
-        You will need to stop the server to do this and then run one of the following commands
-        (depending on which database you are using):</p>
-      <p>For a MySql database or equivalent: <strong><code>npm install mysql --save --save-exact</code></strong> </p>
-      <p>For a PostGreSQL database: <strong><code>npm install pg --save --save-exact</code></strong> </p>
-      <p class="note"><strong>install</strong> will add the module to our instaled modules in the directory
-        "node_modules".
-        <strong>--save</strong> will also add the dependency to the module in the "package.json" file.
-        This is important since after that, if we delete our "node_modules" directory, we only need to run "npm
-        install" to
-        install all modules, since the database connection module is already in the dependencies.
-        <strong>--save-exact</strong> will register in the dependencies we always want the same version installed.
-        We could ommit this option if we want to always have the latest version when "npm install" is run, but a new
-        version
-        may have differences that would make our code stop working, so we should test the new version first and only
-        then change the dependency
-      </p>
-      <p> If you open the "package.json" file you will see a new dependency was installed</p>
-      <h2> Configuring the database</h2>
-      <p> The database configuration is similar for most databases, but it still has differences</p>
-      <section class="columns">
-        <section>
-          <p> Lets create a "models" directory and inside a "connection.js" file.
-            You can see the result on the right.</p>
-          <p> We only have one file in the models directory but in the future we will have more files.
-            It is on these files we will make functions with our queries to request and send data to the database.
-            Our routes will then call these functions each time a user makes a request.
-          </p>
-          <p>
-            By having theses files in this "models" directory we make an important separation between:
-          <ul>
-            <li> The layer that manages client data requests: The files on the "routes" directory</li>
-            <li> The layer that actually processes the requests and does the calculations,
-              also called the business layer since it has all the rules of "our business".
-              This layer will correspond to the files on the "models" directory</li>
-          </ul>
-          </p>
-          <p>First we will need to create the code that will make the connection
-            to our database and allow us to make queries.
-            We have created the "connection.js" file on the "models" directory for that code</p>
-          <p> After that we can make a simple example and we
-            will see how to create our models and connect them to the routes.</p>
-        </section>
-        <p class="centerImg"><img class="halfterm" src="images/connection.png"
-            alt="Models directory and connection file"></p>
-
-
-      </section>
-      <h3 onclick="showHide('postgresql','mysql','block')">
-        Click here to see the code for PostGreSQL</h3>
-      <section id="postgresql" style="display:none">
-        <section class="columns">
-          <strong>
-            <pre class="code">
-var pg = require('pg');
-
-const connectionString = "postgres://root:password@localhost:5432/students"
-const Pool = pg.Pool
-const pool = new Pool({
-    connectionString,
-    max: 10,
-    ssl: {
-        require: true, 
-        rejectUnauthorized: false
-    }
-})
-
-module.exports = pool;</pre>
-          </strong>
-        </section>
-      </section>
-
-      <h3 onclick="showHide('mysql','postgresql','block')">
-        Click here to see the code for MySql</h3>
-      <section id="mysql" style="display:none">
-        <section class="columns">
-          <strong>
-            <pre class="code">
-var mysql = require('mysql')
-var util = require('util')
-
-var pool  = mysql.createPool({
-    connectionLimit : 10,
-    host     : 'localhost',
-    user     : 'root',
-    password : 'password',
-    database : 'students'
-});
-
-pool.query = util.promisify(pool.query)
-
-module.exports = pool</pre>
-          </strong>
-        </section>
-
-      </section>
-
-      <h3>Clean disconnect</h3>
-      <p> It is important that we make sure that our server disconnects when we terminate or crash.
-        In this case we need to close all connections to the database to make them available to other usages.
-      </p>
-      <p> The following code is to be placed at the end of the "www" script that is inside of the "bin" folder.
-        This script starts the server and the code must be "attached" to the event that terminates the server.
-        It may be possible to place this code in another file, but this is the file where the data structure
-        that represents the server is most accessible.
-      </p>
-      <section class="columns">
-        <strong>
-          <pre class="code">
-var pool = require("../models/connection");
-process.once('SIGTERM', end);
-process.once('SIGINT', end);
-function end() {
-  server.close(function (err) {
-    if (err) throw err;
-    console.log('Server endded!'); 
-    pool.end(function (err) {
-      if (err) throw err; 
-      process.exit();
-    });
-  });
-}</pre>
-        </strong>
-      </section>
-      <p> Notice we needed to "load" the connection module we made.
-        We will to "require" the connection module each time we need to access the database.
-        In this case it was to end the connection pool that also closes all connections inside,
-        thus increasing the number of available connections to any application that accesses the database.</p>
-      <h3>The model file</h3>
-
-      <h3>The route file</h3>
-    </section>
-
-    <section id="deploy_heroku">
-      <h2>5- Setting up a website: Github and Heroku</h2>
-      <p> There are several ways to host your website and they will depend on the hosting service you will chose.
-        In this tutorial we consider a free hosting service that uses github has its source code provider: Heroku.
-      </p>
-      <p> To set up our website on Heroku using GitHub we will need:</p>
-      <ul>
-        <li> Create a GitHub account. </li>
-        <li> Create a GitHub repository (remote repository) on that account. </li>
-        <li> Add other collaborators to your repository </li>
-        <li> Clone the repository to our computer (local repository).
-          It will create a directory with all the git repository settings, including which remote repository we are
-          using.</li>
-        <li> Add our code to that repository.
-          If we already created the code in another directory the easy way is to copy-paste (or cut-paste) the code to
-          the repository directory.
-          Make sure the base of the project is directly on the base repository directory i.e. that when you enter the
-          repository directory you see the package.json file and the app.js file.
-          This will be important when we connect Heroku to GitHub </li>
-        <li> Commit and push our code to the local and remote repositories.</li>
-        <li> Create a Heroku account.</li>
-        <li> Create a Heroku Node Application </li>
-        <li> Configure your Heroku application to use your GitHub repository </li>
-        <li> Create your database and load your data into it.
-          You can use:
-          <ul>
-            <li> Free hosting for MySql. For example: <a href="https://www.db4free.net/">DB4free</a>
-              or <a href="https://remotemysql.com/">Remotemysql</a> </li>
-            <li>Free hosting for PostGreSQL. You can use specialized site like <a
-                href="https://www.elephantsql.com/">ElephantSQL</a>
-              or you can create a PostGreSQL database inside your Heroku application (as an add-on of the application).
-            </li>
-          </ul>
-      </ul>
-      <h2>Creating a GitHub repository and clone it to your computer </h2>
-      <p> If you do not have a GitHub account you can register here: <a
-          href="https://github.com/">https://github.com/</a></p>
-      <p> Create a new repository. On the top right you have a plus sign menu. Click on it and choose "New
-        Repository". If your repository will have multiple collaborators only one needs to create, the others
-        will be set as collaborators and can clone or make changes to that same repository.</p>
-      <p> Give it a name and <em>set it as public</em>.
-        Check the <strong>README.md</strong> file option, it will allow you to write a description of the project that
-        is shown in your
-        repository GitHub page. </p>
-      <p> You can also choose a license but you do not need the .gitignore since the express generator already
-        created one for you.</p>
-      <h3> Setting other collaborators</h3>
-      <p> Public repositories can be seen by anyone, and anyone can make a clone, but only collaborators
-        can make changes to that repository
-      </p>
-      <p>To set your collaborators go to Settings (last option in the option menu above the code) and then
-        choose "Manage access": </p>
-      <p class="centerimg"> <img class="big" src="./images/add_collaborators_github.PNG"
-          alt="Add collaborators to github repository"></p>
-      <p> By pressing "Add people" you can write the username of the collaborators to send the invite for collaboration.
-        They will need to check the email to accept collaboration, but after that they will have access to the
-        repository.
-      </p>
-      <p> To clone your remote repository to your local computer (local repository) you will <strong>need to have a git
-          client application </strong></p>
-      <p> If you install git you will already have a client with a command line interface, but you will probably
-        want
-        a client with graphical interface.
-        There are several options for git clients with GUI, bellow are 2 suggestions with some information:</p>
-      <ul>
-        <li> Git Fork application ( <a href="https://git-fork.com/">https://git-fork.com/</a>).
-          It will install git and Fork applications. It has a clear GUI with many functionalities.</li>
-        <li> Visual Studio Code already comes with a Source Control functionality that is a git client.
-          You can add more extensions to add new functionalities to Source Control.
-          You still need to install git to use source control ( <a href="https://git-scm.com/">https://git-scm.com/</a>
-          ).
-        </li>
-      </ul>
-      <p> We will consider using the VSCode Source Control so that we do not add more applications, but using Fork
-        may
-        be even easier, when you adapt to it.</p>
-      <p>First install the git application that was mentioned before.
-        You will probably want all the default options except for the text editor that is Vim by default
-        (it is not as easy to work as other editors, I changed it to Notepad++).
-      </p>
-      <p> After this you can run git commands in VSCode by pressing F1 and writing "Git:".
-        When your repository is set you will also have most of these commands in the Source Control tab in the right,
-        but first we need to clone the repository.</p>
-      <h3> Clone the repository using VSCode</h3>
-      <p> Open VSCode (any folder or even no folder will do). If you already have VSCode open but you only installed the
-        git application
-        after, you will need to close VSCode and open it again so it detects git executables.
-      </p>
-      <p> Press F1 and write "Git: Clode" on the command entry box. See the image bellow:</p>
-      <p class="centerimg"><img class="med" src="./images/git_clone_vscode.PNG" alt="Git Clone in VSCode"></p>
-      <p> It will support cloning directly from GitHub.
-        When you choose the option to clone from GitHub it will ask you for your password to connect to your github.
-        After that your available repositories will show for you to choose one to clone.</p>
-      <p> Choose one repository and the directory you want to clone it too,
-        a directory with the name of the repository will be created will all the code that is in the repository
-        (at the moment only the README.md file) and several other files with the repository settings, including the
-        settings to connect to the remote repository </p>
-      <p> If the repository is not yours you will need to write the path to the repository that consists on the username
-        and the repository name in the following format: {user_name}/{repository_name}.
-        VSCode will autocomplete when you start writing the path.
-        The rest of the steps is the same as if it was your own repository but you will only be able to make changes to
-        that repository if you are a collaborator. </p>
-      <p> You can now copy paste your project code to the repository directory. Make sure that the app.js and
-        package.json files are in the root directory of the project (the one that was created)</p>
-      <p> Open the folder of the repository in VSCode.
-        You can open Source Control with the button on the bar on the left.
-        If you already copy paste your code to the project you will see a number in blue, this says how many
-        files there are in the repository that were not yet commited to the local repository. 
-        The image bellow shows an example: </p>
-      <p class="centerimg"><img style="width:50px" src="./images/vscode_source_control.PNG"
-          alt="VSCode Source Control Option"></p>
-      <p> Press the Source Control option to manage your repository.
-        To submit changes you will always need at least 3 steps:</p>
-      <section class="fleximg">
+      <h4 class="clickMe" onclick="showHide('archExplain',false,'block')">Click to tooggle the explanation of the
+        image and of Web Applications concepts</h4>
+      <section class="canHide" id='archExplain'>
         <ul>
-          <li> Stage all changes to commit: You can do this by pressing the plus sign on the right of 
-            the "Changes" header. All files will now pass to the "Staged Changes" header. 
+          <li>
+            <p>At the top right you see two IDE (Integrated Development Environment) used to create code and manage
+              databases:
+            </p>
+            <ul>
+              <li>
+                <p><strong><a href=" o https://code.visualstudio.com/">Visual Studio Code</a></strong>
+                  Editor for code, including all things web (
+                  <a href="#html">HTML</a>, <a href="#css">CSS</a>,
+                  <a href="#javascript">Javascript</a>, etc)
+                </p>
+                <p>You can also get Notepad++:
+                <ul>
+                  <li> It is also an editor for any type of text file </li>
+                  <li> It is lighter and good for quick modifications</li>
+                </ul>
+                <a href="https://notepad-plus-plus.org/downloads/">https://notepad-plus-plus.org/downloads/</a>
+                </p>
+              </li>
+              <li>
+                <p><strong>Database Client Application</strong>
+
+                  Applications to manage and develop databases, they will depend on the database used. Examples:
+                </p>
+                <ul>
+                  <li>
+                    <p><strong><a href="https://dev.mysql.com/downloads/workbench/">Workbench</a></strong>
+                      Allows the design and management of MySql databases and similar </p>
+                  </li>
+                  <li>
+                    <p><strong><a href="https://www.pgadmin.org/">pgAdmin</a></strong>
+                      Open Source administration and development platform for PostgreSQL </p>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </li>
           <li>
-            Commit all changes to the local repository: Write a message on the entry box above the 
-            "Staged Changes" header. The first line is a summary of all the changes, on the rest of the lines
-            you should describe each change you made to the project.
-             When the message is finished press the ✓ symbol above.
+            <p>Bellow the IDEs, connected to the DB Client you see the databases.
+              This constitutes the base of the three tiers that usually constitute a web application:
+              <strong>Database | Server | Client </strong>.
+            </p>
+            <p> For local server you can use a local or a remote database,
+              but for an online server you will need a remote database,
+              because it would be really hard to connect to the local server.</p>
           </li>
           <li>
-            Push all changes to the remote repository: When all changes are commited to the local repository
-            VSCode will show a button with an option to Sync Changes, which means Pushing your changes to 
-            GitHub. You do not need to Push all Commits, if you keep editing files you can, and should, commit
-            those changes to the local repository. When you are sure that you have something that can be shared
-            with other collaborators you can Sync it to the remote repository.
-            If you hover above the Sync Changes button it will say how many commits you made since last Sync
-            (in our case we will Push one Commit, with the code we copy paste to the project).
+            <p> In the top middle you see a depiction of the <a href="#node_express">Node.js/Express.js</a> server. The
+              server is divided in two parts:
+            <ul>
+              <li><strong>Web Pages Server</strong>
+                Will serve HTML, CSS, Javascript and other files (ex: images) to the browser clients
+              </li>
+              <li>
+                <p><strong><a href="#rest">REST</a> API Server</strong>
+                  Will serve data requested by web pages on the browser (using <a href="#ajax">AJAX</a>
+                  and <a href="#json">JSON</a>) and could also serve data to
+                  other applications (using JSON).</p>
+                <p>
+                  Since the REST API is responsible to manage data, only this part of the server will communicate with
+                  the
+                  database.
+                </p>
+              </li>
+            </ul>
+            </p>
+          </li>
+          <li>
+            <p> In the top left side you see the client side:
+            <ul>
+              <li>
+                <p><strong>Browser</strong>
+                  Browsers like chrome, safari or edge will need web pages composed by HTML, CSS, images, etc.
+                  All these files will be sent by the Web Pages Server.</p>
+                <p> Some of these pages will also need data.
+                  These pages will have javascripts that will request the data from the REST API Server
+                  (the one that can obtain data from the Database) and insert that data on the web pages </p>
+                <p>Some pages will also send data to the REST API also using javascript.</p>
+              </li>
+              <li>
+                <p><strong>Apps</strong>
+                  Applications like mobile applications or desktop programs can also comunicate with the server.
+                </p>
+                <p> Since applications will have their own interface they only need the data so they only connecto to
+                  the
+                  REST API Server.</p>
+              </li>
+
+            </ul>
+            </p>
+          </li>
+          <li>
+            <p> In the bottom, inside the cloud, you have a depiction of the online web server.
+              It replicates the same elements as the local web server: clients,
+              Node.js/Express.js server and database (the online database).
+              The Node.js/Express.js server is divided in the same way in Web Page Server and REST API Server.
+            </p>
+            <p>
+              To create an online server you need a provider.
+              We give as example the <a href="#heroku">Cyclic</a> platform that suports Node.js servers and where you
+              can easilly deploy applications from your public <a href="#github">github</a> repository.
+            </p>
+            <p>
+              The idea is simple:
+            <ol>
+              <li>Create a local <a href="#git">git</a> repository that will allow us to manage versions and connect to
+                a
+                remote repository.</li>
+              <li>Push the latest version to a remote git repository like <a href="github">
+                  GitHub</a>.</li>
+              <li>Connect your GitHub account with Cyclic and create an App that connects to a repository.
+                After configuring this connection Cyclic will automatically deploy the latest version
+                of the code each time the GitHub repository is updated.</li>
+            </ol>
+            </p>
+            <p>
+              You can see more details on how to deploy a Node Web Application on Cyclic on <a
+                href="#deploy_cyclic">another section of this tutorial</a>.
+            </p>
+
+
+          </li>
+
+        </ul>
+        <h3>Other concepts and applications</h3>
+        <ul>
+          <li>
+            <p id="node_express"><strong>Node.js and Express</strong>
+              Allows for the creation of a server that will manage the requests and responses
+              of web pages and other data. We will see this in more detail in this tutorial and following</p>
+            <p><strong>Node.js </strong>
+              Open source server environment (it is programmed in javascript)</p>
+            <p>Reference: <a href="https://nodejs.org/en/docs/guides/">
+                https://nodejs.org/en/docs/guides/ </a>
+            <p>
+            <p><strong> Express.js </strong>
+              Node.js web application framework (it is a Node.js module), used to create web applications more easily
+            </p>
+            <p> References:
+            <ul>
+              <li>
+                Routing:
+                <a href="https://expressjs.com/en/starter/basic-routing.html">
+                  https://expressjs.com/en/starter/basic-routing.html </a>
+              </li>
+              <li>
+                API Reference:
+                <a href="https://expressjs.com/en/4x/api.html">
+                  https://expressjs.com/en/4x/api.html </a>
+              </li>
+            </ul>
+            </p>
+
+          </li>
+
+
+          <li>
+            <p id="html"><strong>HTML</strong>
+              HypertText Modeling Language – Used to define the content of web pages</p>
+            <p>Reference: <a href="https://www.w3schools.com/html/">
+                https://www.w3schools.com/html/ </a>
+              (w3schools is your "go to" resource for websites)</p>
+          </li>
+          <li>
+            <p id="css"><strong>CSS</strong>
+              Cascating Style Sheets – Used to describe the style (presentation) of the web pages</p>
+            <p>Reference: <a href="https://www.w3schools.com/css">
+                https://www.w3schools.com/css</a></p>
+          </li>
+          <li>
+            <p id="javascript"><strong>Javascript</strong>
+              Programming language for web development – Used to make calculations and modifications to and for your web
+              pages
+            <p>Reference: <a href="https://www.w3schools.com/js">
+                https://www.w3schools.com/js</a></p>
+          </li>
+          <li>
+            <p id="rest"><strong>REST</strong>
+              REpresentational State Transfer (just a concept, nothing to install) - Defines a way to provide
+              communication between computer systems.
+              Applications that follow REST rules are called RESTfull Application</p>
+            <p>Reference: <a href="https://www.restapitutorial.com/lessons/whatisrest.html">
+                https://www.restapitutorial.com/lessons/whatisrest.html</a></p>
+            <p>How to document a rest application: <a href="https://bocoup.com/blog/documenting-your-api">
+                https://bocoup.com/blog/documenting-your-api</a></p>
+          </li>
+          <li>
+            <p id="ajax"><strong>AJAX</strong>
+              Asynchronous JavaScript And XML (just a concept, nothing to install) - Allows the communication of web
+              pages
+              with the server and dynamically updating the page without reloading the whole page (much more convenient
+              than the other option).
+              We will not use XML we will use JSON </p>
+          </li>
+          <li>
+            <p id="json"><strong>JSON</strong>
+              JavaScript Object Notation (just a concept, nothing to install) –
+              A syntax for storing and exchanging data –
+              We will use it to send and receive data between web pages and server </p>
+            <p>Reference: <a href="https://www.w3schools.com/js/js_json_intro.asp">
+                https://www.w3schools.com/js/js_json_intro.asp</a></p>
+          </li>
+          <li>
+            <p id="git"><strong>Git</strong>
+              Distributed version control system. Ables developer teams to manage several versions of code
+              and colaboratively create applications.
+              You can use it directly on a command line or using a client with a graphic interface.
+            </p>
+          </li>
+          <li>
+            <p id="github"><strong>GitHub</strong>
+              It is a development platform – It is used to allow a community of developers to host and manage their
+              code,
+              including previous versions
+            </p>
+            <p>Reference: <a href="https://github.com/">
+                https://github.com/</a></p>
+          </li>
+          <li>
+            <p id="cyclic"><strong>Cyclic</strong>
+              It is a PaaS (platform as a service) – We can use it to host our website (needs GitHub to get the code to
+              deploy)
+            </p>
+            <p>Reference: <a href="https://www.cyclic.sh/">
+                https://www.cyclic.sh/</a></p>
           </li>
         </ul>
-        <img src="./images/vscode_stage.PNG" alt="Stage changes on VSCode">
       </section>
-      <p>When there are no changes and the local repository was Synced with the remote repository the Source Control
-        will have no blue number, and it will say "Changes 0"</p>
-      <p> If any other collaborator has made changes to the remote repository you will first need to pull any
-        changes before Pushing (Sync) your changes. 
-        Even if you have no collaborators yet you can test this by editing the README file on GitHub.
-        After that make some changes to the code and try to make the same 3 steps (Stage, Commit, Push)</p>  
-      <p> If you did all the steps you will notice it did not asked anything. This is because the
-        "Sync" option on VSCode already includes a Pull if one is needed, so you actually only need 3 steps: Stage, Commit, Sync.
-      </p>
-      <p> If the other collaborator made a change in the same file as you, you can have a merge conflict. 
-        This means git does not know which version of the file to keep. VSCode will warn you of any conflicts,
-      just go to the file that had conflicts, you will see something like:</p>
-      <pre>
-<<<<<<<<<< Head (Current Change)
-   Your code here
-========
-   Your collaborator code here
->>>>>>>>> Test (Incoming Change)
-      </pre>
-      <p> Correct all the conflicts and delete the extra lines. Repeat the Stage, Commit, Sync steps 
-        to send the new version with your conflict resolution. </p>
-      <p> You can see more information on how to use Source Control in here:
-        <a href="https://code.visualstudio.com/docs/editor/versioncontrol">https://code.visualstudio.com/docs/editor/versioncontrol</a>
-      </p>
-    
-      <h3> Create a Heroku Application and set your repository as source of the code</h3>
-      <p> It is easier if the application is created by the same person that created the repository, since it is easier to connect to the repository that way.</p>
-      <p> Create a Heroku account: <a href="https://signup.heroku.com/login">https://signup.heroku.com/login</a></p>
-      <p> Press the "New" button on the top right and choose "Create a new app". Fill your app name and press "Create App".
-      <p> The new app will open in the Deploy menu so you can set your code source.
-          Make sure you are logged into your GitHub acount.
-          Choose GitHub in the Deployment Method it will find your github username and allow you to search for 
-          the repository you want to connect. Press connect when you find the repository you created.
-          See the image bellow for an example:
-      </p>
-      <p class="centerimg"><img class="big" src="./images/heroku_set_github.PNG" alt="Setting Github repository in Heroku"></p>
-      <p>
-        On "Automatic deploys" press "Enable Automatic Deploys", this will automatically deploy any changes you do to your repository.
-        On "Manual deploy" you can press "Deploy Branch" to make your first deploy (and not wait until the next change to the github repository).
-      </p>
-      <p> You can now press the "Open App" button on the top of the page to open your application. 
-        You can already see all static content but we still need to set our database to see the dynamic content. 
-        Your app URL will be {application_name}.herokuapp.com </p>
-      <h3> Setting up the database on Heroku</h3>
-      <p> If you want a MySql database just create a remote database using one of the suggested websites and
-         change the connnection.js settings for the new database (you will need to Stage/Commit/Sync after).</p>
-      <p> You will need to create the tables and fill them with the data you used on the local database to make a complete 
-        replica of your local run instance.</p>
-      <p> You can use variables to avoid having your database password and other settings on the code.
-        For that you need to: </p>
-      <ul>
-        <li>Replace all sensitive data with environment variables. Example:
-            <pre><!--
-            -->  const connectionString = process.env.CONNECTION<!--
-         --></pre>
-        </li>
-        <li>
-           Go to the Settings menu (last menu, on the top bar) on your Heroku application 
-        </li>
-        <li>
-          Scroll to Config Vars and choose Reveal Config Vars
-        </li>
-        <li> Write the name and value of every environment var you used and press Add for each</li>
-      </ul>
-      <p> If you want to use the PostGreSQL database you can do the same using a free remote database hosting like
-        <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a> or you can use the  PostGreSQL module
-              in Heroku</p>
-      <p> To use the PostGreSQL module go to the Resources menu and write PostGres on the Add-ons search bar</p>
-      <p> Choose the option named "Heroku Postgres" it will create a new database.</p>
-      <p> Click in the link that was created to see the settings of that database. Choose the Settings option and then View Credentials</p>
-      <p>You can use those credentials on the connection.js and you can also use them in pgadmin to create your tables and fill them.</p>
-      <p> To connect to this remote database using pgadmin you will need to:</p>
-      <ul>
-        <li>Create a new Server and choose a name (it is the name you want it to be known in pgadmin, not the database name)</li>
-        <li>Go to the connection menu and fill the credentials you got from your database.
-          On the "Maintainance database" field place the name of the Database (it is the only one you have access).
-          Do not forget to click on the checkbox to save the password so you don't have to write it again.
-        </li>
-        <li> Go to the Advanced menu and place the name of your database in the "DB restriction" field.
-          If you do not do this pgadmin will show all database names in the server but you still only have access to yours, 
-          making it really hard to find your database in the middle of all the other names.
-      </ul>
-      <p> And that is it, now you only need to fill the database with tables and data to replicate your local instance.</p>
+      <h3>What do you need to have</h3>
+      <dl>
+        <dt><strong>Install Node.js</strong></dt>
+        <dd>
+          <p>Site: <a href="https://nodejs.org/en/">https://nodejs.org/en/</a></p>
+          <p>Choose the LTS version (recommended for most users). Download and install Node.js.</p>
+        </dd>
+        <dt><strong>Install Visual Studio Code (Web Editor)</strong></dt>
+        <dd>
+          <p>Site: <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
+          <p> When installing you have an option that will let you open a
+            project folder directly from the explorer using right click (at least on windows).</p>
+          <p class="clickMe" onclick="showHide('vscode_install',false,'block')"> Click to see an image of the VSCode
+            instalation window</p>
+          <p class="centerImg canHide" id="vscode_install""><img src=" images/vscode_install.png"
+            alt="Node instalation window"></p>
+          <p> When you first open a Node project VSCode will detect that it is a Node project
+            and ask if you want to install extensions to help you. You can accept those.
+            You can also install other extensions if you find them usefull.</p>
+        </dd>
+        <dt><strong>Install git</strong></dt>
+        <dd>
+          <p>Site: <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></p>
+          <p>The package will install the executables needed to run all git commands. ~
+            You can call them using the terminal or install a git client. </p>
+        </dd>
+        <dt><strong>Install Postman</strong></dt>
+        <dd>
+          <p>Site: <a href="https://www.postman.com/downloads/">https://www.postman.com/downloads/</a></p>
+          <p> Although Postman is not needed to run the server, it is useful for testing.
+            You can also use other programs for testing, including some VSCode extensions</p>
+        </dd>
+        <dt><strong>Create a Github account</strong></dt>
+        <dd>
+          <p>Site: <a href="https://github.com/">https://github.com/</a></p>
+          <p> Select "Sign Up" and enter your account information.
+            You will need a valid email since when you first login you will receive a code on your email
+            that you need to write to enter. </p>
+          <p> The first time you enter you will also be asked to create your first repository.
+            Make it a public repository and give it a name (if you do not know what to call it, call it "myproject").
+            If you already have an account create a new public repository instead.</p>
+          <p> Create a README file when you create your repository (if you have not created you will always have
+            an option to create it after). For now leave the README me as it is and click commit (you can change it
+            later).</p>
+        </dd>
+        <dt><strong>Create a Cyclic account connected to your Github account</strong></dt>
+        <dd>
+          <p><strong>NOTE:</strong> You should only do this step after you created a basic Node.js/Express.js project.
+            <a href="#create_server">See the section about creating a server</a>
+          </p>
+          <p>Site: <a href="https://cyclic.sh/">https://cyclic.sh/</a></p>
+          <p> Choose "Sign Up" and then "Continue with Github". If you are already logged to github you only need
+            to authorize the connection, otherwise you will ask you to login to your Github. </p>
+          <p>You will then be asked to deploy your first App. We assume you already created your code
+            on a github repository so you will need to choose the tab that says "Link Your Own".</p>
+          </p>
+          <p>
+            Finally search for the repository name and click on it. Cyclic will retrieve all the information
+            it needs from the Node.js configuration file (package.json).
+          </p>
+          <p>
+            Check the next sections to see more of the available settings.
+          </p>
+        </dd>
 
-      <p> If you had to remove the SSL settings for the Pool on the connection.js file you will need to add them now, 
-        since the remote database uses SSL to authenticate. We place the code bellow again to help:</p>
-        <section class="columns">
-          <strong>
-            <pre class="code">
-var pg = require('pg');
+      </dl>
+      <dt><strong>Install a database and the database client</strong></dt>
+      <dd>
+        <p> You will need a database for your server.
+          The database will not be a topic of this tutorial, only the connection to the database.</p>
+        <p>Use the database that is required for your project. Two examples of commonly used databases:</p>
+        <ul>
+          <li><strong>MySql</strong>
+            <p>Site: <a href="https://dev.mysql.com/downloads/workbench/">https://dev.mysql.com/downloads/workbench/</a>
+            </p>
+            <p>Should include MySql (database server) and Workbench (database client)</p>
+          </li>
+          <li><strong>PostgreSQL</strong>
+            <p>Site: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a></p>
+            <p>Should include PostgreSQL (database server) and Pdadmin (dataabase client)
+          </li>
+        </ul>
+      </dd>
+      <dt><strong>Create a remote database</strong></dt>
+      <dd>
+        <p> You will need a remote database for your online server (server on Cyclic).</p>
+        <p>Use the remote database that is required for your project. Examples of free database hosting for the
+          two databases mentioned before:</p>
+        <ul>
+          <li><strong>MySql: Two options</strong>
+            <p>Db4free: <a href="https://www.db4free.net/signup.php">https://www.db4free.net/signup.php</a></p>
+            <p>RemoteMysql: <a href="https://remotemysql.com/login.php">https://remotemysql.com/login.php</a></p>
+          </li>
+          <li><strong>PostgreSQL</strong>
+            <p>ElephantSQL: <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a></p>
+        </ul>
+        <p><strong>Warning: </strong>
+          On free database hosting there can be downtime of the servers and your databases can be deleted without
+          notice,
+          specially if not being used for a long time or if they exceed the size limits.
+          <strong>Always keep a copy</strong> of your database (scripts to create and populate) and <strong>before any
+            presentation
+            check</strong> if the database is working.
+        </p>
+      </dd>
 
-const connectionString = "postgres://root:password@localhost:5432/students"
-const Pool = pg.Pool
-const pool = new Pool({
-    connectionString,
-    max: 10<span class="marked">,
-    ssl: {
-        require: true, 
-        rejectUnauthorized: false
-    }</span>
-})
 
-module.exports = pool;</pre>
-          </strong>
-        </section>
     </section>
 
+    <section id="create_server">
+      <h2>2- Creating a Node.js/Express.js project</h2>
+      <p>This section of the tutorial considerers that you already have the following setup:</p>
+      <ul>
+        <li>Node.js installed</li>
+        <li>Git installed</li>
+        <li>Visual Studio Code installed</li>
+        <li>Github account created and repository created</li>
+      </ul>
+      <h3 class="clickMe" onclick="showHide('git_clone',false,'block')">Step 1: Clone your Github repository to your
+        working directory (click to toggle text) </h3>
+      <section id="git_clone">
+        <p> First you need to configure your git username and email. These will be saved in every submission you make.
+          Sugestion: Use the same email you used for Github and a name that can be recognized. </p>
+        <p> Open a terminal. There is your computer's command line, but you also have the "git bash" (installed with
+          git)
+          and the "node.js command prompt" (installed with node). If for some reason git or node executables are not
+          found they may still be used
+          using the command line that comes with their installation. </p>
+        <p> In the terminal run the following lines (with the name and email you want to use): </p>
+        <pre><code class="language-bash">
+          git config --global user.name "Your Name"
+          git config --global user.email "youremail@yourdomain.com"
+        </code></pre>
+        <p> Now change directory to your working directory so that you can clone your Github repository to the correct
+          place.
+          Cloning will create a directory with the same name as the repository and with all code inside. </p>
+        <p> Run the following code to clone (with your username and your project name):</p>
+        <pre><code class="language-bash">
+          git clone https://github.com/yourname/myproject
+        </code></pre>
+        <p> Since it is a public repository git will not ask you for authentication. With a private repository or
+          when you try to submit changes to any repository you will need to authenticate with your user.</p>
+        <p> Next we will learn the basics of git</p>
+
+
+      </section>
+      <h3 class="clickMe" onclick="showHide('git_management',false,'block')">Step 2: Basics of managing your git
+        repository (click me to toggle text) </h3>
+      <section id="git_management">
+        <h4 class="clickMe" onclick="showHide('git_about',false,'block')">About Git (click to toggle text)</h4>
+        <section class="canHide" id="git_about">
+          <h4>2.1 What is git?</h4>
+          <p> Git is a Version Control System (VCS). That means it saves versions of your project code allowing you to
+            jump between different versions if you need to.</p>
+          <p> Git was created for big projects with many contributers. It is a distributed system that allows several
+            programmers to work on the same project and track each contribution individually.</p>
+          <p> There are many approaches to VCS. Git considers its approach as snapshots of code.
+            Every time a commit is made git will keep the full file if it is different from the previous version. If the
+            file did not change it keeps a reference to that file.</p>
+          <p> Other systems only keep a registry of changes (called a delta) of files that changed, which uses less
+            space but spends
+            more time when you want to retrive the file (since it needs to create the file from the deltas).</p>
+          <h4>2.2 Local and remote repositores</h4>
+          <p> Git is a distributed VCS. That means that each developer has his/her own version of
+            the code in a local repository.</p>
+          <p> Each developer will work on changes on the local repository and than push those changes to the remote
+            repository available to all
+            developers.
+          </p>
+          <ul>
+            <li>When we make changes to the local repository we say that we <strong>commit</strong> the files.</li>
+            <li>When we make changes to the remote repository we say that we <strong>push</strong> the files to the
+              remote repository.
+              Pushing will only work for commited files (see about git file stages in next topic)</li>
+          </ul>
+          <p> Developers can also pull the changes made by others to keep their local repository updated.
+            In fact, <strong>you can only push the changes you made to the remote repository if you have the latest
+              version of the remote
+              repository</strong> i.e. you will need to pull changes made by other before pushing yours.</p>
+          <h4>2.3 File stages in git</h4>
+          <p> The git commands you can do depend on what stage your files are. Your files can pass by 4 stages:</p>
+          <ul>
+            <li> <strong>Modified</strong>. The file was edited but will not be commited before you mark the file to be
+              part of the next commit.
+              The local repository either does not have this file or has a older version. </li>
+            <li> <strong>Staged</strong>. The file is not commited yet but it is marked to be commited in the next
+              commit.</li>
+            <li> <strong>Commited</strong>. Changes to the file were commited and the file is "up to date" on the local
+              repository.
+              The remote repository will not have these changes yet.</li>
+            <li> <strong>Pushed</strong>. This means that you commited the changes to the remote repository, so the file
+              is now "commited" on the remote repository too.
+              Only changes that are commited on the local repository can be pushed. You can only push something if you
+              your local repository has all the changes on the remote repository
+              (otherwise you will need first to pull the changes from the remote repository).</li>
+          </ul>
+          <h4>2.4 Git commands for local repository</h4>
+          <p> There are many commands you can use but we will focus only on the basic ones:</p>
+          <ul>
+            <li><strong>"git init"</strong> This creates a local repository. You will not need this command since "git
+              clone" also creates a local repository
+              that is a copy of the remote repository.</li>
+            <li><strong>"git add . "</strong> Stages all files on the folder, including subfolders and their files. If
+              you run this on the base folder
+              of your project it will mark all files that were edited so that their changes are commited in the next
+              commit.</li>
+            <li><strong>"git commit"</strong> This will commit all changes, it will call the default editor for you to
+              write a message describing the commit.
+              <strong>All commits should have a description</strong>, the first line is a short description, the next
+              lines describe in more details the changes made.
+              If you have a short message to write you can add the message directly using <strong>git commit -m "Your
+                message"</strong>.
+              You can also change the default editor. The code bellow shows how to change to Notepad++ (default is Vim):
+              <pre><code class="language-bash">git config --global core.editor "'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin"</code></pre>
+            </li>
+          </ul>
+          <h4>2.5 Git commands for remote repository</h4>
+          <p> We will again focus on the basic commands</p>
+          <ul>
+            <li><strong>" git clone https://github.com/yourname/myproject"</strong> This was the command we already
+              used.
+              It makes a copy of the remote repository to your computer. The created folder will have a local repository
+              with all the commited changes.
+              It will also save information about where the code came from, called the "remote", allowing you to pull
+              changes or to push changes (if you are the owner of the remote or have permitions for it).</li>
+            <li><strong>git remote add origin https://github.com/yourname/myproject</strong>
+              You will not need to use this since "clone" already adds the information about the remote repository where
+              the code came from.
+              If you have created the local repository directly, for instance by using "git init", you will need to run
+              this command to
+              add your remote repository and push changes to it.
+            </li>
+            <li><strong>git push</strong> This will push all your commits to the remote repository (the ones not already
+              there).
+              It will only work if you have a remote configured, if you commited changes and if your local repository is
+              up to date with the remote one (otherwise you need to make a pull first).
+              You can also say the name of the remote and the branch where you want to push, but we will assume that you
+              only have one remote and one branch.
+            </li>
+            <li><strong>git pull</strong> This will pull all the changes on the remote repository to your local
+              repository (the ones that were not already there).
+            </li>
+          </ul>
+          <h4>2.6 Conflicts</h4>
+          <p>Consider the following example </p>
+          <ol>
+            <li> You made changes to the local repository </li>
+            <li> Your colleague made changes to her/his local repository</li>
+            <li> Your collegue pushed her/his changes to the remote repository</li>
+            <li> You try to push yours and get an warning saying there are changes and that you need first to pull those
+              changes</li>
+            <li> You pull those changes to your computer</li>
+          </ol>
+          <p> Two things can occur when you pull the changes into your local repository where you already made some
+            changes</p>
+          <ol>
+            <li>Git is able to merge both versions. This may be because changes were made in different files, or on
+              different parts of the files.
+              You can commit the merge to your local repository and than push the merged commit to the remote
+              repository.
+            </li>
+            <li> Git finds a conflict between the two versions. Git will mark the conflict on those files by placing
+              both versions of the changes~
+              in the file with some aditional text to mark it. See an example bellow:
+              <pre><code class="language-text">
+              <<<<<<<<<< Head (Current Change)
+                 Your code here
+              ========
+                 Your collaborator code here
+              >>>>>>>>> Test (Incoming Change)
+            </code></pre>
+              You will need to edit the files with conflicts, choosing the correct code or creating a new code that
+              correctly merges both.
+              You also need to remove the added text. After that you can commit the merge and push. You have solved the
+              conflict by manually making the merge.
+          </ol>
+        </section>
+        <p> Enter the project folder that was created on the command line. </p>
+        <p> Copy this file <a href="./files/gitignore">.gitignore</a> to your repository directory with the name
+          ".gitignore" (make sure it has the dot in the beggining).
+          The .gitignore file will tell git what files are not to be send to the repository. For instance the .env file
+          will have sensitive
+          information like our database password so we do not want it to be saved in the repository.</p>
+        <p> You made changes to the repository so you need to run the commands to make the file go through all the
+          necessary stages:
+          Modified to Staged to Commited to Pushed. Run the following commands on the terminal inside your project
+          folder:</p>
+        <pre><code class="language-bash">
+        git add .
+        git commit -m "Added .gitignore for Node projects"
+        git push
+      </code></pre>
+        <p> The push command will ask you to authenticate to your Github account. You only need to do this once, it will
+          save the authentication for future interactions.</p>
+        <p> You may need to use an access token instead of the Github password. It can be a little confusing so here are
+          the steps for it:</p>
+        <ol>
+          <li> Login to you github account.</li>
+          <li> Click on the top left icon (profile icon) and choose "Settings"</li>
+          <li> On Settings scroll down and choose "Developer Settings"</li>
+          <li> Then choose "Personal access tokens" and then "Tokens (classic)"</li>
+          <li> Click on the link "Generate a personal access token" </li>
+          <li> Fill in the details:
+            <ul>
+              <li><strong>Note</strong> Write a name to identify the token, for instance "git" </li>
+              <li><strong>Select scopes</strong> Here you can define what the app can do with that token.
+                Select "repo", that will allow git to access the repositories.</li>
+            </ul>
+          </li>
+          <li>Scroll to the bottom and click "Generate token"</li>
+          <li>Copy the token and paste it has a password (on some terminals you need to use right click to paste) to get
+            access on git (Github username as username and the token as password)</li>
+        </ol>
+        <p> That is it, you made your first push and git now has credentials to access your github.
+          You will not need to set the credentials again for that Github account, even for other projects/repositories.
+        </p>
+        <p>If you ever need to reset the credentials you need to open a terminal with administrator privelages and run
+          this command:</p>
+        <pre><code class="language-bash">git config --system --unset credential.helper</code></pre>
+        <p>Now to test making a pull request. On your Github account edit the text on README.md (Github as an editor for
+          that in the page).
+          Change the text there to something like "My first Node app".
+        </p>
+        <p>Run "git pull" on the terminal to get the changes made online. </p>
+        <p>Usually you will get the changes made by other developers but for them to change your code you need to add
+          them has colaborators</p>
+        <p> <strong>To add collaborators to your project/repository </strong>
+          go to Settings on your repository and then to Collaborators</p>
+        <p> Write the username of who you want to add. He will need to go to his email and accept the invitation.
+          After accepting the repository will show on his Github account, even though the path still has the creator
+          username.
+          He will also be able to make pushes and pulls of the repository as if he was the owner.
+        </p>
+        <p> That is it, if you want you can try making more pulls and pushes with a collegue to get used to using git
+          and Github.</p>
+      </section>
+
+
+    </section>
+    <h3 class="clickMe" onclick="showHide('create_node',false,'block')">Step 3: Creating a Node.js/Express.js project
+      (click me to toggle text) </h3>
+    <section id="creat_node">
+      <h4 class="clickMe" onclick="showHide('node_about',false,'block')">About Node (click to toggle text)</h4>
+      <section class="canHide" id="node_about">
+        <h4>3N.1 What is Node?</h4>
+        <p> Node.js was designed to build scalable network applications.
+          Node.js focus on asynchronous and event base programming to prevent the main Node process from blocking or
+          creating new threads.
+        </p>
+        <p> Basic example on how Node.js works:</p>
+        <ul>
+          <li> A node server receives a request.</li>
+          <li> An asynchronous function call is made to process the request.</li>
+          <li> The node server main process is released to accept other requests.</li>
+          <li> When the funcion call finishes processing the request the main process is called again to send the result
+          </li>
+          <li> If no other requests are made the server will "sleep"</li>
+        </ul>
+        <h4>3N.2 What are the main parts of Node?</h4>
+        <p> Node.js has a binary core and javascript modules. It also has a repository of modules made by third party.
+        </p>
+        <p> Some of the core elements of Node.js</p>
+        <ul>
+          <li><strong>libuv</strong> It is an important part of the binary core and provides network and file services.
+          </li>
+          <li><strong>V8</strong> Googles Javascript engine. Runs all the javascript code of the core and 3d party
+            modules.
+            The code we will create will also use the javascript language. </li>
+          <li><strong> http module</strong> One of the core modules, it allows us to create a server.
+            Some functionalities of Node.js are immediatly available, for other functionalities, like the ones on the
+            http module,
+            we first need to import the correct module </li>
+          <li><strong> 3rd party modules</strong> Node.js includes a powerful
+            package manager called NPM (Node Package Module). 3rd party companies can create modules and submit to the
+            NPM repository,
+            making that module easilly available to every developer</li>
+        </ul>
+        <p> Node.js has tried to avoid some of the mistakes made for the Javascript language.
+          One example is that each module has its own namespace (named entities like variables and functions are only
+          known in their module).
+        </p>
+        <p>This encapsulation of the module avoids conflicts of names that trouble many javascript projects.
+          Each module can then define what is exported to the exterior.
+          Only exported variable/functions will be available when we import the module.</p>
+        <h4>3N.3 Basic commands and concepts of Node and NPM</h4>
+        <p>We will present the basic commands in the order they are usually needed to create a new project </p>
+        <ol>
+          <li><strong>npm init</strong> This command will create a package.json file that contains the settings of a
+            Node.js project.
+            It has a command line user interface that will ask the information for the file creation.
+            You can run the command without it asking questions using <strong>npm init -y</strong> it will use default
+            values. </li>
+          <li><strong>package.json</strong> It is a text file in JSON format (you can edit the file using any text
+            editor)
+            that contains the main settigns of a node project. You can see bellow a basic example of the contents:
+            <pre><code class="language-json">              {
+                "name": "myproject",
+                "version": "1.0.0",
+                "private": true,
+                "scripts": {
+                  "start": "node app.js"
+                },
+                "dependencies": {
+                  "cookie-parser": "~1.4.4",
+                  "dotenv": "^16.0.0",
+                  "express": "~4.16.1",
+                  "mysql2": "8.7.3"
+                }
+              }</code></pre>
+            <p>First you have the name and version of the project. Version numbers have meanings "major.minor.patch"
+              a working project will have at least a 1 on major. Minor means that the changes to the main version do not
+              change the functionalities, and patches are only corrections.
+            </p>
+            <p> With private to true NPM will refuse the project if someone tries to send it to the repository by
+              mistake</p>
+            <p> The scripts define commands that can be called using NPM. <strong>npm start</strong> will run the code
+              defined for the start script</p>
+            <p> The dependencies mark the modules needed for the project. Each time you install a module it will be
+              added to the dependencies.
+              Installed modules are not sent to the Github repository, but anyone that clones the repository only needs
+              to run <strong>npm install</strong>
+              and all the dependencies in the package.json will be installed. Symbols like ~ ^ can be used to control
+              which version of the module can be installed
+              (^ means it can install newer versions as long as they still have the same major version i.e. the same
+              first number) </p>
+          </li>
+          <li><strong>npm install</strong> If you run this line without naming a module it will install all dependencies
+            on package.json.
+            To install a specific module you can do <strong> npm install mysql2 --save</strong> this will
+            install the "mysql2" module and with the --save option will also save the dependency on package.json.</li>
+          <li><strong>node app.js</strong> After we install all modules we can run our project by calling the main
+            script using node.
+            Notice this is the same command we used on the start script on package.json, so this would do the same as
+            running
+            <strong>npm start</strong>
+          </li>
+          <li><strong>Stoping the server</strong> When the server starts the terminal will be used as a console for
+            logging information.
+            To terminate the server you can press <strong>Ctrl-C</strong> on the terminal </li>
+        </ol>
+      </section>
+      <h4 class="clickMe" onclick="showHide('express_about',false,'block')">About Express (click to toggle text)</h4>
+      <section class="canHide" id="express_about">
+        <h4>3E.1 What is Express.js?</h4>
+        <p> The express framework is a Node.js module that simplifies the creation of web applications.</p>
+        <p> The main advantages of express consist on:</p>
+        <ul>
+          <li><strong>A routing system</strong> This system associates an handler to a pair HTTP-method + Path.
+            This allows developers to create clear APIs, like REST APIs, to request resources (we will learn more about
+            REST later).</li>
+          <li><strong>Middleware system</strong> An express application is essentially a series of middleware that form
+            a pipeline
+            to handle requests. The user request is passed through a series of middleware that will add or change the
+            information until
+            the response is calculated and sent back. The middleware can be from express itself, from 3rd party modules
+            or created by us</li>
+          <li><strong>Template engines</strong> These engines provide a way to create responses from templates</li>
+        </ul>
+        <p> The express framework gained many adepts that integrated it with other systems.
+          For instance the MEAN Full-stack Web Developmen System includes Mongo-DB (database), Express(server),
+          Angular(client) and Node (server enviroment).
+        </p>
+        <h4>3E.2 Main Express.js functionalities</h4>
+        <p> To use express we must first install if using NPM: <strong>npm install express --save</strong></p>
+        <p> After that we can import the express module and create our servers. A simple example bellow:</p>
+        <pre><code class="language-js">          const express = require("express");
+          const app = express();
+          var path = require('path');
+          app.use(express.static(path.join(__dirname, 'public')));
+          app.get("/api/", function (req, res) {
+              res.send("Hello World!");
+          });
+          
+          app.listen(8888, function () {
+              console.log("Server running at http://localhost:8888");
+          });</code></pre>
+        <p><strong>require</strong> will import the express module and path module (parses path strings).</p>
+        <p><strong>express()</strong> will create an object with the settings for an Node/Express
+          application. We can define new settings on that object, determining how the application will work.</p>
+        <p><strong>app.use(express.static(path.join(__dirname, 'public')));</strong>
+          The public directory will now be used to look for static files (html, css, client javascript, images, etc)
+          for our static web pages. __dirname is a global variable that nodes sets with the directory on where the
+          project is,
+          so by joining it with 'public' we mean the public folder inside our project directory.
+        </p>
+        <p><strong> app.get("/api/", function (req, res,next) {...}</strong>
+          Defines a routing endpoint for the HTTP method <strong>get</strong> and path <strong>"/"</strong> and the
+          defined handler.
+          Handlers can receive 3 paramenters:
+        </p>
+        <ul>
+          <li><strong>req</strong> Request object. Has all the information that the client sent to be processed.
+            Some middleware adds more information to this request, for instance a cookie middleware can parse the cookie
+            and had the
+            parsed information to the request.</li>
+          <li><strong>res</strong> Result object. We will fill this object with the information we want to send to the
+            user.
+            The object also has function like "send", that allow us to send the information on the request object back
+            to the client.</li>
+          <li><strong>next</strong> This is a function that allows you to pass the control to the next middleware.
+            When the handler is the last middleware to be called we do not need the next function and we can simple
+            write
+            <strong> app.get("/", function (req, res) {...}</strong>
+          </li>
+        </ul>
+        <p><strong>app.listen(8888, function () {...});</strong>
+          The server starts and will be listening to request in the port 8888, the function passed as
+          second argument will be called when the server starts.
+        </p>
+
+
+      </section>
+
+    </section>
+    <h4 class="clickMe" onclick="showHide('servers_about',false,'block')"> How do servers work (click to toggle text)
+    </h4>
+    <section class="canHide" id="servers_about">
+      <p> Consider a request of a website: </p>
+      <p> <strong> http://www.mywebsite.pt:3000/folder1/mypage.html</strong></p>
+      <p> The request will be composed of the following parts:</p>
+      <ul>
+        <li><strong>http</strong> The protocol. Defines the rules on how the communication is made</li>
+        <li><strong>www.mywebsite.pt</strong> The domain name. This will allow to identify what computer/server the
+          request is for.
+          To identify which computer to send the resquest the domain name must first be converted to an IP address
+          (Internet Protocol Address).
+          The Domain Name System, a group of hierarchically connect computers, saves the information of what IP address
+          corresponds to each domain name.</li>
+        <li><strong>:3000</strong> The port. The same computer may have many servers running but different server can
+          listen to different ports.</li>
+        <li><strong>/folder1/mypage.html</strong> The path. A server may provide different information and services, the
+          path will define what service/information to provide.</li>
+        <li>The method. The HTTP protocol defines different methods of sending requests: GET,PUT, POST, DELETE, PATCH...
+          When you write an address on a browser the method will be GET, that means "get" the information of the web
+          page
+          or data you need.
+          For the same path the server can define different functionalities depending on the method used. The GET method
+          may return data, while for the POST method we can have data being saved in the server</li>
+      </ul>
+    </section>
+    <p>Create the package.json file by running <strong>npm init -y</strong> on the terminal (inside your project
+      directory). We will edit the file later</p>
+    <p>Install the modules we will need. Run the following commands:</p>
+    <pre><code class="language-bash">
+      npm install express --save
+      npm install cookie-parser --save
+      npm install dotenv --save
+      npm install morgan --save
+    </code></pre>
+    <p> Besides the <strong>express</strong> module we are installing: </p>
+    <ul>
+      <li><strong>cookie-parers</strong> Parses the information of cookies. Cookies stored in files in the client side,
+        each time the client requests information
+        to the server the information in the cookie is sent, thus allowing to have a state that is not stored in the
+        server side. The cookie information is stored in two variables on the request object (req). <br>
+        <strong>req.cookies</strong> stores an object with all cookie information that is not signed.<br>
+        <strong>req.signedCookies</strong> stores an object with all cookie information that was signed.<br>
+        To be able to process signed cookies we need to set a string that will be the "secret" for the signature.
+      </li>
+      <li><strong>dot-env</strong> Creates a set of environment variables from a ".env" file.
+        The ".env" file is not stored on the git repository, so this is usefull to keep password or other information
+        that we do not wish to disclose to the repository.
+        For example, we can use it to store the secret for signed cookies.</li>
+      <li><strong>morgan</strong> This module will log information about requests to the terminal console. It is useful
+        for debugging.</li>
+    </ul>
+    <p> Open the directory of the project with Visual Studio Code and then open the package.json file.
+      You will see on the dependencies all the modules we installed.
+    </p>
+    <p> The node_modules directory was also created when you installed the modules. It will contain all installed
+      modules.
+      This directory will not be placed on the git repository. You can delete this directory at any time and just need
+      to call
+      <strong>npm install</strong> to create it again, since all dependencies are registered on the package.json file.
+    </p>
+    <p>
+      Create a new file called <strong>index.js</strong> (this is the name of the main file in package.json) and write
+      the code bellow:
+    </p>
+    <pre><code class="language-js">      require('dotenv').config();
+      var express = require('express');
+      var path = require('path');
+      var cookieParser = require('cookie-parser');
+      var morgan = require('morgan');
+      
+      var app = express();
+      
+      app.use(morgan('dev'));
+      app.use(express.json());
+      app.use(express.urlencoded({ extended: false }));
+      app.use(cookieParser(process.env.COOKIE_SECRET));
+      app.use(express.static(path.join(__dirname, 'public')));
+      const port = parseInt(process.env.port || '8080');
+      app.listen(port,function() {
+        console.log("Server running at http://localhost:"+port);
+      });</code></pre>
+    <p> You also need to create a <strong>.env</strong> file (yes, the file must start with a dot in the beggining)
+      where we will save the cookie secret.
+      The file should have the line bellow inside</p>
+    <pre><code class="language-text">      COOKIE_SECRET=This is a secret</code></pre>
+    <p> Most of this code was already explained but we can make a summary:</p>
+    <ul>
+      <li>When running the command <strong> require('dotenv').config()</strong> we import all the enviroment variables
+        in the <strong>.env</strong> file</li>
+      <li> We import express module (require), create an express application (express()),
+        configure the application (app.use(...)) and run the application (app.listen...).
+        The port where the server runs can be changed by setting a PORT environment variable</li>
+      <li>We set the morgan logger to print development information (prints for every request received)</li>
+      <li>We configure the body parsers that come with express:
+        <ul>
+          <li><strong>express.json()</strong> Parses any json in the body of the request. The information will be stored
+            in the request object as <strong>req.body</strong></li>
+          <li><strong>express.urlencoded({ extended: false })</strong>
+            Parses any urlencoded information in the body of the request.
+            The information will be stored in the request object as <strong>req.body</strong></li>
+        </ul>
+        Body information can only be in one format so it will never overlap
+      </li>
+      <li>We configure the cookieParser with the secret that was stored in the .env file</li>
+      <li>We defined the folder ('public') where our static files will be</li>
+    </ul>
+    <p>Now click on the terminal menu and then on "New Terminal". A terminal console will open bellow the code and you
+      can run your code using the command
+      <strong>node index.js</strong>
+    </p>
+    <p> At this moment any request you make will result in a "Not Found" error (HTTP error code 404), since we have no
+      files in the public diretories and no routing defined.</p>
+    <p> Create a "public" folder in the project and a index.html file inside with the code bellow</p>
+    <div id="public_index"></div>
+    <script>loadHTMLTextInto("files/index.html","public_index");</script>
+    <p>With an index.html file inside the public directory a page will open if you write "localhost:8080" on the browser.
+      If no name is give the server will search for the "index.html" file.
+    </p> 
+    <p> This was an example of the Node.js/Express.js web pages server (static pages). Now lets make an example of the REST API Server part.</p>
+    <p> The REST API will serve data, and to keep the code organized we will create two new folders</p>
+    <ul>
+      <li>Create the <strong>routes</strong> folder. This folder will have code to receive requests, but will not make any calculations (no business logic).</li>
+      <li>Create the <strong>models</strong> folder. This folder will have code to make all the needed calculations. When we have a database it will also be here we make the requests to the database.</li>
+    </ul>
+    <p> Create a <strong>usersRoutes.js</strong> file on the routes folder and 
+    a <strong>usersModel.js</strong> file on the models folder.</p>
+    <p> Write the following code on the <strong>usersModel.js</strong> file:</p>
+    <pre><code class="language-js">  class User {
+      constructor(id,name,email,password) {
+          this.id = id;
+          this.name = name;
+          this.email = email;
+          this.password = password;
+      }
+  }
+  const users = [
+      new User(1,"John","john@mail.com", "123"),
+      new User(2,"Mary","mary@m.pt","abc"),
+      new User(3,"Bob","bob@mail.pt","god")
+  ];
+  module.exports.getAll = async function getAll() {
+      try {
+          let result = [];
+          for(let user of users ){
+              result.push(new User(user.id,user.name,user.email));
+          }
+          return {status: 200, result: result};
+      } catch (err) {
+          console.log(err);
+          return {status: 500, result: err };
+      }
+  }</code></pre>
+  <h4 class="clickMe" onclick="showHide('user_model',false,'block')"> usersModel.js code explanation (click to toggle text)
+  </h4>
+  <section class="canHide" id="user_model">
+    <h2>To Do</h2>
+  </section>
+  <p> Write the following code on the <strong>usersRoutes.js</strong> file:</p>
+  <pre><code class="language-js">const express = require('express');
+    const router = express.Router();
+    const uModel = require("../models/usersModel");
+    
+    router.get('/', async function(req, res, next) {
+        try { 
+            console.log("Get all users");
+            let result = await uModel.getAll();
+            res.status(result.status).send(result.result);
+        } catch(err) {
+            console.log(err);
+            res.status(500).send(err);
+        }
+      });
+      
+    module.exports = router;</code></pre>
+
+  <h4 class="clickMe" onclick="showHide('user_routes',false,'block')"> usersRoutes.js code explanation (click to toggle text)
+  </h4>
+  <section class="canHide" id="user_routes">
+    <h2>To Do</h2>
+  </section>
+  <p> The route file will use the model file, but no file is yet connected to the server. We must include the routes in the application as an handler to an endpoint.</p>
+  <p> On the <strong>index.js</strong> file add the two lines bellow after the definition of the static files directory (and before the line that makes the server listen to the 8080 port):</p>
+  <pre><code class="language-js">
+  const usersRouter = require("./routes/usersRoutes");
+  app.use("/api/users",usersRouter);
+  </code></pre>
+  <p> This will mean that to access any routes in the usersRoutes file we will need to write "/api/users" in the path. </p>
+  <p> Notice that in the routes we also set a path, so the full path will be first the "/api/users" and then the path on the route</p>
+  <p> Since we first set the static file directory and then the routes, if a path matches a static file the server will send the static file 
+    and will not look at the routes.
+    Only if no static file if found the routes are searched. That is why we placed the "/api/" for all the API routes. There will be no "api" 
+    folder inside the public folder, so the static files will not hide any of the API routes.
+  </p> 
   </main>
+  <script>hljs.highlightAll();</script>
 </body>
 
 </html>
