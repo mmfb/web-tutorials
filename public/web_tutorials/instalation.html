@@ -930,53 +930,60 @@
     <p> Create a <strong>usersRoutes.js</strong> file on the routes folder and 
     a <strong>usersModel.js</strong> file on the models folder.</p>
     <p> Write the following code on the <strong>usersModel.js</strong> file:</p>
-    <pre><code class="language-js">  class User {
+    <pre><code class="language-js">    class User {
       constructor(id,name,email,password) {
           this.id = id;
           this.name = name;
           this.email = email;
           this.password = password;
       }
+  
+      static async getAll() {
+          try {
+              let result = [];
+              for(let user of users ){
+                  result.push(new User(user.id,user.name,user.email));
+              }
+              return {status: 200, result: result};
+          } catch (err) {
+              console.log(err);
+              return {status: 500, result: err };
+          }
+      }
+  
+  
   }
+  
   const users = [
       new User(1,"John","john@mail.com", "123"),
       new User(2,"Mary","mary@m.pt","abc"),
       new User(3,"Bob","bob@mail.pt","god")
   ];
-  module.exports.getAll = async function getAll() {
-      try {
-          let result = [];
-          for(let user of users ){
-              result.push(new User(user.id,user.name,user.email));
-          }
-          return {status: 200, result: result};
-      } catch (err) {
-          console.log(err);
-          return {status: 500, result: err };
-      }
-  }</code></pre>
+  
+  module.exports = User;</code></pre>
   <h4 class="clickMe" onclick="showHide('user_model',false,'block')"> usersModel.js code explanation (click to toggle text)
   </h4>
   <section class="canHide" id="user_model">
     <h2>To Do</h2>
   </section>
   <p> Write the following code on the <strong>usersRoutes.js</strong> file:</p>
-  <pre><code class="language-js">const express = require('express');
+  <pre><code class="language-js">    const express = require('express');
     const router = express.Router();
-    const uModel = require("../models/usersModel");
+    const User = require("../models/usersModel");
     
     router.get('/', async function(req, res, next) {
         try { 
             console.log("Get all users");
-            let result = await uModel.getAll();
+            let result = await User.getAll();
             res.status(result.status).send(result.result);
         } catch(err) {
             console.log(err);
             res.status(500).send(err);
         }
       });
-      
-    module.exports = router;</code></pre>
+    
+    module.exports = router;
+    </code></pre>
 
   <h4 class="clickMe" onclick="showHide('user_routes',false,'block')"> usersRoutes.js code explanation (click to toggle text)
   </h4>
