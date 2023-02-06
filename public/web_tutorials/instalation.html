@@ -39,7 +39,7 @@
         </li>
         <li>
           <a href="#set_database">
-            Configuring a database
+            Configuring a database and using it
           </a>
         </li>
         <li>
@@ -47,6 +47,12 @@
             Setting up a website: Github and Cyclic
           </a>
         </li>
+        <li>
+          <a href="#creating_api">
+            Creating different types of endpoints for our api
+          </a>
+        </li>
+
       </ol>
     </section>
 
@@ -629,7 +635,7 @@
     </section>
     <h3 class="clickMe" onclick="showHide('create_node',false,'block')">Step 3: Creating a Node.js/Express.js project
       (click me to toggle text) </h3>
-    <section id="creat_node">
+    <section id="create_node">
       <h4 class="clickMe" onclick="showHide('node_about',false,'block')">About Node (click to toggle text)</h4>
       <section class="canHide" id="node_about">
         <h4>3N.1 What is Node?</h4>
@@ -800,74 +806,78 @@
 
 
       </section>
-
-    </section>
-    <h4 class="clickMe" onclick="showHide('servers_about',false,'block')"> How do servers work (click to toggle text)
-    </h4>
-    <section class="canHide" id="servers_about">
-      <p> Consider a request of a website: </p>
-      <p> <strong> http://www.mywebsite.pt:3000/folder1/mypage.html</strong></p>
-      <p> The request will be composed of the following parts:</p>
-      <ul>
-        <li><strong>http</strong> The protocol. Defines the rules on how the communication is made</li>
-        <li><strong>www.mywebsite.pt</strong> The domain name. This will allow to identify what computer/server the
-          request is for.
-          To identify which computer to send the resquest the domain name must first be converted to an IP address
-          (Internet Protocol Address).
-          The Domain Name System, a group of hierarchically connect computers, saves the information of what IP address
-          corresponds to each domain name.</li>
-        <li><strong>:3000</strong> The port. The same computer may have many servers running but different server can
-          listen to different ports.</li>
-        <li><strong>/folder1/mypage.html</strong> The path. A server may provide different information and services, the
-          path will define what service/information to provide.</li>
-        <li>The method. The HTTP protocol defines different methods of sending requests: GET,PUT, POST, DELETE, PATCH...
-          When you write an address on a browser the method will be GET, that means "get" the information of the web
-          page
-          or data you need.
-          For the same path the server can define different functionalities depending on the method used. The GET method
-          may return data, while for the POST method we can have data being saved in the server</li>
-      </ul>
-    </section>
-    <p>Create the package.json file by running <strong>npm init -y</strong> on the terminal (inside your project
-      directory). We will edit the file later</p>
-    <p>Install the modules we will need. Run the following commands:</p>
-    <pre><code class="language-bash">
+      <h4 class="clickMe" onclick="showHide('servers_about',false,'block')"> How do servers work (click to toggle text)
+      </h4>
+      <section class="canHide" id="servers_about">
+        <p> Consider a request of a website: </p>
+        <p> <strong> http://www.mywebsite.pt:3000/folder1/mypage.html</strong></p>
+        <p> The request will be composed of the following parts:</p>
+        <ul>
+          <li><strong>http</strong> The protocol. Defines the rules on how the communication is made</li>
+          <li><strong>www.mywebsite.pt</strong> The domain name. This will allow to identify what computer/server the
+            request is for.
+            To identify which computer to send the resquest the domain name must first be converted to an IP address
+            (Internet Protocol Address).
+            The Domain Name System, a group of hierarchically connect computers, saves the information of what IP
+            address
+            corresponds to each domain name.</li>
+          <li><strong>:3000</strong> The port. The same computer may have many servers running but different server can
+            listen to different ports.</li>
+          <li><strong>/folder1/mypage.html</strong> The path. A server may provide different information and services,
+            the
+            path will define what service/information to provide.</li>
+          <li>The method. The HTTP protocol defines different methods of sending requests: GET,PUT, POST, DELETE,
+            PATCH...
+            When you write an address on a browser the method will be GET, that means "get" the information of the web
+            page
+            or data you need.
+            For the same path the server can define different functionalities depending on the method used. The GET
+            method
+            may return data, while for the POST method we can have data being saved in the server</li>
+        </ul>
+      </section>
+      <p>Create the package.json file by running <strong>npm init -y</strong> on the terminal (inside your project
+        directory). We will edit the file later</p>
+      <p>Install the modules we will need. Run the following commands:</p>
+      <pre><code class="language-bash">
       npm install express --save
       npm install cookie-parser --save
       npm install dotenv --save
       npm install morgan --save
     </code></pre>
-    <p> Besides the <strong>express</strong> module we are installing: </p>
-    <ul>
-      <li><strong>cookie-parers</strong> Parses the information of cookies. Cookies stored in files in the client side,
-        each time the client requests information
-        to the server the information in the cookie is sent, thus allowing to have a state that is not stored in the
-        server side. The cookie information is stored in two variables on the request object (req). <br>
-        <strong>req.cookies</strong> stores an object with all cookie information that is not signed.<br>
-        <strong>req.signedCookies</strong> stores an object with all cookie information that was signed.<br>
-        To be able to process signed cookies we need to set a string that will be the "secret" for the signature.
-      </li>
-      <li><strong>dot-env</strong> Creates a set of environment variables from a ".env" file.
-        The ".env" file is not stored on the git repository, so this is usefull to keep password or other information
-        that we do not wish to disclose to the repository.
-        For example, we can use it to store the secret for signed cookies.</li>
-      <li><strong>morgan</strong> This module will log information about requests to the terminal console. It is useful
-        for debugging.</li>
-    </ul>
-    <p> Open the directory of the project with Visual Studio Code and then open the package.json file.
-      You will see on the dependencies all the modules we installed.
-    </p>
-    <p> The node_modules directory was also created when you installed the modules. It will contain all installed
-      modules.
-      This directory will not be placed on the git repository. You can delete this directory at any time and just need
-      to call
-      <strong>npm install</strong> to create it again, since all dependencies are registered on the package.json file.
-    </p>
-    <p>
-      Create a new file called <strong>index.js</strong> (this is the name of the main file in package.json) and write
-      the code bellow:
-    </p>
-    <pre><code class="language-js">      require('dotenv').config();
+      <p> Besides the <strong>express</strong> module we are installing: </p>
+      <ul>
+        <li><strong>cookie-parers</strong> Parses the information of cookies. Cookies stored in files in the client
+          side,
+          each time the client requests information
+          to the server the information in the cookie is sent, thus allowing to have a state that is not stored in the
+          server side. The cookie information is stored in two variables on the request object (req). <br>
+          <strong>req.cookies</strong> stores an object with all cookie information that is not signed.<br>
+          <strong>req.signedCookies</strong> stores an object with all cookie information that was signed.<br>
+          To be able to process signed cookies we need to set a string that will be the "secret" for the signature.
+        </li>
+        <li><strong>dot-env</strong> Creates a set of environment variables from a ".env" file.
+          The ".env" file is not stored on the git repository, so this is usefull to keep password or other information
+          that we do not wish to disclose to the repository.
+          For example, we can use it to store the secret for signed cookies.</li>
+        <li><strong>morgan</strong> This module will log information about requests to the terminal console. It is
+          useful
+          for debugging.</li>
+      </ul>
+      <p> Open the directory of the project with Visual Studio Code and then open the package.json file.
+        You will see on the dependencies all the modules we installed.
+      </p>
+      <p> The node_modules directory was also created when you installed the modules. It will contain all installed
+        modules.
+        This directory will not be placed on the git repository. You can delete this directory at any time and just need
+        to call
+        <strong>npm install</strong> to create it again, since all dependencies are registered on the package.json file.
+      </p>
+      <p>
+        Create a new file called <strong>index.js</strong> (this is the name of the main file in package.json) and write
+        the code bellow:
+      </p>
+      <pre><code class="language-js">      require('dotenv').config();
       var express = require('express');
       var path = require('path');
       var cookieParser = require('cookie-parser');
@@ -884,53 +894,58 @@
       app.listen(port,function() {
         console.log("Server running at http://localhost:"+port);
       });</code></pre>
-    <p> You also need to create a <strong>.env</strong> file (yes, the file must start with a dot in the beggining)
-      where we will save the cookie secret.
-      The file should have the line bellow inside</p>
-    <pre><code class="language-text">      COOKIE_SECRET=This is a secret</code></pre>
-    <p> Most of this code was already explained but we can make a summary:</p>
-    <ul>
-      <li>When running the command <strong> require('dotenv').config()</strong> we import all the enviroment variables
-        in the <strong>.env</strong> file</li>
-      <li> We import express module (require), create an express application (express()),
-        configure the application (app.use(...)) and run the application (app.listen...).
-        The port where the server runs can be changed by setting a PORT environment variable</li>
-      <li>We set the morgan logger to print development information (prints for every request received)</li>
-      <li>We configure the body parsers that come with express:
-        <ul>
-          <li><strong>express.json()</strong> Parses any json in the body of the request. The information will be stored
-            in the request object as <strong>req.body</strong></li>
-          <li><strong>express.urlencoded({ extended: false })</strong>
-            Parses any urlencoded information in the body of the request.
-            The information will be stored in the request object as <strong>req.body</strong></li>
-        </ul>
-        Body information can only be in one format so it will never overlap
-      </li>
-      <li>We configure the cookieParser with the secret that was stored in the .env file</li>
-      <li>We defined the folder ('public') where our static files will be</li>
-    </ul>
-    <p>Now click on the terminal menu and then on "New Terminal". A terminal console will open bellow the code and you
-      can run your code using the command
-      <strong>node index.js</strong>
-    </p>
-    <p> At this moment any request you make will result in a "Not Found" error (HTTP error code 404), since we have no
-      files in the public diretories and no routing defined.</p>
-    <p> Create a "public" folder in the project and a index.html file inside with the code bellow</p>
-    <div id="public_index"></div>
-    <script>loadHTMLTextInto("files/index.html","public_index");</script>
-    <p>With an index.html file inside the public directory a page will open if you write "localhost:8080" on the browser.
-      If no name is give the server will search for the "index.html" file.
-    </p> 
-    <p> This was an example of the Node.js/Express.js web pages server (static pages). Now lets make an example of the REST API Server part.</p>
-    <p> The REST API will serve data, and to keep the code organized we will create two new folders</p>
-    <ul>
-      <li>Create the <strong>routes</strong> folder. This folder will have code to receive requests, but will not make any calculations (no business logic).</li>
-      <li>Create the <strong>models</strong> folder. This folder will have code to make all the needed calculations. When we have a database it will also be here we make the requests to the database.</li>
-    </ul>
-    <p> Create a <strong>usersRoutes.js</strong> file on the routes folder and 
-    a <strong>usersModel.js</strong> file on the models folder.</p>
-    <p> Write the following code on the <strong>usersModel.js</strong> file:</p>
-    <pre><code class="language-js">    class User {
+      <p> You also need to create a <strong>.env</strong> file (yes, the file must start with a dot in the beggining)
+        where we will save the cookie secret.
+        The file should have the line bellow inside</p>
+      <pre><code class="language-text">      COOKIE_SECRET=This is a secret</code></pre>
+      <p> Most of this code was already explained but we can make a summary:</p>
+      <ul>
+        <li>When running the command <strong> require('dotenv').config()</strong> we import all the enviroment variables
+          in the <strong>.env</strong> file</li>
+        <li> We import express module (require), create an express application (express()),
+          configure the application (app.use(...)) and run the application (app.listen...).
+          The port where the server runs can be changed by setting a PORT environment variable</li>
+        <li>We set the morgan logger to print development information (prints for every request received)</li>
+        <li>We configure the body parsers that come with express:
+          <ul>
+            <li><strong>express.json()</strong> Parses any json in the body of the request. The information will be
+              stored
+              in the request object as <strong>req.body</strong></li>
+            <li><strong>express.urlencoded({ extended: false })</strong>
+              Parses any urlencoded information in the body of the request.
+              The information will be stored in the request object as <strong>req.body</strong></li>
+          </ul>
+          Body information can only be in one format so it will never overlap
+        </li>
+        <li>We configure the cookieParser with the secret that was stored in the .env file</li>
+        <li>We defined the folder ('public') where our static files will be</li>
+      </ul>
+      <p>Now click on the terminal menu and then on "New Terminal". A terminal console will open bellow the code and you
+        can run your code using the command
+        <strong>node index.js</strong>
+      </p>
+      <p> At this moment any request you make will result in a "Not Found" error (HTTP error code 404), since we have no
+        files in the public diretories and no routing defined.</p>
+      <p> Create a "public" folder in the project and a index.html file inside with the code bellow</p>
+      <div id="public_index"></div>
+      <script>loadHTMLTextInto("files/index.html", "public_index");</script>
+      <p>With an index.html file inside the public directory a page will open if you write "localhost:8080" on the
+        browser.
+        If no name is give the server will search for the "index.html" file.
+      </p>
+      <p> This was an example of the Node.js/Express.js web pages server (static pages). Now lets make an example of the
+        REST API Server part.</p>
+      <p> The REST API will serve data, and to keep the code organized we will create two new folders</p>
+      <ul>
+        <li>Create the <strong>routes</strong> folder. This folder will have code to receive requests, but will not make
+          any calculations (no business logic).</li>
+        <li>Create the <strong>models</strong> folder. This folder will have code to make all the needed calculations.
+          When we have a database it will also be here we make the requests to the database.</li>
+      </ul>
+      <p> Create a <strong>usersRoutes.js</strong> file on the routes folder and
+        a <strong>usersModel.js</strong> file on the models folder.</p>
+      <p> Write the following code on the <strong>usersModel.js</strong> file:</p>
+      <pre><code class="language-js">    class User {
       constructor(id,name,email,password) {
           this.id = id;
           this.name = name;
@@ -961,13 +976,15 @@
   ];
   
   module.exports = User;</code></pre>
-  <h4 class="clickMe" onclick="showHide('user_model',false,'block')"> usersModel.js code explanation (click to toggle text)
-  </h4>
-  <section class="canHide" id="user_model">
-    <h2>To Do</h2>
-  </section>
-  <p> Write the following code on the <strong>usersRoutes.js</strong> file:</p>
-  <pre><code class="language-js">    const express = require('express');
+      <h4 class="clickMe" onclick="showHide('user_model',false,'block')"> usersModel.js code explanation (click to
+        toggle
+        text)
+      </h4>
+      <section class="canHide" id="user_model">
+        <h2>To Do</h2>
+      </section>
+      <p> Write the following code on the <strong>usersRoutes.js</strong> file:</p>
+      <pre><code class="language-js">    const express = require('express');
     const router = express.Router();
     const User = require("../models/usersModel");
     
@@ -985,24 +1002,603 @@
     module.exports = router;
     </code></pre>
 
-  <h4 class="clickMe" onclick="showHide('user_routes',false,'block')"> usersRoutes.js code explanation (click to toggle text)
-  </h4>
-  <section class="canHide" id="user_routes">
-    <h2>To Do</h2>
-  </section>
-  <p> The route file will use the model file, but no file is yet connected to the server. We must include the routes in the application as an handler to an endpoint.</p>
-  <p> On the <strong>index.js</strong> file add the two lines bellow after the definition of the static files directory (and before the line that makes the server listen to the 8080 port):</p>
-  <pre><code class="language-js">
+      <h4 class="clickMe" onclick="showHide('user_routes',false,'block')"> usersRoutes.js code explanation (click to
+        toggle text)
+      </h4>
+      <section class="canHide" id="user_routes">
+        <h2>To Do</h2>
+      </section>
+      <p> The route file will use the model file, but no file is yet connected to the server. We must include the routes
+        in the application as an handler to an endpoint.</p>
+      <p> On the <strong>index.js</strong> file add the two lines bellow after the definition of the static files
+        directory (and before the line that makes the server listen to the 8080 port):</p>
+      <pre><code class="language-js">
   const usersRouter = require("./routes/usersRoutes");
   app.use("/api/users",usersRouter);
   </code></pre>
-  <p> This will mean that to access any routes in the usersRoutes file we will need to write "/api/users" in the path. </p>
-  <p> Notice that in the routes we also set a path, so the full path will be first the "/api/users" and then the path on the route</p>
-  <p> Since we first set the static file directory and then the routes, if a path matches a static file the server will send the static file 
-    and will not look at the routes.
-    Only if no static file if found the routes are searched. That is why we placed the "/api/" for all the API routes. There will be no "api" 
-    folder inside the public folder, so the static files will not hide any of the API routes.
-  </p> 
+      <p> This will mean that to access any routes in the usersRoutes file we will need to write "/api/users" in the
+        path.
+      </p>
+      <p> Notice that in the routes we also set a path, so the full path will be first the "/api/users" and then the
+        path
+        on the route</p>
+      <p> Since we first set the static file directory and then the routes, if a path matches a static file the server
+        will send the static file
+        and will not look at the routes.
+        Only if no static file if found the routes are searched. That is why we placed the "/api/" for all the API
+        routes.
+        There will be no "api"
+        folder inside the public folder, so the static files will not hide any of the API routes.
+      </p>
+    </section>
+    <section id="set_database">
+      <h2>3- Connecting to a database</h2>
+      <p>This section of the tutorial considerers that you already have the following setup:</p>
+      <ul>
+        <li>Database installed (examples for MySql and PostgreSql)</li>
+        <li>Some knowledge on how to use the database</li>
+        <li>The server made on the <a href="#create_server">previous section</a></li>
+      </ul>
+      <h3 class="clickMe" onclick="showHide('create_database',false,'block')">Step 1: Create your database (click to
+        hide)</h3>
+      <section id="create_database">
+        <p>First we need to create the database. Open your database client (ex: Workbench for MySql or pgadmin for
+          PostgreSql).
+          Open a tab to execute queries. Run the two next code examples:</p>
+        <h4>Code to create the database and table</h4>
+        <pre><code class="language-sql">create database mydb;
+
+use mydb;
+
+create table cards (
+    crd_id int not null auto_increment,
+    crd_name varchar(60) not null,
+    crd_img_url varchar(200), -- what if we have more than one image?
+    crd_lore varchar(400),
+    crd_description varchar(300),
+    crd_level int not null, -- cards of higher level cannot not be played in the beggining
+    crd_cost int,
+    crd_timeout int, -- while on timeout the card cannot be played
+    crd_max_usage int, -- null means no max usage
+    crd_type int not null,-- We should have another table defining what types exist
+    -- If a card has multiple types we would need another table yet
+	primary key (crd_id));</code></pre>
+        <h4>Code to insert data into the table</h4>
+        <pre><code class="language-sql">insert into cards (crd_name, crd_img_url, crd_lore, crd_description, crd_level, crd_cost, crd_timeout, crd_max_usage, crd_type)
+values ('Left','left.png',null,'Move left',1,1,null,null,1); 
+            
+insert into cards (crd_name, crd_img_url, crd_lore, crd_description, crd_level, crd_cost, crd_timeout, crd_max_usage, crd_type)
+values ('Full Ahead','fullA.png',"Full speed ahead! C'mon you lazy sea monkeys! - said captain Rust.",
+'Move double space forward',2,1,2,2,1);             </code></pre>
+        <p> You should also create a new folder on your project named <strong>db_scripts</strong>
+          and save the previous code in two new files inside the folder:</p>
+        <ul>
+          <li> <strong>create.sql</strong> with the code to create the database and table</li>
+          <li> <strong>populate.sql</strong> with the code to populate the database</li>
+        </ul>
+        <p> This way you can save the code to recreate the database. This code will also be sent to the repository.
+          It is ok because this is just for learning, otherwise the database could have private data and we could not
+          send it to the repository.
+        </p>
+      </section>
+      <h3 class="clickMe" onclick="showHide('create_connection',false,'block')">Step 2: Connect to the database (click
+        to hide)</h3>
+      <section id="create_connection">
+        <p>To connect to a database we first need to install the node module that is specific for our database
+          (<strong>you should only install one database module</strong>):</p>
+        <ul>
+          <li>
+            <p>Mysql has two possible modules: <strong>mysql</strong> and <strong>mysql2</strong>.
+              We will be using <strong>mysql2</strong> since it should have a better performance
+              and offers some additional features, in particular buitin support to promises.</p>
+            <p>Just run <strong>npm install mysql2 --save</strong> inside your project folder</p>
+          </li>
+          <li>
+            <p>PostgreSql Node.js module is simply called <strong>pg</strong> </p>
+            <p>Just run <strong>npm install pg --save</strong> inside your project folder
+          </li>
+        </ul>
+        <p>Now we need to set up the module in our project with the database settings.</p>
+        <p> Since we do not want the settigns to be public on the repository (specially the password)
+          we will use enviroment variables. Add the following lines to your <strong>.env</strong> file:
+        </p>
+        <pre><code class="language-text">DB_HOST=localhost
+DB_USER=root
+DB_PASS=root
+DB_NAME=mydb</code></pre>
+        <p><strong>DB_USER</strong> must be your user. <strong>root</strong> is the default user created for mysql,
+          for postgresql the default user is <strong>postgres</strong>, so <strong>if you are using posgresql you
+            will need to change the user to postgres</strong>.</p>
+        <p><strong>DB_PASS</strong> must be the password you choosed for your database</p>
+        <p><strong>DB_HOST</strong> and <strong>DB_NAME</strong> are the host name and the name of the database.
+          Since we are running the database on the same computer as the server we used <strong>localhost</strong>
+          and<strong>mydb</strong> was the name we gave to our database when we created it </p>
+        <p> Next we create a new folder <strong>config</strong> to hold all files related with our server
+          configurations.
+          Inside create the <strong>database.js</strong> file with the following code: </p>
+        <h5 onclick="showHide('con_mysql','con_postgres','block')">For Mysql (click to hide/show):</h5>
+        <pre id="con_mysql"><code class="language-js">const mysql = require("mysql2/promise");
+
+  const pool = mysql.createPool({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      connectionLimit: 20});
+  
+  module.exports = pool;</code></pre>
+        <h5 onclick="showHide('con_postgres','con_mysql','block')">For PostgreSql (click to show/hide):</h5>
+        <pre style="display:none" id="con_postgres"><code class="language-js">const pg = require('pg');
+
+  const Pool = pg.Pool
+  const pool = new Pool({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      max: 20});
+  
+  module.exports = pool;</code></pre>
+        <h4 class="clickMe" onclick="showHide('db_con',false,'block')"> database.js code explanation (click to toggle
+          text)
+        </h4>
+        <section class="canHide" id="db_con">
+          <h2>To Do</h2>
+        </section>
+      </section>
+      <h3 class="clickMe" onclick="showHide('create_db_code',false,'block')">
+        Step 3: Create the code that uses the database (click to hide)</h3>
+      <section id="create_db_code">
+        <p> We will now create a new set of endpoints for the new resource (cards resource). </p>
+        <p> To keep the code separated we create new files for new resources, keeping the endpoints for
+          each resource on its own files (to learn more about organizing your API learn about REST APIs).</p>
+        <p> Create a new <strong>cardsRoutes.js</strong> file and <strong>cardsModel.js</strong> file in their
+          respective folders.</p>
+        <p> The <strong>cardsModel.js</strong> file will use the database connection we created. See the code bellow:
+        </p>
+        <h5 onclick="showHide('cards_model_mysql','cards_model_postgres','block')"><strong>cardsModel.js</strong> code
+          for Mysql (click to hide/show):</h5>
+        <pre id="cards_model_mysql"><code class="language-js">const pool = require("../config/database");
+
+          function cardFromDB(dbObj) {
+              return new Card(dbObj.crd_id,dbObj.crd_name, 
+                  dbObj.crd_img_url, dbObj.crd_lore, dbObj.crd_description,
+                  dbObj.crd_level, dbObj.crd_cost, dbObj.crd_timeout,
+                  dbObj.crd_max_usage, dbObj.crd_type);    
+          }
+          class Card {
+              constructor(id,name,url,lore,description, level, 
+                          cost, timeout, maxUsage, type) {
+                  this.id = id;
+                  this.name = name;
+                  this.url = url;
+                  this.lore = lore;
+                  this.description = description;
+                  this.level = level;
+                  this.cost = cost;
+                  this.timeout = timeout;
+                  this.maxUsage = maxUsage;
+                  this.type = type;
+              }
+          
+              static async getAll() {
+                  try {
+                      let result = [];
+                      let [dbCards,fields] = await pool.query("Select * from cards");
+                      for(let dbCard of dbCards ){
+                          result.push(cardFromDB(dbCard));
+                      }
+                      return {status: 200, result: result};
+                  } catch (err) {
+                      console.log(err);
+                      return {status: 500, result: err };
+                  }
+              }          
+          }
+          
+          module.exports = Card;</code></pre>
+        <h5 onclick="showHide('cards_model_postgres','cards_model_mysql','block')"><strong>cardsModel.js</strong> code
+          for PostgreSql (click to show/hide):</h5>
+        <pre style="display:none" id="cards_model_postgres"><code class="language-js">const pool = require("../config/database");
+
+          function cardFromDB(dbObj) {
+            return new Card(dbObj.crd_id,dbObj.crd_name, 
+                dbObj.crd_img_url, dbObj.crd_lore, dbObj.crd_description,
+                dbObj.crd_level, dbObj.crd_cost, dbObj.crd_timeout,
+                dbObj.crd_max_usage, dbObj.crd_type);    
+          }
+          class Card {
+              constructor(id,name,url,lore,description, level, 
+                          cost, timeout, maxUsage, type) {
+                  this.id = id;
+                  this.name = name;
+                  this.url = url;
+                  this.lore = lore;
+                  this.description = description;
+                  this.level = level;
+                  this.cost = cost;
+                  this.timeout = timeout;
+                  this.maxUsage = maxUsage;
+                  this.type = type;
+              }
+          
+              static async getAll() {
+                  try {
+                      let result = [];
+                      let dbres = await pool.query("Select * from cards");
+                      let dbCards = dbres.rows;
+                      for(let dbCard of dbCards ){
+                        result.push(cardFromDB(dbCard));
+                      }
+                      return {status: 200, result: result};
+                  } catch (err) {
+                      console.log(err);
+                      return {status: 500, result: err };
+                  }
+              }
+          }
+          
+          module.exports = Card;</code></pre>
+        <h4 class="clickMe" onclick="showHide('cards_model',false,'block')"> cardsModel.js code explanation (click to
+          toggle
+          text)
+        </h4>
+        <section class="canHide" id="cards_model">
+          <h2>To Do</h2>
+        </section>
+        <p> The <strong>cardsRoutes.js</strong> file is almost identical to the one we made for
+          usersRoutes.js. This is intended, since the idea is for Routes and Models to be independent
+          modules, so changing the way the Model works should not affect the Routes.
+          <strong>The Routes code is independent of the database you use</strong>. See the code bellow:
+        </p>
+        <h5 onclick="showHide('cards_routes',false,'block')"><strong>usersModel.js</strong> code (click to hide/show):
+        </h5>
+        <pre id="cards_model_mysql"><code class="language-js">const express = require('express');
+          const router = express.Router();
+          const Card = require("../models/cardsModel");
+          
+          router.get('/', async function(req, res, next) {
+              try { 
+                  console.log("Get all cards");
+                  let result = await Card.getAll();
+                  res.status(result.status).send(result.result);
+              } catch(err) {
+                  console.log(err);
+                  res.status(500).send(err);
+              }
+            });
+          
+          module.exports = router;</code></pre>
+        <h4 class="clickMe" onclick="showHide('cards_routes_exp',false,'block')"> cardsRoutes.js code explanation (click
+          to toggle
+          text)
+        </h4>
+        <section class="canHide" id="cards_routes_exp">
+          <h2>To Do</h2>
+        </section>
+        <p>Finally, like before, we need to connect the new routes to the application.
+          Add the following lines to the <strong>index.js</strong> file. </p>
+        <pre><code class="language-js">const cardsRouter = require("./routes/cardsRoutes");
+app.use("/api/cards",cardsRouter);</code></pre>
+        <p>Keep your code organized. It is easier to read the code if you first do all the requires
+          and then use them. So you should have something like this in your <strong>index.js</strong>: </p>
+        <pre><code class="language-js">const usersRouter = require("./routes/usersRoutes");
+const cardsRouter = require("./routes/cardsRoutes");
+
+app.use("/api/users",usersRouter);
+app.use("/api/cards",cardsRouter);</code></pre>
+        <p>Restart the server and call the new endpoint: <a
+            href="http://localhost:8080/api/cards">http://localhost:8080/api/cards</a></p>
+      </section>
+      <p> Now update your local and remote repository, you will need them updated to deploy your application on a remote
+        host.</p>
+    </section>
+    <section id="deploy_cyclic">
+      <h2>4- Setting up a website: Github and Cyclic</h2>
+      <p>This section of the tutorial considerers that you already have the following setup:</p>
+      <ul>
+        <li>Created the code of a Node.js/Express.js application on the
+          <a href="#set_database"> previous section</a> and have that code on your Github repository.
+        </li>
+        <li>Have the database scripts to create the database on a remote database host</li>
+        </li>
+      </ul>
+      <h4>Set up the remote database</h4>
+      <p> First you need to have a remote database. Use one of the free webhostings to create a remote database:</p>
+      <ul>
+        <li><strong>MySql: Two options</strong>
+          <p>Db4free: <a href="https://www.db4free.net/signup.php">https://www.db4free.net/signup.php</a></p>
+          <p>RemoteMysql: <a href="https://remotemysql.com/login.php">https://remotemysql.com/login.php</a></p>
+        </li>
+        <li><strong>PostgreSQL</strong>
+          <p>ElephantSQL: <a href="https://www.elephantsql.com/">https://www.elephantsql.com/</a></p>
+      </ul>
+      <p> Usually database webhosts have a way for you to run sql commands but if you cannot find it
+        you can always connect to the webhost using your database client and the database settings
+        that you got when you created the database.</p>
+      <p> Run the commands on your <strong>create.sql</strong> and <strong>populate.sql</strong> scripts
+        on the remote host. For the create script <strong>you should only run the create table</strong>
+        the database is already created and you cannot change the name</p>
+      <p> Test the remote database by changing the database variables on your <strong>.env</strong>
+        file with the settings you got when creating the database.
+        After restarting the server your application should run exactly the same way with the remote database.</p>
+      <p>You can change between the local and remote database at any time by changing the variables and restarting the
+        server.</p>
+      <h4>Deploy your application on Cyclic</h4>
+      <p>First you need an account. Go to the Cyclic web page and choose to create the Free account:
+        <a href="https://www.cyclic.sh/pricing">https://www.cyclic.sh/pricing</a>. Next steps:
+      </p>
+      <ul>
+        <li>Press start on the free account.</li>
+        <li>Choose to connect using Github (it is the only option) it will go to the github login page.</li>
+        <li>If you are already logged on to your Github account in the browser it will ask you to authorize Cyclic
+          access to the repository.
+          If are not loggend on than you will need to fill your Github login username (or email) and password, and then
+          you will be asked for authorization for Cyclic</li>
+        <li>You now have a Cyclic account. Since you have no app yet on the account you will be asked to deploy your
+          first app.</li>
+        <li> Cyclic can create a basic code template for a server. Since we already have the code click on the
+          <strong>Link Your Own</strong> tab.
+        </li>
+        <li> Click on the entrybox to search for the repository, choose the name of the repository and click it.</li>
+        <li> If the project is a valid Node.js project it will show you a button to connect. Click the button to create
+          your online web application.
+          Github will ask you for your permission to connect to that repository.
+        </li>
+        <li>Your app is now online, but you may still want to finish some setups.
+          <ul>
+            <li> If you are using environment variables Cyclic will detect those variables
+              and add them to enviroment variables setup page. It will also show you a warning with a direct link to
+              that page.</li>
+            <li>Click on the link and fill those variable values with the same values you have on your local server.
+              For the database you will need the values for the remote database, in case you already changed them back
+              to the local database
+              (the local database can only be used by your local server). The "port" variable you can leave it empty
+            </li>
+            <li>Click the save button on the bottom.</li>
+          </ul>
+        </li>
+        <li>Your app is now configured and running. The window you see is your App dashboard.
+          Here you have many usefull information in different tabs, like the history of deploys
+          (<strong>Deployments</strong> tab) or the <strong>Logs</strong>
+          tab with all the "console.log" made by your code (same as what you would see in the terminal).</li>
+        <li> In the top right you can also see the links for the running web application and the Github repository.
+          <strong>Press the link for the application and test it</strong>. Do not forget that to test de cards endpoint
+          you need to add "/api/cards" to the path.
+        </li>
+      </ul>
+      <p>Eact time you update your repository code Cyclic will be informed of the changes and deploy
+        the new version. If you wish to submit changes to your repository and not affect cyclic you will
+        need to use two branches:
+      </p>
+      <ol>
+        <li> Development branch where you can have the newest version of the code, even if unstable</li>
+        <li> The main branch that will always have a stable version and that it is connected to Cyclic</li>
+      </ol>
+      <p> You can see more about branches in this tutorial: <a
+          href="http://https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging</a>
+    </section>
+    <section id="creating_api">
+      <h2>5- Creating different types of endpoints for our api</h2>
+      <p>This section of the tutorial considerers that you already have the following setup:</p>
+      <ul>
+        <li>Created a the code of a Node.js/Express.js application on the
+          <a href="#set_database"> this section (setup a database section)</a>
+        </li>
+        <li><strong>(not mandatory but advised)</strong> Have deployed the application on Cyclic <a
+            href="#deploy_cyclic">(previous section)</a></li>
+      </ul>
+      <p> So far we only created a "get all" rule that will return all the cards on our table.
+        Let us create some more endpoints and learn more about the functionalities of Express and of the database
+        module. </p>
+      <p> The functionalities we are going to see:</p>
+      <ol>
+        <li> Get one card given the id</li>
+        <li>Insert a new card</li>
+        <li> Get a list of cards with only cards of a given type </li>
+        <li> Get a list of cards with a text on the lore or the description </li>
+        <li>Edit a card</li>
+        <li>Delete a card given the id</li>
+      </ol>
+      <p> Unlike the previous "get all" endpoint these endpoints will need information from the client side.
+        This information is sent on the requests and can be send in 3 formats: </p>
+      <ul>
+        <li><strong> Path variables: /api/cards/1 </strong> The value is send as part of the path.
+          This means we will have routes where the part has a variable, which is marked with ":", like
+          this: <strong>/api/cards/:id</strong>. Inside the code we will be able to access the value from
+          the request parameters (req.params) and using the name after the ":" like this <strong>req.params.id</strong>
+        </li>
+        <li><strong> The body of the message</strong> Get rules have no body, but rules to add or modify information,
+          post and put rules respectively, will have a body with the information that will de added or changed.
+          Like we talked in the beggining the <strong>body-parser</strong> module will parse any information sent in the
+          body
+          and save it in "req.body". If the client sent somethint like this:
+          <pre><code class="language-json">{"name":"Up", "level":1}</code></pre>
+          We can access both values using <strong>req.body.name</strong> and <strong>req.body.level</strong>.
+          If we call only <strong>req.body</strong> we will have an object with both parameters.
+        </li>
+        <li><strong>Query parameters: /api/cards?type=1</strong> Path variables are the way to go if we want to obtain a
+          specific resource,
+          But if we want to filter a set of elements using some restrictions path variables are not the best choice.
+          In this case query parameters are more flexible and make more sense. For instance, for the given example
+          (/api/cards?type=1) the
+          resource we want to obtain is the list of cards, but we want to filter to have only the ones of type 1.
+          Query parameters are not part of the route path and are automatically parsed by express. For this example we
+          could access the value
+          by using <strong>req.query.type</strong>. We can have many parameters together (ex:
+          <strong>/api/cards?levelMin=2&levelMax=5</strong>) and like for the req.body
+          we can access them individualy (ex: <strong>req.query.levelMin</strong> and
+          <strong>req.query.levelMax</strong>) or obtain an object
+          with all the parameters inside (<strong>req.query</strong>).
+        </li>
+      </ul>
+      <p>Next we will see the functionalities we mentioned before. For each we will need to add code on the
+        <strong>card model file</strong> and on the <strong>card route file</strong>. However, <strong>we do not need
+          to add code to the index.js file</strong> since the route file is already connected to the application (all
+        new
+        endpoints will be connected like the old ones). Since we are changing the server we will <strong>need to restart
+          the server for any change to apply</strong>.
+      </p>
+      <h3 class="clickMe" onclick="showHide('get_card_by_id',false,'block')">
+        Functionality 1: Get Card by Id (click to hide)</h3>
+      <section id="get_card_by_id">
+        <p> For this functionality we will need to receive the id of the card to get on the path, pass that id to the
+          model
+          to retrieve the card from the database, and return the information. If the received id is not valid the card
+          will
+          not be found and a 404 error will be returned.</p>
+        <p> Another difference is that <strong>we return only one object</strong>, instead of a list.
+          Since there is only one entity with that id <strong>it makes no sense to return a list</strong>.
+          We need to do this server side since all calls to the database will always return a list of results, even when
+          we
+          only have one element on the list. </p>
+        <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+        <h5 onclick="showHide('card_id_model',false,'block')"><strong>Get card by id</strong> model code for mysql (click to
+          hide/show):</h5>
+        <pre id="card_id_model"><code class="language-js">    static async getById(id) {
+          try {
+              let [dbCards,fields] = 
+                  await pool.query("Select * from cards where crd_id=?",[id]);
+              if (!dbCards)
+                  return {status:404, result: {msg: "No card found with that identifier"}};
+              let dbCard = dbCards[0];
+              let result = cardFromDB(dbCard);
+              return {status: 200, result: result};
+          } catch (err) {
+              console.log(err);
+              return {status: 500, result: err };
+          }
+      }</code></pre>
+        
+      <p><strong>ATTENTION:</strong> Notice we did not use the value of the id received from the client in our query.
+      Instead we placed a "?" and then added a second parameter which is a list with the id inside.
+    When we use "?" and the list the mysql2 module will replace the "?" by values in the list (same order) but those values will be escaped.
+  Escaping values assures us that the value will be not be considered an SQL command, avoiding <strong>SQL Injection attacks</strong>
+ (for instance the user could send "1; drop table card" as the id).</p>
+ <p><strong>For PostgreSql</strong> instead of "?" we must use "$1","$2"...  The advantage is that you do not need to place the
+values in the list in the order that they will appear in the sql command, since you control which position to use. 
+You can even use the same position twice or more (placing two "$2" for instance).</p>
+      <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+        <h5 onclick="showHide('card_id_routes',false,'block')"><strong>Get card by id</strong> routes code (click to
+          hide/show):</h5>
+        <pre id="card_id_routes"><code class="language-js">  router.get('/:id', async function(req, res, next) {
+        try { 
+            console.log("Get card with id "+req.params.id);
+            let result = await Card.getById(req.params.id);
+            res.status(result.status).send(result.result);
+        } catch(err) {
+            console.log(err);
+            res.status(500).send(err);
+        }
+      });</code></pre>
+        <h4 class="clickMe" onclick="showHide('card_by_id',false,'block')"> <strong>Card by id</strong> model and route
+          code explanation (click to toggle text)
+        </h4>
+        <section class="canHide" id="card_by_id">
+          <h2>To Do</h2>
+        </section>
+      </section>
+      <h3 class="clickMe" onclick="showHide('post_save_card',false,'block')">
+        Functionality 2: Save a Card (click to hide)</h3>
+      <section id="post_save_card">
+        <p> For this functionality we have a post rule instead of a get rule.
+          We also will need to receive information in the body.</p>
+        <p>Before saving information in the database it is a good idea to verify the data that was sent.
+          Remember that <strong>even if you make verifications in the client side you need to do them in the server side
+            since client side code can always be bypassed</strong></p>
+         <p> On the server side you can make verifications on the routes or on the models:</p>
+         <ul><li> Route side verifications can make direct verifications of values, for instance checking if the
+          field is empty or if it is an email</li>
+            <li> Model side verifications can make more complex verifications that involve the database. 
+              For instance if with had a table with all possible types we could check if the sent type corresponds to a valid type. </li></ul>
+        <p> <strong>NOTE:</strong> It is hard to make a strong argument to where a validation should take place:</p>
+        <ul><li>We can consider it business logic and place it on the model side.</li>
+        <li>We can consider it a simple parameter validation
+          and do it on routes. In this case we still need to use model functions to check for things like if a type exists or not.</li></ul>
+        <p>In this tutorial, and our advice unless there are reasons otherwise, we decided to place all
+          verifications that require the database inside the model, to avoid extra calls to the model.</p>
+        <p>We also decided to make all simple parameter validations on the routes. This decision was made because we can use the
+          <strong>express-validator</strong> module to make many of the verifications. This module will use the information on the request, 
+        and we do not want to make the request available inside of the model.</p>
+        <p> We will format the model side errors the same way that express-validator formats the errors, but there will be one difference.
+          The express-validation route side verifications will group all errors and send them together, not making any model-side verification 
+          if any error is found on the route side. On the model side verification we only send one error, since we will exit as soon as we find an error.
+          Since verifications that involve the database will usually be more expensive we will avoid making verifications if we already know there is an error. 
+        The disavantage is that the client will not know of all the errors of the request that was made, so even if the errors that were marked are corrected 
+      the next request may receive a response with other errors, but only errors that needed validation from the database, since all "simple" errors are validated in group.</p>
+
+        <p> So first we need to install the <strong>express-validator</strong> module:</p>
+        <pre><code class="language-bash">npm install express-validator --save</code></pre>
+        <p> You can see the documentation of the <strong>express-validator</strong> module <a href="https://express-validator.github.io/docs/">here</a>.</p>
+
+        <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+        <h5 onclick="showHide('card_id_model',false,'block')"><strong>Save card</strong> model code for mysql (click to
+          hide/show):</h5>
+        <pre id="card_id_model"><code class="language-js">    static async save(newCard) {
+          try {
+              let [dbCards, fields] =
+                  await pool.query("Select * from cards where crd_name=?", [newCard.name]);
+              if (dbCards.length)
+                  return {
+                      status: 400, result: [{
+                          location: "body", param: "name",
+                          msg: "That name already exists"
+                      }]
+                  };
+              let [result] =
+                  await pool.query(`Insert into cards (crd_name, crd_img_url, crd_lore, 
+                  crd_description, crd_level, crd_cost, crd_timeout, crd_max_usage, crd_type)
+                  values (?,?,?,?,?,?,?,?,?)`, [newCard.name, newCard.url, newCard.lore,
+                  newCard.description, newCard.level, newCard.cost, newCard.timeout,
+                  newCard.maxUsage, newCard.type]);
+              return { status: 200, result: result };
+          } catch (err) {
+              console.log(err);
+              return { status: 500, result: err };
+          }
+      }</code></pre>
+        <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+        <h5 onclick="showHide('save_card_routes',false,'block')"><strong>Save card</strong> routes code (click to
+          hide/show):</h5>
+        <pre id="save_card_routes"><code class="language-js">const { body, validationResult } = require('express-validator');
+          router.post("/", 
+              body('name').isLength({ min: 4, max: 60 })
+                  .withMessage('Name must have between 4 and 60 characters'),
+              body('level').isInt({ min: 0 })
+                  .withMessage('Level must be a non negative integer number'),
+              body('type').isInt({ min: 1 })
+                  .withMessage('Type must be a positive integer number'),
+              async function (req, res, next) {
+                  try {
+                      console.log("Save card with name " + req.body.name);
+          
+                      const valid = validationResult(req);
+                      if (!valid.isEmpty()) {
+                          return res.status(400).json(valid.array());
+                      }
+                      let result = await Card.save(req.body);
+                      res.status(result.status).send(result.result);
+                  } catch (err) {
+                      console.log(err);
+                      res.status(500).send(err);
+                  }
+              });</code></pre>
+        <h4 class="clickMe" onclick="showHide('save_card',false,'block')"> <strong>Save_card</strong> model and route
+          code explanation (click to toggle text)
+        </h4>
+        <section class="canHide" id="save_card">
+          <h2>To Do</h2>
+        </section>
+      <p> Since browsers only do GET requests you will need to use Postman to test this endpoint.
+          You will need to send information in JSON format. Try to test with some invalid data also to check if the
+          validations are working. </p>
+          <p>The image bellow shows an example of a test of the post endpoint in postman: </p>
+          <p class="centerImg"><img class="big" src="images/post_cards_postman.png"
+            alt="Postman example of testing the post cards endpoint"></p>
+      
+      </section>
+      
+    </section>
   </main>
   <script>hljs.highlightAll();</script>
 </body>
