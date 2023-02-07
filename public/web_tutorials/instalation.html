@@ -1452,7 +1452,8 @@ app.use("/api/cards",cardsRouter);</code></pre>
           We need to do this server side since all calls to the database will always return a list of results, even when
           we
           only have one element on the list. </p>
-        <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+        <p> The code bellow must be added to the <strong>cardsModel.js</strong> file :</p>
+        <p><strong>NOTE:</strong> It must be placed inside the class i.e. inside <strong>class Card { **around here** }</strong></p>
         <h5 onclick="showHide('card_id_model',false,'block')"><strong>Get card by id</strong> model code for mysql
           (click to
           hide/show):</h5>
@@ -1618,6 +1619,13 @@ become part of the string </p>
         <p> Since browsers only do GET requests you will need to use Postman to test this endpoint.
           You will need to send information in JSON format. Try to test with some invalid data also to check if the
           validations are working. </p>
+        <p> If you ommit some of the card attributes on the JSON the value that will be set on the card object for those
+          attributes will be <strong>undefined</strong>. Since that value does not exist in SQL, when you use an undefined
+          value on the mysql2 module, it will use <strong>null</strong> instead. This will only be accepted by the database
+          if the corresponding column is not set to "not null". We made sure in our code that all the columns that cannot
+          be null have verifications to make sure a valid value is inserted (many more verifications could be defined but as 
+          an example these are enough ).
+        </p>
         <p>The image bellow shows an example of a test of the post endpoint in postman: </p>
         <p class="centerImg"><img class="big" src="images/post_cards_postman.png"
             alt="Postman example of testing the post cards endpoint"></p>
@@ -1634,7 +1642,7 @@ become part of the string </p>
           At the moment the only filter we will be using is the type id, but it is prepared to
           support other filters (just add more if-then-else clauses).
         </p>
-
+    
         <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
         <h5 onclick="showHide('filter_by_type_model',false,'block')"><strong>Filter by type</strong> model code for
           mysql (click to
@@ -1683,7 +1691,13 @@ become part of the string </p>
               res.status(500).send(err);
           }
       });</code></pre>
-        <h4 class="clickMe" onclick="showHide('filter_by_type_exp',false,'block')"> <strong>Filter by type</strong>
+      <p> <strong>REMEMBER:</strong> Query parameters are sent also on the path,
+         but are parsed separately by the server. To call this route you will need to write something like:
+        <strong>localhost:8080/api/cards/filter?typeId=1</strong> the full path (the part defined on index.js
+         and the part defined on cardsRoutes.js) will be /api/cards/filter, the query parameter part is the ?typeId=1 
+        that will be parsed to a req.query.typeId with a value 1 inside. </p>
+
+      <h4 class="clickMe" onclick="showHide('filter_by_type_exp',false,'block')"> <strong>Filter by type</strong>
           model and route
           code explanation (click to toggle text)
         </h4>
@@ -1747,7 +1761,16 @@ become part of the string </p>
                 res.status(500).send(err);
             }
         });</code></pre>
-          <h4 class="clickMe" onclick="showHide('lore_desc_exp',false,'block')"> <strong>Filter by lore or description </strong>
+        <p> Like before to call this route you will need to write the path and the query together in the URI, something like:
+         <strong>localhost:8080/api/cards/filter?descContains=Move</strong> the query parameter will be parsed to a 
+         req.query.descContains with a value 'Move' inside. </p>
+         <p> The way we coded only one filter can be applied. If you use both like this:
+          <strong>localhost:8080/api/cards/filter?typeId=1&descContains=Move</strong>
+          It will filter by typeId, since it is the first one tested in the if-then-else chained ifs
+         </p>
+ 
+      
+        <h4 class="clickMe" onclick="showHide('lore_desc_exp',false,'block')"> <strong>Filter by lore or description </strong>
             model and route code explanation (click to toggle text)
           </h4>
           <section class="canHide" id="lore_desc_exp">
@@ -1755,68 +1778,155 @@ become part of the string </p>
           </section>
         </section>
 
-        <h3 class="clickMe" onclick="showHide('',false,'block')">
-          Functionality 5:  (click to hide)</h3>    
-        <section id="">
-          <p> </p>
-          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
-          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
+        <h3 class="clickMe" onclick="showHide('edit_card',false,'block')">
+          Functionality 5: Edit a card (click to hide)</h3>    
+        <section id="edit_card">
+          <p> This is almost equivalent to the add card endpoint, the big difference being that we will send 
+            the id of the card we want to edit, and it will update the corresponding line of the database instead
+            of inserting a new one.
+          </p>
+          <p> In terms of path we have 2 possibilities, both valid</p>
+          <ul><li><strong>/api/cards/</strong> The id of what to edit and the new values are sent in the body
+            (available at req.body)</li>
+          <li><strong>/api/cards/2</strong> The id goes in the path and the new values are sent in the body</li></ul>
+          <p> I have not yet found a reason to choose one over the other. However, it is important that, once
+            we decide on what to use, our API will always use the same format</p>
+            <p> In this tutorial we will use <strong>/api/cards/</strong> with all information in the body
+            (just because we need to choose one, no preference)</p>
+            <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+          <h5 onclick="showHide('edit_card_model',false,'block')"><strong>Edit card </strong> model code for
             mysql (click to hide/show):</h5>
-          <pre id="_model"><code class="language-js"></code></pre>
+          <pre id="edit_card_model"><code class="language-js">    static async edit(newInfo) {
+            try {
+                // Checking if card exist to edit the card
+                let [dbCards] =
+                    await pool.query("Select * from cards where crd_id=?",
+                        [newInfo.id]);
+                if (dbCards.length == 0) {
+                    return {
+                        status: 404, result: {
+                            msg: "No card found with that ID"
+                        }
+                    };
+                };
+    
+                // Checking if the new name does not exist (excludes the card
+                // we are editing since we might not want to change the name )
+                [dbCards] =
+                    await pool.query("Select * from cards where crd_name=? and crd_id!=?",
+                        [newInfo.name, newInfo.id]);
+                if (dbCards.length)
+                    return {
+                        status: 400, result: [{
+                            location: "body", param: "name",
+                            msg: "Another card already has that name"
+                        }]
+                    };
+                // We are considering all values will be changing
+                let [result] =
+                    await pool.query(`update cards 
+                    set crd_name=?, crd_img_url=?, crd_lore=?, 
+                    crd_description=?, crd_level=?, crd_cost=?, crd_timeout=?, 
+                    crd_max_usage=?, crd_type=? where crd_id=?`, [newInfo.name, newInfo.url, newInfo.lore,
+                    newInfo.description, newInfo.level, newInfo.cost, newInfo.timeout,
+                    newInfo.maxUsage, newInfo.type, newInfo.id]);
+                return { status: 200, result:{msg:"Card edited" }}
+            } catch (err) {
+                console.log(err);
+                return { status: 500, result: err };
+            }
+        }</code></pre>
 
+
+          <p><strong>IMPORTANT:</strong> In the route we will need to run the same validations for name, level and type.
+            We could copy paste that part but <strong>developers should not have repeated code</strong>.We can simply put all these verifications in a list.</p>
+            <p>Create the list with the verifications like exemplified bellow:</p>
+            <pre><code class="language-js">const cardValidations = [ body('name').isLength({ min: 4, max: 60 })
+              .withMessage('Name must have between 4 and 60 characters'),
+              body('level').isInt({ min: 0 })
+              .withMessage('Level must be a non negative integer number'),
+              body('type').isInt({ min: 1 })
+              .withMessage('Type must be a positive integer number')];</code></pre>
+            <p>Now you can delete the list on the post rule and replaced with <strong>...cardValidations</strong>. The "..." 
+              is called the "spread operator" and will  expand the list into the 3 arguments we had before.
+            The beggining of your post route will now be like this:</p>
+            <pre><code class="language-js">router.post("/", ...cardValidations ,
+              async function (req, res, next) {</code></pre>
+            <p>And we will do something similar to our put (edit) rule</p>
           <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
-          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
+          <h5 onclick="showHide('edit_card_routes',false,'block')"><strong>Edit card </strong> routes code
             (click to hide/show):</h5>
-          <pre id="_routes"><code class="language-js"></code></pre>
-          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
+          <pre id="edit_card_routes"><code class="language-js">router.put("/", ...cardValidations ,
+            async function (req, res, next) {
+                try {
+                    console.log("Edit card with id " + req.body.id);
+                    const valid = validationResult(req);
+                    if (!valid.isEmpty()) {
+                        return res.status(400).json(valid.array());
+                    }
+                    let result = await Card.edit(req.body);
+                    res.status(result.status).send(result.result);
+                } catch (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+            });</code></pre>
+          <h4 class="clickMe" onclick="showHide('edit_card_exp',false,'block')"> <strong> Edit card</strong>
             model and route code explanation (click to toggle text)
           </h4>
-          <section class="canHide" id="_exp">
+          <section class="canHide" id="edit_card_exp">
             <h2>To Do</h2>
           </section>
         </section>
 
-        <h3 class="clickMe" onclick="showHide('',false,'block')">
-          Functionality 6:  (click to hide)</h3>    
-        <section id="">
-          <p> </p>
+        <h3 class="clickMe" onclick="showHide('delete_card',false,'block')">
+          Functionality 6: Delete a card (click to hide)</h3>    
+        <section id="delete_card">
+          <p> In many cases it is easier to mark something as not used than to delete it. 
+            One of the reasons is that data can be reference by other data an that would 
+            mean either delete all that references it or to change the reference. </p>
+          <p> Delete is still used for more transient information. Which usually has no or few references to it</p>
+          <p> The rule will be very similar to the "get card by id" since we only need the id to delete</p>
           <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
-          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
+          <h5 onclick="showHide('delete_card_model',false,'block')"><strong> Delete card</strong> model code for
             mysql (click to hide/show):</h5>
-          <pre id="_model"><code class="language-js"></code></pre>
+          <pre id="delete_card_model"><code class="language-js">static async deleteById(id) {
+            try {
+                let [result] =
+                    await pool.query("delete from cards where crd_id=?", [id]);
+                // if nothing was deleted it means no card exists with that id
+                if (!result.affectedRows)
+                    return { status: 404, result: { msg: "No card found with that identifier" } };
+                return { status: 200, result: {msg: "Card deleted!"} };
+            } catch (err) {
+                console.log(err);
+                return { status: 500, result: err };
+            }
+        }</code></pre>
 
           <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
-          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
+          <h5 onclick="showHide('delete_card_routes',false,'block')"><strong> Delete card</strong> routes code
             (click to hide/show):</h5>
-          <pre id="_routes"><code class="language-js"></code></pre>
-          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
+          <pre id="delete_card_routes"><code class="language-js">router.delete('/:id', async function (req, res, next) {
+            try {
+                console.log("Delete card with id " + req.params.id);
+                let result = await Card.deleteById(req.params.id);
+                res.status(result.status).send(result.result);
+            } catch (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+        });</code></pre>
+          <h4 class="clickMe" onclick="showHide('delete_card_exp',false,'block')"> <strong>Delete card </strong>
             model and route code explanation (click to toggle text)
           </h4>
-          <section class="canHide" id="_exp">
+          <section class="canHide" id="delete_card_exp">
             <h2>To Do</h2>
           </section>
+          <p> <strong> Final Note:</strong> Notice that many of the endpoints we created have the same path.
+          We can use the same path if the method is difference, since Express will only look for endpoints of that method.</p>
         </section>
 
-        <h3 class="clickMe" onclick="showHide('',false,'block')">
-          Functionality 7:  (click to hide)</h3>    
-        <section id="">
-          <p> </p>
-          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
-          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
-            mysql (click to hide/show):</h5>
-          <pre id="_model"><code class="language-js"></code></pre>
-
-          <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
-          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
-            (click to hide/show):</h5>
-          <pre id="_routes"><code class="language-js"></code></pre>
-          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
-            model and route code explanation (click to toggle text)
-          </h4>
-          <section class="canHide" id="_exp">
-            <h2>To Do</h2>
-          </section>
-        </section>
 
       </section>
   </main>
