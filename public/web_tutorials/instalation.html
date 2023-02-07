@@ -1453,7 +1453,8 @@ app.use("/api/cards",cardsRouter);</code></pre>
           we
           only have one element on the list. </p>
         <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
-        <h5 onclick="showHide('card_id_model',false,'block')"><strong>Get card by id</strong> model code for mysql (click to
+        <h5 onclick="showHide('card_id_model',false,'block')"><strong>Get card by id</strong> model code for mysql
+          (click to
           hide/show):</h5>
         <pre id="card_id_model"><code class="language-js">    static async getById(id) {
           try {
@@ -1469,16 +1470,20 @@ app.use("/api/cards",cardsRouter);</code></pre>
               return {status: 500, result: err };
           }
       }</code></pre>
-        
-      <p><strong>ATTENTION:</strong> Notice we did not use the value of the id received from the client in our query.
-      Instead we placed a "?" and then added a second parameter which is a list with the id inside.
-    When we use "?" and the list the mysql2 module will replace the "?" by values in the list (same order) but those values will be escaped.
-  Escaping values assures us that the value will be not be considered an SQL command, avoiding <strong>SQL Injection attacks</strong>
- (for instance the user could send "1; drop table card" as the id).</p>
- <p><strong>For PostgreSql</strong> instead of "?" we must use "$1","$2"...  The advantage is that you do not need to place the
-values in the list in the order that they will appear in the sql command, since you control which position to use. 
-You can even use the same position twice or more (placing two "$2" for instance).</p>
-      <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+
+        <p><strong>ATTENTION:</strong> Notice we did not use the value of the id received from the client in our query.
+          Instead we placed a "?" and then added a second parameter which is a list with the id inside.
+          When we use "?" and the list the mysql2 module will replace the "?" by values in the list (same order) but
+          those values will be escaped.
+          Escaping values assures us that the value will be not be considered an SQL command, avoiding <strong>SQL
+            Injection attacks</strong>
+          (for instance the user could send "1; drop table card" as the id).</p>
+        <p><strong>For PostgreSql</strong> instead of "?" we must use "$1","$2"... The advantage is that you do not need
+          to place the
+          values in the list in the order that they will appear in the sql command, since you control which position to
+          use.
+          You can even use the same position twice or more (placing two "$2" for instance).</p>
+        <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
         <h5 onclick="showHide('card_id_routes',false,'block')"><strong>Get card by id</strong> routes code (click to
           hide/show):</h5>
         <pre id="card_id_routes"><code class="language-js">  router.get('/:id', async function(req, res, next) {
@@ -1506,30 +1511,46 @@ You can even use the same position twice or more (placing two "$2" for instance)
         <p>Before saving information in the database it is a good idea to verify the data that was sent.
           Remember that <strong>even if you make verifications in the client side you need to do them in the server side
             since client side code can always be bypassed</strong></p>
-         <p> On the server side you can make verifications on the routes or on the models:</p>
-         <ul><li> Route side verifications can make direct verifications of values, for instance checking if the
-          field is empty or if it is an email</li>
-            <li> Model side verifications can make more complex verifications that involve the database. 
-              For instance if with had a table with all possible types we could check if the sent type corresponds to a valid type. </li></ul>
+        <p> On the server side you can make verifications on the routes or on the models:</p>
+        <ul>
+          <li> Route side verifications can make direct verifications of values, for instance checking if the
+            field is empty or if it is an email</li>
+          <li> Model side verifications can make more complex verifications that involve the database.
+            For instance if with had a table with all possible types we could check if the sent type corresponds to a
+            valid type. </li>
+        </ul>
         <p> <strong>NOTE:</strong> It is hard to make a strong argument to where a validation should take place:</p>
-        <ul><li>We can consider it business logic and place it on the model side.</li>
-        <li>We can consider it a simple parameter validation
-          and do it on routes. In this case we still need to use model functions to check for things like if a type exists or not.</li></ul>
+        <ul>
+          <li>We can consider it business logic and place it on the model side.</li>
+          <li>We can consider it a simple parameter validation
+            and do it on routes. In this case we still need to use model functions to check for things like if a type
+            exists or not.</li>
+        </ul>
         <p>In this tutorial, and our advice unless there are reasons otherwise, we decided to place all
           verifications that require the database inside the model, to avoid extra calls to the model.</p>
-        <p>We also decided to make all simple parameter validations on the routes. This decision was made because we can use the
-          <strong>express-validator</strong> module to make many of the verifications. This module will use the information on the request, 
-        and we do not want to make the request available inside of the model.</p>
-        <p> We will format the model side errors the same way that express-validator formats the errors, but there will be one difference.
-          The express-validation route side verifications will group all errors and send them together, not making any model-side verification 
-          if any error is found on the route side. On the model side verification we only send one error, since we will exit as soon as we find an error.
-          Since verifications that involve the database will usually be more expensive we will avoid making verifications if we already know there is an error. 
-        The disavantage is that the client will not know of all the errors of the request that was made, so even if the errors that were marked are corrected 
-      the next request may receive a response with other errors, but only errors that needed validation from the database, since all "simple" errors are validated in group.</p>
+        <p>We also decided to make all simple parameter validations on the routes. This decision was made because we can
+          use the
+          <strong>express-validator</strong> module to make many of the verifications. This module will use the
+          information on the request,
+          and we do not want to make the request available inside of the model.
+        </p>
+        <p> We will format the model side errors the same way that express-validator formats the errors, but there will
+          be one difference.
+          The express-validation route side verifications will group all errors and send them together, not making any
+          model-side verification
+          if any error is found on the route side. On the model side verification we only send one error, since we will
+          exit as soon as we find an error.
+          Since verifications that involve the database will usually be more expensive we will avoid making
+          verifications if we already know there is an error.
+          The disavantage is that the client will not know of all the errors of the request that was made, so even if
+          the errors that were marked are corrected
+          the next request may receive a response with other errors, but only errors that needed validation from the
+          database, since all "simple" errors are validated in group.</p>
 
         <p> So first we need to install the <strong>express-validator</strong> module:</p>
         <pre><code class="language-bash">npm install express-validator --save</code></pre>
-        <p> You can see the documentation of the <strong>express-validator</strong> module <a href="https://express-validator.github.io/docs/">here</a>.</p>
+        <p> You can see the documentation of the <strong>express-validator</strong> module <a
+            href="https://express-validator.github.io/docs/">here</a>.</p>
 
         <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
         <h5 onclick="showHide('card_id_model',false,'block')"><strong>Save card</strong> model code for mysql (click to
@@ -1557,6 +1578,11 @@ You can even use the same position twice or more (placing two "$2" for instance)
               return { status: 500, result: err };
           }
       }</code></pre>
+      <p><strong>NOTE:</strong> In the Insert string we used `` instead of "". These are called
+      <strong>Template Strings</strong> (or template literals) and can be very useful to create more complex strings.
+    In our case we used them because it was a big string and we wanted to break the line (which cannot be done inside a normal string).
+  We can also use <strong>${exp}</strong> to evaluate expressions inside the string, the result of the evaluated expression will
+become part of the string </p>
         <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
         <h5 onclick="showHide('save_card_routes',false,'block')"><strong>Save card</strong> routes code (click to
           hide/show):</h5>
@@ -1589,16 +1615,210 @@ You can even use the same position twice or more (placing two "$2" for instance)
         <section class="canHide" id="save_card">
           <h2>To Do</h2>
         </section>
-      <p> Since browsers only do GET requests you will need to use Postman to test this endpoint.
+        <p> Since browsers only do GET requests you will need to use Postman to test this endpoint.
           You will need to send information in JSON format. Try to test with some invalid data also to check if the
           validations are working. </p>
-          <p>The image bellow shows an example of a test of the post endpoint in postman: </p>
-          <p class="centerImg"><img class="big" src="images/post_cards_postman.png"
+        <p>The image bellow shows an example of a test of the post endpoint in postman: </p>
+        <p class="centerImg"><img class="big" src="images/post_cards_postman.png"
             alt="Postman example of testing the post cards endpoint"></p>
-      
       </section>
-      
-    </section>
+      <h3 class="clickMe" onclick="showHide('filter_by_type',false,'block')">
+        Functionality 3: Filter cards by type id (click to hide)</h3>
+      <section id="filter_by_type">
+        <p> In terms of database this endpoint is very similiar to the "get by id" but instead
+          of using the card id we use the type id. Since there as many cards of the same type
+          the result will be a list. There will be no 404 error, if there are no cards for the
+          supplied value it will return an empty list.
+        </p>
+        <p> In terms of route this endpoint is different because it will use query parameters to get the filters.
+          At the moment the only filter we will be using is the type id, but it is prepared to
+          support other filters (just add more if-then-else clauses).
+        </p>
+
+        <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+        <h5 onclick="showHide('filter_by_type_model',false,'block')"><strong>Filter by type</strong> model code for
+          mysql (click to
+          hide/show):</h5>
+        <pre id="filter_by_type_model"><code class="language-js">    static async filterByType(typeId) {
+          try {
+              let result = [];
+              let [dbCards, fields] =
+                  await pool.query("Select * from cards where crd_type=?", [typeId]);
+              for (let dbCard of dbCards) {
+                  result.push(cardFromDB(dbCard));
+              }
+              return { status: 200, result: result };
+          } catch (err) {
+              console.log(err);
+              return { status: 500, result: err };
+          }
+      }</code></pre>
+
+        <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+        <p><strong>NODE:</strong> This code must be placed before the "get by id" endpoint otherwise it will never be
+          called.
+          The "get by id" endpoint has a path <strong>'/:id'</strong> and the path <strong>/filter</strong>
+          will be also accepted by that path. Placing the <strong>/filter</strong> before will accept the ones with
+          "/filter"
+          and the rest will pass to the "/:id" path verification.</p>
+        <p>Another way of doing this without the need of any order would be changing the "get by id" to accept only
+          numbers.
+          Express.js paths accept regular expressions and changing the "get by id" path to "/:id(\\d+)" will only match
+          decimal numbers
+        </p>
+        <h5 onclick="showHide('filter_by_type_routes',false,'block')"><strong>Filter by type</strong> routes code (click
+          to
+          hide/show):</h5>
+        <pre id="filter_by_type_routes"><code class="language-js">router.get('/filter', async function (req, res, next) {
+          try {
+              console.log("Filter cards");                        
+              if (req.query.typeId) {
+                  let result = await Card.filterByType(req.query.typeId);
+                  res.status(result.status).send(result.result);
+              } else {        
+                  res.status(400).send({ msg: "No filter provided" });
+              }
+          } catch (err) {
+              console.log(err);
+              res.status(500).send(err);
+          }
+      });</code></pre>
+        <h4 class="clickMe" onclick="showHide('filter_by_type_exp',false,'block')"> <strong>Filter by type</strong>
+          model and route
+          code explanation (click to toggle text)
+        </h4>
+        <section class="canHide" id="filter_by_type_exp">
+          <h2>To Do</h2>
+        </section>
+        
+        <h3 class="clickMe" onclick="showHide('get_lore_desc',false,'block')">
+          Functionality 4:  Get a list of cards with a text on the lore 
+          or the description (click to hide)</h3>    
+        <section id="get_lore_desc">
+          <p> This functionality is also a filter.
+            We will be using the same route and add a new if-then-else rule.
+            This time we have two possible places to check, we can filter both
+            using the database query, but we also must consider that we are not using 
+            an exact match (it is a substring) .
+          </p>
+          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+          <h5 onclick="showHide('lore_desc_model',false,'block')"><strong>Filter by lore or description </strong> model code for
+            mysql (click to hide/show):</h5>
+          <pre id="lore_desc_model"><code class="language-js">    static async filterByLoreOrDescription(text) {
+            try {
+                let result = [];
+                let [dbCards] =
+                    await pool.query(`Select * from cards 
+                    where crd_description LIKE ? or crd_lore LIKE ?`, 
+                    ['%'+text+'%','%'+text+'%']);
+                for (let dbCard of dbCards) {
+                    result.push(cardFromDB(dbCard));
+                }
+                return { status: 200, result: result };
+            } catch (err) {
+                console.log(err);
+                return { status: 500, result: err };
+            }
+        }</code></pre>
+        <p>Notice we used a "or" to match both columns (lore and description) and since it is a partial match we used '%'.
+          The '%' must be placed as part of the value that will be escaped (value on the list).
+          If we tried to place it on the string like this %?% the % would not be 
+          inside the quoted text, if the search text was move it would search for %"Move"% instead of "%Move%".
+       </p>
+          <p> We will also be adding a new if-then-else rule into the filter route on the
+            <strong>cardsRoutes.js</strong> file. However, to avoid mistakes we place the
+            full changed code here: </p>
+          <h5 onclick="showHide('lore_desc_routes',false,'block')"><strong>Filter by lore or description </strong> route code
+            (click to hide/show):</h5>
+          <pre id="lore_desc_routes"><code class="language-js">router.get('/filter', async function (req, res, next) {
+            try {
+                console.log("Filter cards");                        
+                if (req.query.typeId) {
+                    let result = await Card.filterByType(req.query.typeId);
+                    res.status(result.status).send(result.result);
+                } else if (req.query.descContains) {
+                    let result = await Card.filterByLoreOrDescription(req.query.descContains);
+                    res.status(result.status).send(result.result);
+                } else {        
+                    res.status(400).send({ msg: "No filter provided" });
+                }
+            } catch (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+        });</code></pre>
+          <h4 class="clickMe" onclick="showHide('lore_desc_exp',false,'block')"> <strong>Filter by lore or description </strong>
+            model and route code explanation (click to toggle text)
+          </h4>
+          <section class="canHide" id="lore_desc_exp">
+            <h2>To Do</h2>
+          </section>
+        </section>
+
+        <h3 class="clickMe" onclick="showHide('',false,'block')">
+          Functionality 5:  (click to hide)</h3>    
+        <section id="">
+          <p> </p>
+          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
+            mysql (click to hide/show):</h5>
+          <pre id="_model"><code class="language-js"></code></pre>
+
+          <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
+            (click to hide/show):</h5>
+          <pre id="_routes"><code class="language-js"></code></pre>
+          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
+            model and route code explanation (click to toggle text)
+          </h4>
+          <section class="canHide" id="_exp">
+            <h2>To Do</h2>
+          </section>
+        </section>
+
+        <h3 class="clickMe" onclick="showHide('',false,'block')">
+          Functionality 6:  (click to hide)</h3>    
+        <section id="">
+          <p> </p>
+          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
+            mysql (click to hide/show):</h5>
+          <pre id="_model"><code class="language-js"></code></pre>
+
+          <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
+            (click to hide/show):</h5>
+          <pre id="_routes"><code class="language-js"></code></pre>
+          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
+            model and route code explanation (click to toggle text)
+          </h4>
+          <section class="canHide" id="_exp">
+            <h2>To Do</h2>
+          </section>
+        </section>
+
+        <h3 class="clickMe" onclick="showHide('',false,'block')">
+          Functionality 7:  (click to hide)</h3>    
+        <section id="">
+          <p> </p>
+          <p> The code bellow must be added to the <strong>cardsModel.js</strong> file:</p>
+          <h5 onclick="showHide('_model',false,'block')"><strong> </strong> model code for
+            mysql (click to hide/show):</h5>
+          <pre id="_model"><code class="language-js"></code></pre>
+
+          <p> The code bellow must be added to the <strong>cardsRoutes.js</strong> file:</p>
+          <h5 onclick="showHide('_routes',false,'block')"><strong> </strong> routes code
+            (click to hide/show):</h5>
+          <pre id="_routes"><code class="language-js"></code></pre>
+          <h4 class="clickMe" onclick="showHide('_exp',false,'block')"> <strong> </strong>
+            model and route code explanation (click to toggle text)
+          </h4>
+          <section class="canHide" id="_exp">
+            <h2>To Do</h2>
+          </section>
+        </section>
+
+      </section>
   </main>
   <script>hljs.highlightAll();</script>
 </body>
