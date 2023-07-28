@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="calc.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Cálculo de horas</h1>
+    <form action="javascript:calc()">
+        <p>Número de dias: <input type="number" id="dias" value="5"></p>
+        <p>Horas por dia: <input type="time" id="horas" value="08:00"></p>
+        <table>
+            <tr>
+                <th>Dia</th>
+                <th>Início Manhã</th>
+                <th>Fim Manhã</th>
+                <th>Início Tarde</th>
+                <th>Fim Tarde</th>
+                <th>Horas feitas</th>
+            </tr>
+            <tr>
+                <td>Segunda</td>
+                <td><input type="time" id="im2"></td>
+                <td><input type="time" id="fm2"></td>
+                <td><input type="time" id="it2"></td>
+                <td><input type="time" id="ft2"></td>
+                <td><input type="time" id="tot2" readonly></td>
+            </tr>
+            <tr>
+                <td>Terça</td>
+                <td><input type="time" id="im3"></td>
+                <td><input type="time" id="fm3"></td>
+                <td><input type="time" id="it3"></td>
+                <td><input type="time" id="ft3"></td>
+                <td><input type="time" id="tot3" readonly></td>
+            </tr>
+            <tr>
+                <td>Quarta</td>
+                <td><input type="time" id="im4"></td>
+                <td><input type="time" id="fm4"></td>
+                <td><input type="time" id="it4"></td>
+                <td><input type="time" id="ft4"></td>
+                <td><input type="time" id="tot4" readonly></td>
+            </tr>
+            <tr>
+                <td>Quinta</td>
+                <td><input type="time" id="im5"></td>
+                <td><input type="time" id="fm5"></td>
+                <td><input type="time" id="it5"></td>
+                <td><input type="time" id="ft5"></td>
+                <td><input type="time" id="tot5" readonly></td>
+            </tr>
+            <tr>
+                <td>Sexta</td>
+                <td><input type="time" id="im6"></td>
+                <td><input type="time" id="fm6"></td>
+                <td><input type="time" id="it6"></td>
+                <td><input type="time" id="ft6"></td>
+                <td><input type="time" id="tot6" readonly></td>
+            </tr>
+        </table>
+        <p>Total feito: <input type="text" id="total" readonly></p>
+        <p>Faltam na semana: <input type="text" id="faltam" readonly></p>
+
+        <input type="submit" value="Cálcular horas">
+    </form>
+
+</body>
+
+</html>
