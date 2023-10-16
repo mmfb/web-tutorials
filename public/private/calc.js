@@ -21,7 +21,7 @@ function calc() {
 
 
 function getTime(milli) {
-    let hours = milli / 3600000;
+    let hours = Math.trunc(milli / 3600000);
     let mins = Math.abs((milli % 3600000) / 60000);
     let shours = hours.toFixed(0).padStart(2,"0");
     let smins = mins.toFixed(0).padStart(2,"0");
